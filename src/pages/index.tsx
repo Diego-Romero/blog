@@ -1,6 +1,6 @@
-import * as React from "react"
-import Layout from "../components/Layout"
-import {Text} from '@chakra-ui/react'
+import * as React from "react";
+import Layout from "../components/Layout";
+import { Text } from "@chakra-ui/react";
 
 const IndexPage = () => {
   return (
@@ -18,6 +18,6 @@ const IndexPage = () => {
       </Text>
     </Layout>
   );
-}
+};
 
-export default IndexPage
+export default IndexPage;

@@ -4,7 +4,7 @@ import { Text } from "@chakra-ui/react";
 
 const JournalismPage = () => {
   return (
-    <Layout title={"Journalism"}>
+    <Layout title={"Hi!"}>
       <Text>
         Lorem Ipsum is simply dummy text of the printing and typesetting
         industry. Lorem Ipsum has been the industry's standard dummy text ever

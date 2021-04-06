@@ -12,7 +12,6 @@ export default function Navbar() {
         boxSize="150"
         src={profilePicture}
         alt="My photo"
-        mr="4"
         cursor="pointer"
         onClick={() => navigate("/")}
       />
