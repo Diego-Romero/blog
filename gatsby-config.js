@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: "blog",
+    title: "Diego Romero",
   },
-  plugins: [],
+  plugins: ["gatsby-plugin-gatsby-cloud", "@chakra-ui/gatsby-plugin"],
 };
