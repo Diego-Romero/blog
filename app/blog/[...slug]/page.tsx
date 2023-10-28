@@ -1,19 +1,19 @@
-import 'css/prism.css'
-import 'katex/dist/katex.css'
+import "css/prism.css"
+import "katex/dist/katex.css"
 
-import PageTitle from '@/components/PageTitle'
-import { components } from '@/components/MDXComponents'
-import { MDXLayoutRenderer } from 'pliny/mdx-components'
-import { sortPosts, coreContent, allCoreContent } from 'pliny/utils/contentlayer'
-import { allBlogs, allAuthors } from 'contentlayer/generated'
-import type { Authors, Blog } from 'contentlayer/generated'
-import PostSimple from '@/layouts/PostSimple'
-import PostLayout from '@/layouts/PostLayout'
-import PostBanner from '@/layouts/PostBanner'
-import { Metadata } from 'next'
-import siteMetadata from '@/data/siteMetadata'
+import PageTitle from "@/components/PageTitle"
+import { components } from "@/components/MDXComponents"
+import { MDXLayoutRenderer } from "pliny/mdx-components"
+import { sortPosts, coreContent, allCoreContent } from "pliny/utils/contentlayer"
+import { allBlogs, allAuthors } from "contentlayer/generated"
+import type { Authors, Blog } from "contentlayer/generated"
+import PostSimple from "@/layouts/PostSimple"
+import PostLayout from "@/layouts/PostLayout"
+import PostBanner from "@/layouts/PostBanner"
+import { Metadata } from "next"
+import siteMetadata from "@/data/siteMetadata"
 
-const defaultLayout = 'PostLayout'
+const defaultLayout = "PostLayout"
 const layouts = {
   PostSimple,
   PostLayout,
@@ -25,9 +25,9 @@ export async function generateMetadata({
 }: {
   params: { slug: string[] }
 }): Promise<Metadata | undefined> {
-  const slug = decodeURI(params.slug.join('/'))
+  const slug = decodeURI(params.slug.join("/"))
   const post = allBlogs.find((p) => p.slug === slug)
-  const authorList = post?.authors || ['default']
+  const authorList = post?.authors || ["default"]
   const authorDetails = authorList.map((author) => {
     const authorResults = allAuthors.find((p) => p.slug === author)
     return coreContent(authorResults as Authors)
@@ -41,11 +41,11 @@ export async function generateMetadata({
   const authors = authorDetails.map((author) => author.name)
   let imageList = [siteMetadata.socialBanner]
   if (post.images) {
-    imageList = typeof post.images === 'string' ? [post.images] : post.images
+    imageList = typeof post.images === "string" ? [post.images] : post.images
   }
   const ogImages = imageList.map((img) => {
     return {
-      url: img.includes('http') ? img : siteMetadata.siteUrl + img,
+      url: img.includes("http") ? img : siteMetadata.siteUrl + img,
     }
   })
 
@@ -56,16 +56,16 @@ export async function generateMetadata({
       title: post.title,
       description: post.summary,
       siteName: siteMetadata.title,
-      locale: 'en_US',
-      type: 'article',
+      locale: "en_US",
+      type: "article",
       publishedTime: publishedAt,
       modifiedTime: modifiedAt,
-      url: './',
+      url: "./",
       images: ogImages,
       authors: authors.length > 0 ? authors : [siteMetadata.author],
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: post.title,
       description: post.summary,
       images: imageList,
@@ -74,13 +74,13 @@ export async function generateMetadata({
 }
 
 export const generateStaticParams = async () => {
-  const paths = allBlogs.map((p) => ({ slug: p.slug.split('/') }))
+  const paths = allBlogs.map((p) => ({ slug: p.slug.split("/") }))
 
   return paths
 }
 
 export default async function Page({ params }: { params: { slug: string[] } }) {
-  const slug = decodeURI(params.slug.join('/'))
+  const slug = decodeURI(params.slug.join("/"))
   // Filter out drafts in production
   const sortedCoreContents = allCoreContent(sortPosts(allBlogs))
   const postIndex = sortedCoreContents.findIndex((p) => p.slug === slug)
@@ -88,7 +88,7 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
     return (
       <div className="mt-24 text-center">
         <PageTitle>
-          Under Construction{' '}
+          Under Construction{" "}
           <span role="img" aria-label="roadwork sign">
             🚧
           </span>
@@ -100,16 +100,16 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
   const prev = sortedCoreContents[postIndex + 1]
   const next = sortedCoreContents[postIndex - 1]
   const post = allBlogs.find((p) => p.slug === slug) as Blog
-  const authorList = post?.authors || ['default']
+  const authorList = post?.authors || ["default"]
   const authorDetails = authorList.map((author) => {
     const authorResults = allAuthors.find((p) => p.slug === author)
     return coreContent(authorResults as Authors)
   })
   const mainContent = coreContent(post)
   const jsonLd = post.structuredData
-  jsonLd['author'] = authorDetails.map((author) => {
+  jsonLd["author"] = authorDetails.map((author) => {
     return {
-      '@type': 'Person',
+      "@type": "Person",
       name: author.name,
     }
   })
