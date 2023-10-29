@@ -75,7 +75,7 @@ export async function getServerSideProps(context) {
     props: {
       // props for your component
     },
-  };
+  }
 }
 ```
 
@@ -90,14 +90,14 @@ If we don’t need to pre-render data, we can also use this strategy. This will 
 This approach works well for user dashboard pages, for example. Because a dashboard is a private, user-specific page, SEO is not relevant, and the page doesn’t need to be pre-rendered. The data is frequently updated, which requires request-time data fetching. Vercel also created a React hook for data fetching called SWR, it handles caching, revalidation, focus tracking, refetching on interval and more. Here is an example:
 
 ```jsx
-import useSWR from "swr";
+import useSWR from "swr"
 
 function Profile() {
-  const { data, error } = useSWR("/api/user", fetch);
+  const { data, error } = useSWR("/api/user", fetch)
 
-  if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
-  return <div>hello {data.name}!</div>;
+  if (error) return <div>failed to load</div>
+  if (!data) return <div>loading...</div>
+  return <div>hello {data.name}!</div>
 }
 ```
 
@@ -106,10 +106,10 @@ function Profile() {
 In order to dynamically create routes we need to make use of `getStaticPaths`. The other thing we will need is to specify inside the pages folder the page with `[id].js`. For example creating a page called **`[id].js`** under `pages/posts`. Then inside of that file we can specify all the possible paths, such as:
 
 ```jsx
-import Layout from "../../components/layout";
+import Layout from "../../components/layout"
 
 export default function Post() {
-  return <Layout>...</Layout>;
+  return <Layout>...</Layout>
 }
 
 export async function getStaticPaths() {
@@ -133,7 +133,7 @@ NextJs has support to create its own API endpoints as NodeJs lambda functions. F
 
 ```jsx
 export default function handler(req, res) {
-  res.status(200).json({ text: "Hello" });
+  res.status(200).json({ text: "Hello" })
 }
 ```
 
