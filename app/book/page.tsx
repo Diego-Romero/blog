@@ -9,7 +9,7 @@ export const metadata = genPageMetadata({ title: "Book" })
 
 export default function BookPage() {
   const books = allCoreContent(sortPosts(allBooks))
-  console.log(books);
+  console.log(books)
   const pageNumber = 1
   const initialDisplayPosts = books.slice(
     BOOKS_PER_PAGE * (pageNumber - 1),
