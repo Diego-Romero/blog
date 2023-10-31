@@ -3,7 +3,7 @@ const siteMetadata = {
   title: "Diego Blog",
   author: "Diego Romero",
   headerTitle: "Diego Romero",
-  description: "Personal blog by Diego Romero. I explain things I learn.",
+  description: "I explain things I learn.",
   language: "en-us",
   theme: "system", // system, dark or light
   siteUrl: "https://www.diegoromero.blog/",
