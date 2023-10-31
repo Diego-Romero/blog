@@ -9,7 +9,7 @@ const siteMetadata = {
   siteUrl: "https://www.diegoromero.blog/",
   siteRepo: "https://github.com/Diego-Romero/blog",
   siteLogo: "/static/images/logo.png",
-  socialBanner: "/static/images/twitter-card.png",
+  socialBanner: "/static/images/social-banner.png",
   // mastodon: "https://mastodon.social/@mastodonuser",
   // email: "address@yoursite.com",
   github: "https://github.com/Diego-Romero",
