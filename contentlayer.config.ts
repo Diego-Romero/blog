@@ -45,9 +45,9 @@ const computedFields: ComputedFields = {
 /**
  * Count the occurrences of all tags across blog posts and write to json file
  */
-function createTagCount(allBlogs) {
+function createTagCount(allDataTypes) {
   const tagCount: Record<string, number> = {}
-  allBlogs.forEach((file) => {
+  allDataTypes.forEach((file) => {
     if (file.tags && (!isProduction || file.draft !== true)) {
       file.tags.forEach((tag) => {
         const formattedTag = GithubSlugger.slug(tag)
@@ -62,14 +62,14 @@ function createTagCount(allBlogs) {
   writeFileSync("./app/tag-data.json", JSON.stringify(tagCount))
 }
 
-function createSearchIndex(allBlogs) {
+function createSearchIndex(allDataTypes) {
   if (
     siteMetadata?.search?.provider === "kbar" &&
     siteMetadata.search.kbarConfig.searchDocumentsPath
   ) {
     writeFileSync(
       `public/${siteMetadata.search.kbarConfig.searchDocumentsPath}`,
-      JSON.stringify(allCoreContent(sortPosts(allBlogs)))
+      JSON.stringify(allCoreContent(sortPosts(allDataTypes)))
     )
     console.log("Local search index generated...")
   }
@@ -110,6 +110,41 @@ export const Blog = defineDocumentType(() => ({
   },
 }))
 
+export const Book = defineDocumentType(() => ({
+  name: "Book",
+  filePathPattern: "book/**/*.mdx",
+  contentType: "mdx",
+  fields: {
+    title: { type: "string", required: true },
+    date: { type: "date", required: true },
+    tags: { type: "list", of: { type: "string" }, default: [] },
+    lastmod: { type: "date" },
+    draft: { type: "boolean" },
+    summary: { type: "string" },
+    images: { type: "json" },
+    authors: { type: "list", of: { type: "string" } },
+    layout: { type: "string" },
+    bibliography: { type: "string" },
+    canonicalUrl: { type: "string" },
+  },
+  computedFields: {
+    ...computedFields,
+    structuredData: {
+      type: "json",
+      resolve: (doc) => ({
+        "@context": "https://schema.org",
+        "@type": "BookPosting",
+        headline: doc.title,
+        datePublished: doc.date,
+        dateModified: doc.lastmod || doc.date,
+        description: doc.summary,
+        image: doc.images ? doc.images[0] : siteMetadata.socialBanner,
+        url: `${siteMetadata.siteUrl}/${doc._raw.flattenedPath}`,
+      }),
+    },
+  },
+}))
+
 export const Authors = defineDocumentType(() => ({
   name: "Authors",
   filePathPattern: "authors/**/*.mdx",
@@ -130,7 +165,7 @@ export const Authors = defineDocumentType(() => ({
 
 export default makeSource({
   contentDirPath: "data",
-  documentTypes: [Blog, Authors],
+  documentTypes: [Blog, Authors, Book],
   mdx: {
     cwd: process.cwd(),
     remarkPlugins: [
@@ -150,8 +185,9 @@ export default makeSource({
     ],
   },
   onSuccess: async (importData) => {
-    const { allBlogs } = await importData()
-    createTagCount(allBlogs)
-    createSearchIndex(allBlogs)
+    const { allBlogs, allBooks } = await importData()
+    const allData = [...allBlogs, allBooks]
+    createTagCount(allData)
+    createSearchIndex(allData)
   },
 })
