@@ -1,0 +1,349 @@
+---
+title: Tmux - Unleash Your Terminal Productivity with a Mouse-Free Workflow
+date: "2023-12-24"
+tags: ["productivity"]
+draft: false
+summary: This blog post provides a comprehensive guide to using Tmux, a terminal multiplexer that enhances productivity and workflow management. It covers the core concepts of Tmux, including sessions, windows, and panes, and explains how to navigate and interact with them using keybindings. The document also includes instructions on installation, customization, and advanced features such as plugins, themes, and session persistence. Overall, it is a valuable resource for anyone looking to unleash their productivity with a mouse-free terminal workflow.
+authors: ["default"]
+---
+
+<TOCInline toc={props.toc} />
+
+# Why Tmux?
+
+Tmux is a powerful terminal multiplexer that allows users to access multiple terminal sessions within a single window, greatly enhancing productivity and workflow management. With Tmux, users can create and manage sessions, windows, and panes, allowing them to simultaneously run and switch between multiple command-line applications. Tmux also provides keybindings and customisation options, enabling users to navigate, resize, and interact with panes efficiently. Its ability to persist sessions and configurations even after a computer restart makes it a reliable and convenient tool for developers and power users. Overall, Tmux is a must-have tool for anyone looking to maximise productivity and streamline their terminal workflow.
+
+![demo](/static/images/blog/tmux/tmux.gif)
+
+> In the video above, you will see how to create new panes, resize them, and navigate between different sessions and windows. These are just a few of the many things you can do with Tmux.
+
+# Core Concepts
+
+## Prefix
+
+The Tmux prefix is a key combination, typically `Ctrl+b`, used as a prefix before executing Tmux commands in the terminal.
+
+Here are some critical commands for working with tmux using the prefix key:
+
+- `prefix + %`: Splits the current pane vertically.
+- `prefix + "`: Splits the current pane horizontally.
+- `prefix + o`: Switches to the next pane.
+- `prefix + ;`: Switches to the previously active pane.
+- `prefix + x`: Closes the current pane.
+
+## Session
+
+A Tmux session is a collection of one or more terminal windows, each containing multiple panes. It allows users to run and manage multiple command-line applications simultaneously, enhancing productivity and workflow management.
+
+Here are some critical commands for working with tmux using the prefix key:
+
+- `prefix + $`: Rename the current session.
+- `prefix + (`: Switch to the previous session.
+- `prefix + )`: Switch to the next session.
+- `prefix + s`: Show a list of all sessions.
+- `prefix + d`: Detach from the current session and return to the shell.
+
+## Window
+
+A Tmux window is a collection of one or more panes within a session. It provides a separate workspace within the Tmux environment. Each window can contain multiple panes, allowing users to work on different tasks simultaneously.
+
+Here are some essential commands for working with windows:
+
+- `prefix + c`: Create a new window.
+- `prefix + w`: List windows in session.
+- `prefix + n`: Switch to the next window.
+- `prefix + p`: Switch to the previous window.
+- `prefix + [0-9]`: Switch to a specific window by its index.
+- `prefix + ,`: Rename the current window.
+- `prefix + &`: Close the current window.
+
+## Pane
+
+A Tmux pane is a division within a Tmux window that allows users to work on multiple tasks simultaneously.
+
+- `prefix + %`: Split the current pane vertically.
+- `prefix + "`: Split the current pane horizontally.
+- `prefix + o`: Switch to the next pane.
+- `prefix + ;`: Switch to the previously active pane.
+- `prefix + x`: Close the current pane.
+- `prefix + !`: Move the current pane into a new window.
+- `prefix + {`: Move the current pane to the left.
+- `prefix + }`: Move the current pane to the right.
+- `prefix + !`: Convert the current pane into a window.
+- `prefix + q`: Show pane numbers and switch to a specific pane.
+
+# Getting Started
+
+## Installation
+
+Please follow [this document in the official documentation](https://github.com/tmux/tmux/wiki/Installing).
+
+If you’re running in macOS:
+
+```bash
+brew install tmux
+```
+
+## Creating your first session
+
+To create your first Tmux session just type `tmux` in your terminal, this will create session with a default name, you will be able to see it typing `tmux ls`.
+
+In order to exit tmux type: `prefix +` (type) `:kill-server` , which in a fresh install is: `ctrl + b + :kill-server` .
+
+## Creating your .tmux.conf file
+
+### Creating the config file and being able to reload the configuration
+
+In order to customise your Tmux you will need to create a file (`.tmux.conf` ) at root level:
+
+```bash
+touch ~/.tmux.conf
+```
+
+Open that file in your code editor and lets get started with some basic configuration, also if you prefer you can also change your prefix key to something more convenient like `ctrl + a` like I do:
+
+```bash
+# reload config file (change file location to your the tmux.conf you want to use)
+unbind r
+bind r source-file ~/.tmux.conf
+
+# Enable true colour functionality for Tmux
+set -g default-terminal "screen-256color"
+
+# Remap the prefix key to Ctrl + a
+set -g prefix C-a
+unbind C-b
+bind-key C-a send-prefix
+
+# Allow the mouse to work as well, you can even use it to resize panes.
+set -g mouse on
+```
+
+> A general recommendation is to change your caps lock to  be the control key in the keyboard, as you will use it far more, typically the ctrl key is in an awkward position to reach.
+> 
+
+Now lets exit and re-enter your tmux session so your configuration is loaded:
+
+```bash
+tmux kill-server
+```
+
+And enter tmux again:
+
+```bash
+tmux
+```
+
+You should be able to split the pane by doing `prefix  + %` , as well  as reload your configuration by doing `prefix + r` .
+
+## Working with panes
+
+Working with panes with tmux is probably the thing you will be doing the most, so lets improve the default experience, lets add the following to our configuration file:
+
+```bash
+# split panes using | and -, as they are more intuitive
+unbind 
+bind | split-window -h
+
+unbind '"'
+bind - split-window -v
+
+# Resize panes using Vim style key-bindings
+bind -r j resize-pane -D 6
+bind -r k resize-pane -U 5
+bind -r l resize-pane -R 5
+bind -r h resize-pane -L 5
+
+# Resize the pane to full-size
+bind -r m resize-pane -Z
+```
+
+Now you will be able to split windows and resize in a far more intuitive way (more vim like), as well as make your pane temporarily full-screen size:
+
+- `prefix + |`: Split the current pane vertically.
+- `prefix + -`: Split the current pane horizontally.
+- `prefix + j`: Resize the current pane down.
+- `prefix + k`: Resize the current pane up.
+- `prefix + h`: Resize the current pane left.
+- `prefix + l`: Resize the current pane right.
+- `prefix + m`: Resize the current pane to be full screen, you will be able to go back by pressing the same command again.
+
+## Scrolling in Tmux
+
+### Copy Mode
+
+To enable smooth scrolling and navigation in your new tmux terminal, it is important to understand what copy mode is.
+
+> Copy mode in tmux allows users to scroll through the terminal effortlessly, select and copy text using vim keybindings, and enhance their ability to navigate and manipulate text within tmux.
+> 
+
+First lets add this to our configuration file:
+
+```bash
+# Allow the mouse to work as well, you can even use it to resize panes.
+set -g mouse on
+
+# Allow to use vi motions in Tmux as well
+set-window-option -g mode-keys vi
+
+# Allows to select and copy text in tmux, using vim keybindings.
+bind-key -T copy-mode-vi 'v' send -X begin-selection # start selecting text with "v"
+bind-key -T copy-mode-vi 'y' send -X copy-selection # copy text with "y"
+
+unbind -T copy-mode-vi MouseDragEnd1Pane # don't exit copy mode after dragging with mouse
+```
+
+Now we will be able to enter copy mode by either:
+
+- Using the mouse to scroll.
+- Pressing `prefix + [` .
+
+> You will notice that you are in copy mode by seeing a box in the upper right corner of your terminal, displaying the line you are currently in and the number of lines you can scroll through. For example, [0/114].
+> 
+
+Now you can navigate using vim commands, select and copy text, and use the mouse as you normally would. In order to exit copy mode just press `q` or scrolling to the bottom with your mouse.
+
+## Taking Tmux to the next level
+
+### Using a plugin manager
+
+> In order to install the plugins you have to run `prefix + shift + i`
+> 
+
+**Using TPM**
+
+First add this to your config file:
+
+```bash
+# Use a Tmux plugin manager
+set -g @plugin 'tmux-plugins/tpm'
+
+# list of tmux plugins
+set -g @plugin 'christoomey/vim-tmux-navigator' # for navigating panes and vim/nvim with Ctrl-hjkl, if you're using the same plugin in NeoVim you will be able to navigate between panes there as well.
+```
+
+This is important, now at the end of your config file add:
+
+```bash
+# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+run '~/.tmux/plugins/tpm/tpm'
+```
+
+> Remember to install the plugins after you’ve saved your config file with `prefix + shit + i`
+> 
+
+Now you can navigate between panes in the same way as you would in NeoVim, using the following key combinations:
+
+- `ctrl + j`: Move one pane down.
+- `ctrl + k`: Move one pane up.
+- `ctrl + h`: Move one pane left.
+- `ctrl + l`: Move one pane right.
+
+> If you have the same plugin in your Neovim config by christoomey, you will also be able to navigate between Neovim panes and Tmux panes.
+> 
+
+### Using a theme
+
+Tmux themes allow you to customize the appearance of the Tmux environment by changing colors, fonts, and styles of elements such as the status bar, window borders, and panes. They enhance the visual experience, making it easier to distinguish between different elements.
+
+One popular and basic theme I use is [tmux-themepack](https://github.com/jimeh/tmux-themepack/tree/master), which includes a cyan color scheme. To add this theme to your configuration file, include the following:
+
+```bash
+# theme related plugins
+set -g @plugin 'jimeh/tmux-themepack' # tmux theme
+set -g @themepack 'powerline/default/cyan' # use this theme for tmux-themepack
+```
+
+> Remember to install the plugins after you’ve saved your config file with `prefix + shit + i`
+> 
+
+### Keeping sessions after restart (resurrect 🪦)
+
+One of the coolest and most powerful features of tmux is the ability to persist sessions and keep your configuration, even if your computer restarts. To add this functionality, copy the following code into your config file:
+
+```bash
+# Resurrect tmux sessions after restart and keep saving them every 15 minutes
+set -g @plugin 'tmux-plugins/tmux-resurrect' # persist tmux sessions after computer restart
+set -g @plugin 'tmux-plugins/tmux-continuum' # automatically saves sessions for you every 15 minutes
+set -g @resurrect-capture-pane-contents 'on' # allow tmux-ressurect to capture pane contents
+set -g @continuum-restore 'on' # enable tmux-continuum functionality
+```
+
+> Remember to install the plugins after you’ve saved your config file with `prefix + shit + i`
+> 
+
+# Conclusion and some words of wisdom
+
+When it comes to tmux configurations, it's tempting to copy heavily customized setups from the web. But trust me, it's better to start with a basic configuration and gradually add modifications. This way, you'll be fully aware of the changes you make and actually learn about tmux. Remember applying complex changes may lead to mistakes. So, backup your config and proceed with caution.
+
+# Other useful Tmux resources
+
+- https://github.com/rothgar/awesome-tmux
+- [How I Use Tmux With Neovim For An Awesome Dev Workflow On My Mac](https://www.youtube.com/watch?v=U-omALWIBos)
+- [https://hamvocke.com/blog/a-guide-to-customizing-your-tmux-conf/](https://hamvocke.com/blog/a-guide-to-customizing-your-tmux-conf/)
+
+## Full tmux config file
+
+```bash
+# reload config file (change file location to your the tmux.conf you want to use)
+unbind r
+bind r source-file ~/.tmux.conf
+
+# Enable true colour functionality for Tmux
+set -g default-terminal "screen-256color"
+
+# remap prefix from 'C-b' to 'C-a'
+unbind C-b
+set-option -g prefix C-a
+bind-key C-a send-prefix
+
+# General recommendation, to change your caps lock to actually be the control key in the keyboards, as you will use it far more.
+
+# split panes using | and -, as they are more intuitive
+unbind %
+bind | split-window -h
+
+unbind '"'
+bind - split-window -v
+
+# Resize panes using Vim style key-bindings
+bind -r l resize-pane -R 5
+bind -r j resize-pane -D 6
+bind -r k resize-pane -U 5
+bind -r h resize-pane -L 5
+
+# Resize the pane to full size
+bind -r m resize-pane -Z
+
+# Allow the mouse to work as well, you can even use it to resize panes.
+set -g mouse on
+
+# Allow to use vi motions in Tmux as well
+set-window-option -g mode-keys vi
+
+# Allows to select and copy text in tmux, using vim keybindings.
+bind-key -T copy-mode-vi 'v' send -X begin-selection # start selecting text with "v"
+bind-key -T copy-mode-vi 'y' send -X copy-selection # copy text with "y"
+
+unbind -T copy-mode-vi MouseDragEnd1Pane # don't exit copy mode after dragging with mouse
+
+# Use a Tmux plugin manager
+set -g @plugin 'tmux-plugins/tpm'
+
+# list of tmux plugins
+set -g @plugin 'christoomey/vim-tmux-navigator' # for navigating panes and vim/nvim with Ctrl-hjkl, if you're using the same plugin in NeoVim you will be able to navigate between panes there as well.
+
+# theme related plugins
+set -g @plugin 'jimeh/tmux-themepack' # tmux theme
+set -g @themepack 'powerline/default/cyan' # use this theme for tmux-themepack
+# See for more themes: https://github.com/jimeh/tmux-themepack/tree/master
+
+# Resurrect tmux sessions after restart and keep saving them every 15 minutes
+set -g @plugin 'tmux-plugins/tmux-resurrect' # persist tmux sessions after computer restart
+set -g @plugin 'tmux-plugins/tmux-continuum' # automatically saves sessions for you every 15 minutes
+set -g @resurrect-capture-pane-contents 'on' # allow tmux-ressurect to capture pane contents
+set -g @continuum-restore 'on' # enable tmux-continuum functionality
+
+# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+run '~/.tmux/plugins/tpm/tpm'
+```
