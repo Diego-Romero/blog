@@ -4,8 +4,6 @@ import { CoreContent } from "pliny/utils/contentlayer"
 import type { Blog } from "contentlayer/generated"
 import Comments from "@/components/Comments"
 import Link from "@/components/Link"
-import PageTitle from "@/components/PageTitle"
-import SectionContainer from "@/components/SectionContainer"
 import siteMetadata from "@/data/siteMetadata"
 import ScrollTopAndComment from "@/components/ScrollTopAndComment"
 
@@ -16,67 +14,84 @@ interface LayoutProps {
   prev?: { path: string; title: string }
 }
 
-export default function PostLayout({ content, next, prev, children }: LayoutProps) {
+export default function PostSimple({ content, next, prev, children }: LayoutProps) {
   const { path, slug, date, title } = content
+  const basePath = path.split("/")[0]
 
   return (
-    <SectionContainer>
+    <>
       <ScrollTopAndComment />
-      <article>
-        <div>
-          <header>
-            <div className="space-y-1 border-b border-gray-200 pb-10 text-center dark:border-gray-700">
-              <dl>
-                <div>
-                  <dt className="sr-only">Published on</dt>
-                  <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                    <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
-                  </dd>
-                </div>
-              </dl>
-              <div>
-                <PageTitle>{title}</PageTitle>
-              </div>
-            </div>
-          </header>
-          <div className="grid-rows-[auto_1fr] divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:divide-y-0">
-            <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
-              <div className="prose max-w-none pb-8 pt-10 dark:prose-invert">{children}</div>
-            </div>
-            {siteMetadata.comments && (
-              <div className="pb-6 pt-6 text-center text-gray-700 dark:text-gray-300" id="comment">
-                <Comments slug={slug} />
-              </div>
-            )}
-            <footer>
-              <div className="flex flex-col text-sm font-medium sm:flex-row sm:justify-between sm:text-base">
-                {prev && prev.path && (
-                  <div className="pt-4 xl:pt-8">
-                    <Link
-                      href={`/${prev.path}`}
-                      className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                      aria-label={`Previous post: ${prev.title}`}
-                    >
-                      &larr; {prev.title}
-                    </Link>
-                  </div>
-                )}
-                {next && next.path && (
-                  <div className="pt-4 xl:pt-8">
-                    <Link
-                      href={`/${next.path}`}
-                      className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                      aria-label={`Next post: ${next.title}`}
-                    >
-                      {next.title} &rarr;
-                    </Link>
-                  </div>
-                )}
-              </div>
-            </footer>
-          </div>
+      <div className="content-container">
+        {/* Back */}
+        <div className="article-back-row">
+          <Link href={`/${basePath}`} className="back-btn">
+            Back to {basePath}
+          </Link>
         </div>
-      </article>
-    </SectionContainer>
+
+        <article>
+          {/* Header */}
+          <header className="article-header">
+            <div className="article-meta-line">
+              <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
+            </div>
+            <h1 className="article-title">{title}</h1>
+          </header>
+
+          {/* Body */}
+          <div className="prose prose-lg dark:prose-invert article-body">{children}</div>
+
+          {/* Comments */}
+          {siteMetadata.comments && (
+            <div
+              className="mt-12 pt-8"
+              style={{ borderTop: "1px solid var(--border)" }}
+              id="comment"
+            >
+              <Comments slug={slug} />
+            </div>
+          )}
+
+          {/* Prev/Next */}
+          {(next || prev) && (
+            <nav
+              className="mt-12 pt-6 flex justify-between gap-4"
+              style={{
+                borderTop: "1px solid var(--border)",
+                fontFamily: "var(--font-space-mono), 'Space Mono', monospace",
+                fontSize: "0.75rem",
+              }}
+            >
+              {prev && prev.path ? (
+                <div>
+                  <div style={{ color: "var(--muted)", marginBottom: "0.3rem" }}>← Previous</div>
+                  <Link
+                    href={`/${prev.path}`}
+                    style={{ color: "var(--accent)", textDecoration: "none" }}
+                  >
+                    {prev.title}
+                  </Link>
+                </div>
+              ) : (
+                <div />
+              )}
+              {next && next.path ? (
+                <div className="text-right">
+                  <div style={{ color: "var(--muted)", marginBottom: "0.3rem" }}>Next →</div>
+                  <Link
+                    href={`/${next.path}`}
+                    style={{ color: "var(--accent)", textDecoration: "none" }}
+                  >
+                    {next.title}
+                  </Link>
+                </div>
+              ) : (
+                <div />
+              )}
+            </nav>
+          )}
+        </article>
+      </div>
+    </>
   )
 }
