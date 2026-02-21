@@ -1,0 +1,1698 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diego Romero — diegoromero.blog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Noto+Sans+JP:wght@300;400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── CSS Variables ─── */
+    :root {
+      --bg:         #FAFAF8;
+      --bg2:        #F4F4F0;
+      --fg:         #1A1A18;
+      --fg2:        #4A4A46;
+      --accent:     #2C3E7A;
+      --border:     #E0E0DC;
+      --muted:      #9A9A94;
+      --font-serif: 'Noto Serif', serif;
+      --font-sans:  'Noto Sans JP', sans-serif;
+      --font-mono:  'JetBrains Mono', monospace;
+    }
+
+    [data-theme="dark"] {
+      --bg:     #0F0F0E;
+      --bg2:    #171715;
+      --fg:     #E8E8E4;
+      --fg2:    #9A9A94;
+      --accent: #6B7FD4;
+      --border: #2A2A28;
+      --muted:  #4A4A46;
+    }
+
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      line-height: 1.7;
+      min-height: 100vh;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      padding-bottom: 80px;
+    }
+
+    /* ─── Typography Base ─── */
+    h1, h2, h3, h4 {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      line-height: 1.25;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ─── Top Bar ─── */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background-color: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 56px;
+    }
+
+    .top-bar-name {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.8125rem;
+      letter-spacing: 0.05em;
+      color: var(--fg2);
+    }
+
+    .top-bar-nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .top-bar-nav a {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .top-bar-nav a:hover {
+      color: var(--fg);
+    }
+
+    /* ─── Theme Toggle ─── */
+    .theme-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      padding: 4px 0;
+      transition: color 0.2s ease;
+      margin-left: 32px;
+    }
+
+    .theme-toggle:hover {
+      color: var(--fg);
+    }
+
+    /* ─── View System ─── */
+    .view {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      padding-top: 56px;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    .view.visible {
+      opacity: 1;
+    }
+
+    /* ─── Layout Container ─── */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    .container-narrow {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    /* ─── Indigo Rule ─── */
+    .indigo-rule {
+      border: none;
+      border-top: 1px solid var(--accent);
+      margin: 0;
+    }
+
+    .border-rule {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    /* ─── Bottom Nav ─── */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background-color: var(--bg);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      height: 56px;
+    }
+
+    .bottom-nav button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.6875rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      padding: 8px 0;
+      transition: color 0.2s ease;
+      text-transform: lowercase;
+    }
+
+    .bottom-nav button:hover {
+      color: var(--fg);
+    }
+
+    .bottom-nav button.active {
+      color: var(--accent);
+    }
+
+    /* ══════════════════════════════════════════
+       VIEW 1: HOMEPAGE
+    ══════════════════════════════════════════ */
+
+    /* Hero */
+    .hero {
+      padding: 120px 0 112px;
+      text-align: left;
+    }
+
+    .hero-name {
+      font-family: var(--font-serif);
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--fg);
+      line-height: 1.1;
+      margin-bottom: 32px;
+    }
+
+    .hero-tagline {
+      font-family: var(--font-serif);
+      font-size: 1.0625rem;
+      font-weight: 400;
+      color: var(--fg2);
+      line-height: 1.75;
+      max-width: 480px;
+    }
+
+    .hero-rule-wrapper {
+      padding: 72px 0;
+    }
+
+    .publishing-note {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-top: 32px;
+    }
+
+    /* Home Sections */
+    .home-section {
+      padding: 80px 0;
+    }
+
+    .home-section-label {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.6875rem;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+
+    /* Article List (homepage) */
+    .article-list-item {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 24px;
+      align-items: baseline;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    .article-list-item:first-child {
+      border-top: 1px solid var(--border);
+    }
+
+    .article-list-date {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    .article-list-title {
+      font-family: var(--font-serif);
+      font-size: 1.0625rem;
+      font-weight: 400;
+      color: var(--fg);
+      line-height: 1.4;
+      transition: color 0.2s ease;
+    }
+
+    .article-list-item:hover .article-list-title {
+      color: var(--accent);
+    }
+
+    /* Books List (homepage) */
+    .books-list-item {
+      display: grid;
+      grid-template-columns: 1fr auto auto auto;
+      gap: 24px;
+      align-items: baseline;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    .books-list-item:first-child {
+      border-top: 1px solid var(--border);
+    }
+
+    .books-list-title {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--fg);
+      transition: color 0.2s ease;
+    }
+
+    .books-list-item:hover .books-list-title {
+      color: var(--accent);
+    }
+
+    .books-list-author {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.75rem;
+      color: var(--fg2);
+    }
+
+    .books-list-year {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .books-list-genre {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.6875rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* Projects List (homepage) */
+    .projects-list-item {
+      padding: 32px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    .projects-list-item:first-child {
+      border-top: 1px solid var(--border);
+    }
+
+    .projects-list-name {
+      font-family: var(--font-serif);
+      font-size: 1.0625rem;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 8px;
+      transition: color 0.2s ease;
+    }
+
+    .projects-list-item:hover .projects-list-name {
+      color: var(--accent);
+    }
+
+    .projects-list-desc {
+      font-family: var(--font-serif);
+      font-size: 0.9375rem;
+      color: var(--fg2);
+      line-height: 1.6;
+    }
+
+    /* ══════════════════════════════════════════
+       VIEW 2: BLOG LISTING
+    ══════════════════════════════════════════ */
+
+    .page-header {
+      padding: 80px 0 64px;
+    }
+
+    .page-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--fg);
+      line-height: 1.15;
+    }
+
+    /* Tag Filter */
+    .tag-filter {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+      margin-bottom: 56px;
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.75rem;
+    }
+
+    .tag-filter-item {
+      color: var(--muted);
+      cursor: pointer;
+      padding: 0 8px;
+      transition: color 0.2s ease;
+      letter-spacing: 0.02em;
+    }
+
+    .tag-filter-item:first-child {
+      padding-left: 0;
+    }
+
+    .tag-filter-item:hover {
+      color: var(--fg);
+    }
+
+    .tag-filter-item.active {
+      color: var(--accent);
+    }
+
+    .tag-separator {
+      color: var(--border);
+      user-select: none;
+    }
+
+    /* Blog Entry */
+    .blog-entry {
+      padding: 40px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    .blog-entry:first-of-type {
+      border-top: 1px solid var(--border);
+    }
+
+    .blog-entry-date {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.6875rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+    }
+
+    .blog-entry-title {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--fg);
+      line-height: 1.35;
+      margin-bottom: 12px;
+      transition: color 0.2s ease;
+    }
+
+    .blog-entry:hover .blog-entry-title {
+      color: var(--accent);
+    }
+
+    .blog-entry-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .blog-entry-tags {
+      display: flex;
+      gap: 12px;
+    }
+
+    .blog-entry-tag {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.6875rem;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+
+    .blog-entry-reading-time {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.6875rem;
+      color: var(--muted);
+    }
+
+    /* ══════════════════════════════════════════
+       VIEW 3: ARTICLE DETAIL
+    ══════════════════════════════════════════ */
+
+    .article-layout {
+      position: relative;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    .article-main {
+      max-width: 640px;
+    }
+
+    .article-header {
+      padding: 80px 0 48px;
+    }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--fg);
+      line-height: 1.2;
+      margin-bottom: 24px;
+    }
+
+    .article-meta {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    .article-rule {
+      margin: 40px 0;
+    }
+
+    .article-body {
+      font-family: var(--font-serif);
+      font-size: 1.125rem;
+      line-height: 2.0;
+      color: var(--fg);
+    }
+
+    .article-body p {
+      margin-bottom: 32px;
+    }
+
+    .article-body h2 {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin: 64px 0 24px;
+      letter-spacing: -0.01em;
+    }
+
+    .article-body blockquote {
+      border-left: 2px solid var(--accent);
+      padding: 8px 0 8px 32px;
+      margin: 40px 0;
+      font-style: italic;
+      color: var(--fg2);
+    }
+
+    .article-body pre {
+      background-color: var(--bg2);
+      padding: 32px;
+      overflow-x: auto;
+      margin: 40px 0;
+    }
+
+    .article-body code {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: var(--fg2);
+      line-height: 1.7;
+    }
+
+    .article-body p code {
+      background-color: var(--bg2);
+      padding: 2px 6px;
+      font-size: 0.875em;
+    }
+
+    /* TOC */
+    .toc {
+      position: absolute;
+      top: 80px;
+      right: 0;
+      width: 200px;
+      padding-top: 136px;
+    }
+
+    .toc-label {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .toc-link {
+      display: block;
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.6875rem;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .toc-link:hover {
+      color: var(--accent);
+    }
+
+    /* Related Posts */
+    .related-posts {
+      padding: 64px 0 80px;
+    }
+
+    .related-label {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.6875rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    .related-item {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    .related-item:first-of-type {
+      border-top: 1px solid var(--border);
+    }
+
+    .related-item-date {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.6875rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .related-item-title {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      color: var(--fg);
+      transition: color 0.2s ease;
+    }
+
+    .related-item:hover .related-item-title {
+      color: var(--accent);
+    }
+
+    /* ══════════════════════════════════════════
+       VIEW 4: BOOKS LISTING
+    ══════════════════════════════════════════ */
+
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 40px;
+      padding: 0 0 80px;
+    }
+
+    .book-card {
+      background-color: transparent;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+    }
+
+    .book-card:hover {
+      border-color: var(--accent);
+    }
+
+    .book-cover {
+      width: 100%;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .book-cover-title {
+      font-family: var(--font-serif);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      padding: 16px;
+      line-height: 1.4;
+    }
+
+    .book-card-body {
+      padding: 24px;
+    }
+
+    .book-card-title {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 6px;
+    }
+
+    .book-card-author {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.75rem;
+      color: var(--fg2);
+      margin-bottom: 12px;
+    }
+
+    .book-card-stars {
+      color: var(--accent);
+      font-size: 0.6875rem;
+      letter-spacing: 0.2em;
+      margin-bottom: 8px;
+    }
+
+    .book-card-genre {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.6875rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ══════════════════════════════════════════
+       VIEW 5: BOOK DETAIL
+    ══════════════════════════════════════════ */
+
+    .book-detail-header {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 48px;
+      align-items: start;
+      padding: 80px 0 56px;
+    }
+
+    .book-detail-cover {
+      width: 160px;
+      height: 240px;
+      background-color: #4A5568;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .book-detail-cover-title {
+      font-family: var(--font-serif);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      padding: 16px;
+      line-height: 1.4;
+    }
+
+    .book-detail-meta {
+      padding-top: 8px;
+    }
+
+    .book-detail-title {
+      font-family: var(--font-serif);
+      font-size: 1.75rem;
+      font-weight: 400;
+      color: var(--fg);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .book-detail-author {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.875rem;
+      color: var(--fg2);
+      margin-bottom: 24px;
+    }
+
+    .book-detail-stars {
+      color: var(--accent);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      margin-bottom: 16px;
+    }
+
+    .book-detail-attrs {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .book-detail-attr {
+      display: flex;
+      gap: 16px;
+    }
+
+    .book-detail-attr-label {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.6875rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      width: 72px;
+      flex-shrink: 0;
+    }
+
+    .book-detail-attr-value {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.6875rem;
+      color: var(--fg2);
+    }
+
+    .book-detail-body {
+      font-family: var(--font-serif);
+      font-size: 1.0625rem;
+      line-height: 2.0;
+      color: var(--fg);
+      padding-bottom: 80px;
+    }
+
+    .book-detail-body h2 {
+      font-family: var(--font-serif);
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin: 56px 0 20px;
+      letter-spacing: -0.01em;
+    }
+
+    .book-detail-body p {
+      margin-bottom: 28px;
+    }
+
+    .book-detail-body blockquote {
+      border-left: 2px solid var(--accent);
+      padding: 8px 0 8px 32px;
+      margin: 40px 0;
+      font-style: italic;
+      color: var(--fg2);
+    }
+
+    .book-detail-body ol {
+      padding-left: 0;
+      list-style: none;
+      counter-reset: item;
+    }
+
+    .book-detail-body ol li {
+      counter-increment: item;
+      display: flex;
+      gap: 24px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .book-detail-body ol li:first-child {
+      border-top: 1px solid var(--border);
+    }
+
+    .book-detail-body ol li::before {
+      content: counter(item, decimal-leading-zero);
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.6875rem;
+      color: var(--accent);
+      padding-top: 4px;
+      flex-shrink: 0;
+      width: 24px;
+    }
+
+    /* ══════════════════════════════════════════
+       VIEW 6: PROJECTS
+    ══════════════════════════════════════════ */
+
+    .project-item {
+      padding: 72px 0;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr 240px;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .project-item:first-of-type {
+      border-top: 1px solid var(--border);
+    }
+
+    .project-name {
+      font-family: var(--font-serif);
+      font-size: 1.75rem;
+      font-weight: 400;
+      color: var(--fg);
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .project-platform {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      margin-bottom: 24px;
+    }
+
+    .project-desc {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      color: var(--fg2);
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+
+    .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .project-tech-tag {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.6875rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    .project-tech-tag + .project-tech-tag::before {
+      content: '·';
+      margin-right: 12px;
+      color: var(--border);
+    }
+
+    .project-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .project-link {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.75rem;
+      color: var(--accent);
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: opacity 0.2s ease;
+    }
+
+    .project-link:hover {
+      opacity: 0.7;
+    }
+
+    .project-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 200px;
+    }
+
+    .project-shape-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background-color: transparent;
+      border: 1px solid var(--accent);
+      opacity: 0.4;
+    }
+
+    .project-shape-rect {
+      width: 140px;
+      height: 90px;
+      background-color: transparent;
+      border: 1px solid var(--accent);
+      opacity: 0.4;
+    }
+
+    .project-shape-diamond {
+      width: 90px;
+      height: 90px;
+      background-color: transparent;
+      border: 1px solid var(--accent);
+      opacity: 0.4;
+      transform: rotate(45deg);
+    }
+
+    /* ══════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════ */
+
+    @media (max-width: 768px) {
+      .container,
+      .container-narrow {
+        padding: 0 24px;
+      }
+
+      .top-bar {
+        padding: 0 24px;
+      }
+
+      .top-bar-nav {
+        gap: 16px;
+      }
+
+      .top-bar-nav a.hide-mobile {
+        display: none;
+      }
+
+      .hero {
+        padding: 80px 0 72px;
+      }
+
+      .article-list-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .books-list-item {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .books-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .book-detail-header {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .project-item {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .project-visual {
+        display: none;
+      }
+
+      .toc {
+        display: none;
+      }
+
+      .article-layout {
+        padding: 0 24px;
+      }
+
+      .bottom-nav {
+        gap: 16px;
+      }
+
+      .bottom-nav button {
+        font-size: 0.625rem;
+      }
+    }
+
+    @media (max-width: 960px) {
+      .toc {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ─── Top Bar ─── -->
+  <header class="top-bar">
+    <span class="top-bar-name">Diego Romero</span>
+    <nav class="top-bar-nav">
+      <a onclick="showView('home')" class="hide-mobile">home</a>
+      <a onclick="showView('blog')" class="hide-mobile">writing</a>
+      <a onclick="showView('books')" class="hide-mobile">reading</a>
+      <a onclick="showView('projects')" class="hide-mobile">work</a>
+      <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">dark</button>
+    </nav>
+  </header>
+
+  <!-- ════════════════════════════════════════
+       VIEW 1: HOMEPAGE
+  ════════════════════════════════════════ -->
+  <section id="view-home" class="view active">
+    <div class="container">
+
+      <!-- Hero -->
+      <div class="hero">
+        <h1 class="hero-name">Diego Romero</h1>
+        <p class="hero-tagline">Software engineer. Writing on technology, books, and the practice of building.</p>
+      </div>
+
+      <!-- Indigo Rule — the one dramatic element -->
+      <div class="hero-rule-wrapper">
+        <hr class="indigo-rule" />
+        <p class="publishing-note">Publishing every couple of days.</p>
+      </div>
+
+      <!-- Latest Articles -->
+      <div class="home-section">
+        <p class="home-section-label">Latest writing</p>
+
+        <div class="article-list-item" onclick="showView('article')">
+          <span class="article-list-date">Feb 18, 2026</span>
+          <span class="article-list-title">Rewriting My Blog With Claude Code</span>
+        </div>
+
+        <div class="article-list-item" onclick="showView('blog')">
+          <span class="article-list-date">Feb 12, 2026</span>
+          <span class="article-list-title">Why Talent Trumps Passion</span>
+        </div>
+
+        <div class="article-list-item" onclick="showView('blog')">
+          <span class="article-list-date">Feb 05, 2026</span>
+          <span class="article-list-title">The Compound Effect of Consistent Shipping</span>
+        </div>
+      </div>
+
+      <hr class="border-rule" />
+
+      <!-- Books -->
+      <div class="home-section">
+        <p class="home-section-label">Currently reading</p>
+
+        <div class="books-list-item" onclick="showView('book-detail')">
+          <span class="books-list-title">Deep Work</span>
+          <span class="books-list-author">Cal Newport</span>
+          <span class="books-list-year">2016</span>
+          <span class="books-list-genre">Productivity</span>
+        </div>
+
+        <div class="books-list-item" onclick="showView('books')">
+          <span class="books-list-title">The Psychology of Money</span>
+          <span class="books-list-author">Morgan Housel</span>
+          <span class="books-list-year">2020</span>
+          <span class="books-list-genre">Finance</span>
+        </div>
+
+        <div class="books-list-item" onclick="showView('books')">
+          <span class="books-list-title">The Ride of a Lifetime</span>
+          <span class="books-list-author">Robert Iger</span>
+          <span class="books-list-year">2019</span>
+          <span class="books-list-genre">Business</span>
+        </div>
+
+        <div class="books-list-item" onclick="showView('books')">
+          <span class="books-list-title">Shoe Dog</span>
+          <span class="books-list-author">Phil Knight</span>
+          <span class="books-list-year">2016</span>
+          <span class="books-list-genre">Memoir</span>
+        </div>
+      </div>
+
+      <hr class="border-rule" />
+
+      <!-- Projects -->
+      <div class="home-section">
+        <p class="home-section-label">Work</p>
+
+        <div class="projects-list-item" onclick="showView('projects')">
+          <div class="projects-list-name">Deepflow</div>
+          <div class="projects-list-desc">A focus and time-tracking application built around deep work principles.</div>
+        </div>
+
+        <div class="projects-list-item" onclick="showView('projects')">
+          <div class="projects-list-name">Listu</div>
+          <div class="projects-list-desc">A minimal list-making tool that respects how the human mind actually organizes thought.</div>
+        </div>
+
+        <div class="projects-list-item" onclick="showView('projects')">
+          <div class="projects-list-name">KODR</div>
+          <div class="projects-list-desc">An interactive platform for learning to code through immediate, tactile feedback.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════
+       VIEW 2: BLOG LISTING
+  ════════════════════════════════════════ -->
+  <section id="view-blog" class="view">
+    <div class="container">
+
+      <div class="page-header">
+        <h1 class="page-title">Writing</h1>
+      </div>
+
+      <!-- Tag Filter -->
+      <div class="tag-filter">
+        <span class="tag-filter-item active" onclick="filterTag(this)">all</span>
+        <span class="tag-separator">·</span>
+        <span class="tag-filter-item" onclick="filterTag(this)">technology</span>
+        <span class="tag-separator">·</span>
+        <span class="tag-filter-item" onclick="filterTag(this)">books</span>
+        <span class="tag-separator">·</span>
+        <span class="tag-filter-item" onclick="filterTag(this)">building</span>
+        <span class="tag-separator">·</span>
+        <span class="tag-filter-item" onclick="filterTag(this)">productivity</span>
+      </div>
+
+      <!-- Articles -->
+      <div class="blog-entry" onclick="showView('article')">
+        <div class="blog-entry-date">February 18, 2026</div>
+        <div class="blog-entry-title">Rewriting My Blog With Claude Code</div>
+        <div class="blog-entry-meta">
+          <div class="blog-entry-tags">
+            <span class="blog-entry-tag">technology</span>
+            <span class="blog-entry-tag">building</span>
+          </div>
+          <span class="blog-entry-reading-time">8 min read</span>
+        </div>
+      </div>
+
+      <div class="blog-entry">
+        <div class="blog-entry-date">February 12, 2026</div>
+        <div class="blog-entry-title">Why Talent Trumps Passion</div>
+        <div class="blog-entry-meta">
+          <div class="blog-entry-tags">
+            <span class="blog-entry-tag">books</span>
+            <span class="blog-entry-tag">productivity</span>
+          </div>
+          <span class="blog-entry-reading-time">6 min read</span>
+        </div>
+      </div>
+
+      <div class="blog-entry">
+        <div class="blog-entry-date">February 05, 2026</div>
+        <div class="blog-entry-title">The Compound Effect of Consistent Shipping</div>
+        <div class="blog-entry-meta">
+          <div class="blog-entry-tags">
+            <span class="blog-entry-tag">building</span>
+          </div>
+          <span class="blog-entry-reading-time">5 min read</span>
+        </div>
+      </div>
+
+      <div class="blog-entry">
+        <div class="blog-entry-date">January 28, 2026</div>
+        <div class="blog-entry-title">On the Courage to Be Disliked</div>
+        <div class="blog-entry-meta">
+          <div class="blog-entry-tags">
+            <span class="blog-entry-tag">books</span>
+          </div>
+          <span class="blog-entry-reading-time">7 min read</span>
+        </div>
+      </div>
+
+      <div class="blog-entry">
+        <div class="blog-entry-date">January 19, 2026</div>
+        <div class="blog-entry-title">Tmux as a Second Brain for the Terminal</div>
+        <div class="blog-entry-meta">
+          <div class="blog-entry-tags">
+            <span class="blog-entry-tag">technology</span>
+          </div>
+          <span class="blog-entry-reading-time">4 min read</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════
+       VIEW 3: ARTICLE DETAIL
+  ════════════════════════════════════════ -->
+  <section id="view-article" class="view">
+    <div class="article-layout">
+
+      <!-- TOC — desktop only -->
+      <aside class="toc">
+        <div class="toc-label">Contents</div>
+        <a class="toc-link">The Old Blog Was Holding Me Back</a>
+        <a class="toc-link">Choosing Claude Code</a>
+        <a class="toc-link">The Architecture</a>
+        <a class="toc-link">What I Learned</a>
+      </aside>
+
+      <div class="article-main">
+        <div class="article-header">
+          <h1 class="article-title">Rewriting My Blog With Claude Code</h1>
+          <div class="article-meta">February 18, 2026 &nbsp;·&nbsp; 8 min read</div>
+        </div>
+
+        <hr class="indigo-rule article-rule" />
+
+        <div class="article-body">
+
+          <p>There is a particular kind of guilt that accumulates around a blog you built yourself and then quietly neglected. The code becomes a monument to a version of you that had more enthusiasm and less clarity. Mine had been sitting that way for two years — a Next.js project with dependencies so outdated they were practically archaeology.</p>
+
+          <p>I decided to rewrite it. Not incrementally, not carefully — completely. And I decided to do it with Claude Code as my collaborator. What followed was one of the more interesting weeks of work I have done in some time.</p>
+
+          <h2>The Old Blog Was Holding Me Back</h2>
+
+          <p>The original blog was built in a weekend of enthusiasm. It had seventeen npm packages where three would have served. It had a custom MDX pipeline that I no longer remembered how to modify. Every time I wanted to write a post, I found myself spending the first twenty minutes debugging the development environment instead of writing.</p>
+
+          <p>This is the quiet cost of over-engineering: the friction compounds. Eventually you stop writing altogether, because starting feels like too much work before the actual work begins. The blog becomes a project rather than a practice.</p>
+
+          <blockquote>
+            The best tool for a personal blog is the one that disappears — that gets out of the way so completely you forget it exists and simply write.
+          </blockquote>
+
+          <p>I wanted something that felt more like a journal and less like a product. Static files. Minimal JavaScript. A design that rewarded silence and space rather than filling every pixel with motion.</p>
+
+          <h2>Choosing Claude Code as My Collaborator</h2>
+
+          <p>I had been using Claude for writing and thinking for a while, but Claude Code is a different kind of tool. It operates in your filesystem, reads your existing code, writes new files, runs commands. It works alongside you rather than simply answering questions.</p>
+
+          <p>What surprised me most was the quality of its judgment about trade-offs. When I described what I wanted, it did not immediately generate code. It asked clarifying questions. It pushed back on choices that seemed like they would create complexity without benefit. It suggested I consider what I actually needed versus what I thought I wanted.</p>
+
+          <p>This is the kind of conversation I might have with a thoughtful engineering colleague. I found myself working better because of it — more considered, more deliberate, less prone to reaching for familiar tools out of habit.</p>
+
+          <h2>The Architecture I Landed On</h2>
+
+          <p>The final structure is deliberately simple. TypeScript for type safety where it matters, a flat file structure that mirrors the mental model of the site, and a build process with no surprises.</p>
+
+<pre><code>// content/posts structure
+interface Post {
+  slug:        string;
+  title:       string;
+  date:        string;
+  tags:        string[];
+  readingTime: number;
+  content:     string;
+}
+
+// pages are just functions
+function buildPost(post: Post): string {
+  return template({
+    title:   post.title,
+    content: renderMarkdown(post.content),
+    meta:    formatMeta(post),
+  });
+}</code></pre>
+
+          <p>The build runs in under a second. The output is static HTML — no JavaScript required to read a post. The design is entirely CSS. It is boring in the right ways, which means I do not think about it.</p>
+
+          <h2>What I Learned</h2>
+
+          <p>The most valuable thing I took from this week was not the new blog — it was a clearer sense of how to work with AI tools well. There is a quality of engagement that makes the collaboration work. You have to know what you want with some precision. You have to be willing to interrogate your own assumptions when they are challenged. You have to treat the output as a starting point for thinking rather than an answer to stop at.</p>
+
+          <p>Claude Code made the project go faster. More importantly, it made the decisions better. Having to articulate choices in natural language — explain why I wanted something, what problem it solved, what I was willing to give up — forced a clarity I would not have otherwise reached alone.</p>
+
+          <blockquote>
+            The constraint of having to explain yourself is, it turns out, a very productive constraint. It is hard to defend a bad decision out loud.
+          </blockquote>
+
+          <p>The blog is live now. It has fewer features than the old one and is more pleasant to use. I wrote three posts in the week after launch — more than I had written in the previous six months. The infrastructure disappeared, which was the entire point.</p>
+
+        </div>
+
+        <!-- Related Posts -->
+        <div class="related-posts">
+          <hr class="border-rule" style="margin-bottom: 40px;" />
+          <div class="related-label">Related writing</div>
+
+          <div class="related-item">
+            <div class="related-item-date">February 05, 2026</div>
+            <div class="related-item-title">The Compound Effect of Consistent Shipping</div>
+          </div>
+
+          <div class="related-item">
+            <div class="related-item-date">January 19, 2026</div>
+            <div class="related-item-title">Tmux as a Second Brain for the Terminal</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════
+       VIEW 4: BOOKS LISTING
+  ════════════════════════════════════════ -->
+  <section id="view-books" class="view">
+    <div class="container">
+
+      <div class="page-header">
+        <h1 class="page-title">Reading</h1>
+        <p style="font-family: var(--font-sans); font-weight: 300; font-size: 0.8125rem; color: var(--muted); margin-top: 16px; letter-spacing: 0.02em;">Books I have read and thought worth remembering.</p>
+      </div>
+
+      <div class="books-grid">
+
+        <!-- Deep Work -->
+        <div class="book-card" onclick="showView('book-detail')">
+          <div class="book-cover" style="background-color: #4A5568;">
+            <span class="book-cover-title">Deep Work</span>
+          </div>
+          <div class="book-card-body">
+            <div class="book-card-title">Deep Work</div>
+            <div class="book-card-author">Cal Newport, 2016</div>
+            <div class="book-card-stars">● ● ● ● ●</div>
+            <div class="book-card-genre">Productivity / Focus</div>
+          </div>
+        </div>
+
+        <!-- Psychology of Money -->
+        <div class="book-card">
+          <div class="book-cover" style="background-color: #3D5A3E;">
+            <span class="book-cover-title">The Psychology of Money</span>
+          </div>
+          <div class="book-card-body">
+            <div class="book-card-title">The Psychology of Money</div>
+            <div class="book-card-author">Morgan Housel, 2020</div>
+            <div class="book-card-stars">● ● ● ● ○</div>
+            <div class="book-card-genre">Finance / Behavior</div>
+          </div>
+        </div>
+
+        <!-- Ride of a Lifetime -->
+        <div class="book-card">
+          <div class="book-cover" style="background-color: #4A3F5C;">
+            <span class="book-cover-title">The Ride of a Lifetime</span>
+          </div>
+          <div class="book-card-body">
+            <div class="book-card-title">The Ride of a Lifetime</div>
+            <div class="book-card-author">Robert Iger, 2019</div>
+            <div class="book-card-stars">● ● ● ● ○</div>
+            <div class="book-card-genre">Business / Memoir</div>
+          </div>
+        </div>
+
+        <!-- Shoe Dog -->
+        <div class="book-card">
+          <div class="book-cover" style="background-color: #5A3A2A;">
+            <span class="book-cover-title">Shoe Dog</span>
+          </div>
+          <div class="book-card-body">
+            <div class="book-card-title">Shoe Dog</div>
+            <div class="book-card-author">Phil Knight, 2016</div>
+            <div class="book-card-stars">● ● ● ● ●</div>
+            <div class="book-card-genre">Memoir / Entrepreneurship</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════
+       VIEW 5: BOOK DETAIL
+  ════════════════════════════════════════ -->
+  <section id="view-book-detail" class="view">
+    <div class="container-narrow">
+
+      <div class="book-detail-header">
+        <div class="book-detail-cover">
+          <span class="book-detail-cover-title">Deep Work</span>
+        </div>
+        <div class="book-detail-meta">
+          <div class="book-detail-title">Deep Work</div>
+          <div class="book-detail-author">Cal Newport</div>
+          <div class="book-detail-stars">● ● ● ● ●</div>
+          <div class="book-detail-attrs">
+            <div class="book-detail-attr">
+              <span class="book-detail-attr-label">Published</span>
+              <span class="book-detail-attr-value">2016</span>
+            </div>
+            <div class="book-detail-attr">
+              <span class="book-detail-attr-label">Genre</span>
+              <span class="book-detail-attr-value">Productivity</span>
+            </div>
+            <div class="book-detail-attr">
+              <span class="book-detail-attr-label">Pages</span>
+              <span class="book-detail-attr-value">296</span>
+            </div>
+            <div class="book-detail-attr">
+              <span class="book-detail-attr-label">Read</span>
+              <span class="book-detail-attr-value">January 2026</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="indigo-rule" />
+
+      <div class="book-detail-body">
+
+        <h2>The Argument</h2>
+
+        <p>Newport's central claim is deceptively simple: the ability to focus without distraction on cognitively demanding work is becoming increasingly rare at exactly the moment it is becoming increasingly valuable. Most knowledge workers, he argues, spend their days in a state of perpetual shallow engagement — email, meetings, Slack, the thousand small interruptions that feel like work but are mostly friction.</p>
+
+        <p>He defines "deep work" as professional activity performed in a state of distraction-free concentration that pushes your cognitive capabilities to their limit. The opposite — shallow work — is logistically necessary but cognitively undemanding. The tragedy of the modern workplace is that we have optimized for shallow work at the expense of the kind of thinking that actually creates value.</p>
+
+        <blockquote>
+          "A deep life is a good life." Newport does not soften this into advice. He states it as a proposition — that the quality of your attention is the quality of your life.
+        </blockquote>
+
+        <p>Newport does not frame this as productivity advice in the conventional sense. He makes a more ambitious claim: that depth of focus is not merely a professional advantage but a source of meaning. The person who can give their full attention to difficult work is, he suggests, living a different kind of life than the one who cannot.</p>
+
+        <h2>What I Took From It</h2>
+
+        <p>I came to this book with some skepticism. I have read enough productivity literature to know the genre well — the confident diagnoses, the simple prescriptions, the implicit promise that the right system will reorganize your life. Newport is better than most, but the genre's limitations apply: real working conditions do not always permit the kind of total restructuring he recommends.</p>
+
+        <p>What landed, for me, was not the system but the underlying diagnosis. I recognized my own habits in his description of the shallow worker — the way I refreshed my inbox not because I expected anything but because the motion of refreshing felt like doing something. The way I scheduled calls that could have been emails because the conversation felt more productive than the silence of actual work.</p>
+
+        <p>The most useful reframe was his treatment of boredom. Newport argues that the ability to focus deeply is trained, not native, and that we erode it every time we reach for distraction at the first moment of discomfort. The person who cannot tolerate being bored cannot do deep work — because deep work requires sitting with difficulty, not escaping from it.</p>
+
+        <blockquote>
+          The capacity for depth is built in the same place it is exercised: in the ordinary moments when you choose not to look away.
+        </blockquote>
+
+        <h2>Five Things I Practice Now</h2>
+
+        <ol>
+          <li>I schedule two uninterrupted hours of deep work each morning before opening email or any communication tool. The hours between 7 and 9 are inviolable unless something has genuinely broken in production.</li>
+          <li>I keep a "shutdown ritual" — a short practice at the end of each workday where I review open tasks, plan tomorrow's priorities, and declare work complete. This is harder to maintain than it sounds, and far more useful than I expected.</li>
+          <li>I removed social media applications from my phone entirely. Not because social media is evil, but because the presence of the shortcut made the choice automatic. Without the app, I have to decide to open a browser, which introduces just enough friction to make the choice conscious.</li>
+          <li>When I feel the pull toward distraction in the middle of a focus session, I note the time and wait twenty minutes before acting on it. Often the impulse has passed. When it has not, it was probably a real need.</li>
+          <li>I have become much more willing to say no to meetings that lack a clear agenda and a specific decision to be made. This is a professional risk in some cultures. I have decided it is a risk worth taking.</li>
+        </ol>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════
+       VIEW 6: PROJECTS
+  ════════════════════════════════════════ -->
+  <section id="view-projects" class="view">
+    <div class="container">
+
+      <div class="page-header">
+        <h1 class="page-title">Projects</h1>
+      </div>
+
+      <!-- Deepflow -->
+      <div class="project-item">
+        <div class="project-content">
+          <div class="project-name">Deepflow</div>
+          <div class="project-platform">macOS &amp; iOS</div>
+          <p class="project-desc">A focus and time-tracking application built around the principles of deep work. Deepflow structures your day into intentional sessions, tracks where your attention actually goes, and reflects the data back without judgment — so you can see the gap between how you think you spend your time and how you actually do.</p>
+          <div class="project-tech">
+            <span class="project-tech-tag">Swift</span>
+            <span class="project-tech-tag">SwiftUI</span>
+            <span class="project-tech-tag">Core Data</span>
+            <span class="project-tech-tag">CloudKit</span>
+          </div>
+          <div class="project-links">
+            <a class="project-link">App Store</a>
+            <a class="project-link">Details</a>
+          </div>
+        </div>
+        <div class="project-visual">
+          <div class="project-shape-circle"></div>
+        </div>
+      </div>
+
+      <!-- Listu -->
+      <div class="project-item">
+        <div class="project-content">
+          <div class="project-name">Listu</div>
+          <div class="project-platform">Web</div>
+          <p class="project-desc">A minimal list-making tool that respects how the human mind actually organizes thought. Lists in Listu are not flat — they are nested, fluid, and easy to reorganize. The entire interface is keyboard-driven, and the data model is simple enough that you never have to worry about lock-in.</p>
+          <div class="project-tech">
+            <span class="project-tech-tag">TypeScript</span>
+            <span class="project-tech-tag">React</span>
+            <span class="project-tech-tag">Supabase</span>
+            <span class="project-tech-tag">Tailwind</span>
+          </div>
+          <div class="project-links">
+            <a class="project-link">listu.app</a>
+            <a class="project-link">GitHub</a>
+          </div>
+        </div>
+        <div class="project-visual">
+          <div class="project-shape-rect"></div>
+        </div>
+      </div>
+
+      <!-- KODR -->
+      <div class="project-item">
+        <div class="project-content">
+          <div class="project-name">KODR</div>
+          <div class="project-platform">Web / Education</div>
+          <p class="project-desc">An interactive platform for learning to code through immediate, tactile feedback. Every concept in KODR is taught through a small, self-contained challenge that runs in the browser. The goal is to eliminate the gap between reading about code and writing code — the gap where most learning quietly dies.</p>
+          <div class="project-tech">
+            <span class="project-tech-tag">Next.js</span>
+            <span class="project-tech-tag">TypeScript</span>
+            <span class="project-tech-tag">Monaco Editor</span>
+            <span class="project-tech-tag">PostgreSQL</span>
+          </div>
+          <div class="project-links">
+            <a class="project-link">kodr.dev</a>
+            <a class="project-link">GitHub</a>
+          </div>
+        </div>
+        <div class="project-visual">
+          <div class="project-shape-diamond"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── Bottom Navigation ─── -->
+  <nav class="bottom-nav">
+    <button onclick="showView('home')" id="nav-home" class="active">home</button>
+    <button onclick="showView('blog')" id="nav-blog">writing</button>
+    <button onclick="showView('article')" id="nav-article">article</button>
+    <button onclick="showView('books')" id="nav-books">reading</button>
+    <button onclick="showView('book-detail')" id="nav-book-detail">book</button>
+    <button onclick="showView('projects')" id="nav-projects">work</button>
+  </nav>
+
+  <script>
+    // ─── View Navigation ───
+    const views = ['home', 'blog', 'article', 'books', 'book-detail', 'projects'];
+    let currentView = 'home';
+
+    function showView(id) {
+      if (id === currentView) return;
+
+      const prev = document.getElementById('view-' + currentView);
+      const next = document.getElementById('view-' + id);
+
+      if (!next) return;
+
+      // Fade out current
+      prev.classList.remove('visible');
+
+      setTimeout(() => {
+        prev.classList.remove('active');
+        next.classList.add('active');
+
+        // Force reflow
+        next.getBoundingClientRect();
+
+        // Fade in next
+        setTimeout(() => {
+          next.classList.add('visible');
+        }, 16);
+
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }, 300);
+
+      currentView = id;
+      updateNav(id);
+    }
+
+    function updateNav(id) {
+      views.forEach(v => {
+        const btn = document.getElementById('nav-' + v);
+        if (btn) btn.classList.remove('active');
+      });
+      const active = document.getElementById('nav-' + id);
+      if (active) active.classList.add('active');
+    }
+
+    // ─── Theme Toggle ───
+    function toggleTheme() {
+      const html = document.documentElement;
+      const btn = document.getElementById('theme-btn');
+      if (html.getAttribute('data-theme') === 'dark') {
+        html.setAttribute('data-theme', 'light');
+        btn.textContent = 'dark';
+      } else {
+        html.setAttribute('data-theme', 'dark');
+        btn.textContent = 'light';
+      }
+    }
+
+    // ─── Tag Filter ───
+    function filterTag(el) {
+      document.querySelectorAll('.tag-filter-item').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    // ─── Init: show first view ───
+    (function init() {
+      const home = document.getElementById('view-home');
+      home.classList.add('active');
+      // Short delay to allow layout to settle before fading in
+      setTimeout(() => home.classList.add('visible'), 50);
+    })();
+  </script>
+
+</body>
+</html>

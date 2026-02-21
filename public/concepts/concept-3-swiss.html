@@ -1,0 +1,2589 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Diego Romero — Swiss Design Concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,400;1,700&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+
+<style>
+/* ============================================================
+   CSS CUSTOM PROPERTIES
+   ============================================================ */
+:root {
+  --bg: #FFFFFF;
+  --fg: #0D0D0D;
+  --accent: #E63329;
+  --border: #0D0D0D;
+  --muted: #767676;
+  --surface: #F5F5F5;
+  --grid-line: rgba(0,0,0,0.05);
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-body: 'Barlow', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --nav-h: 56px;
+  --max-w: 1200px;
+  --col-pad: clamp(16px, 4vw, 48px);
+}
+
+[data-theme="dark"] {
+  --bg: #0D0D0D;
+  --fg: #F5F5F5;
+  --accent: #E63329;
+  --border: #F5F5F5;
+  --muted: #888888;
+  --surface: #1A1A1A;
+  --grid-line: rgba(255,255,255,0.04);
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  min-height: 100vh;
+  padding-bottom: calc(var(--nav-h) + 16px);
+
+  /* SWISS GRID BACKGROUND */
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 39px,
+      var(--grid-line) 39px,
+      var(--grid-line) 40px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 39px,
+      var(--grid-line) 39px,
+      var(--grid-line) 40px
+    );
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img { display: block; max-width: 100%; }
+
+ul, ol { list-style: none; }
+
+/* ============================================================
+   LAYOUT UTILITIES
+   ============================================================ */
+.container {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--col-pad);
+}
+
+.view {
+  display: none;
+  opacity: 0;
+  animation: fadeIn 0.15s ease forwards;
+  min-height: calc(100vh - var(--nav-h) - 16px);
+}
+
+.view.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ============================================================
+   SITE HEADER (shared)
+   ============================================================ */
+.site-header {
+  border-bottom: 2px solid var(--border);
+  padding: 0 var(--col-pad);
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 100;
+}
+
+.site-header__inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.logo__mark {
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logo__text {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.header-nav a {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.12s;
+  cursor: pointer;
+}
+
+.header-nav a:hover,
+.header-nav a.active {
+  color: var(--accent);
+}
+
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+
+.theme-toggle:hover {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+/* ============================================================
+   BOTTOM NAV
+   ============================================================ */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-h);
+  background: var(--bg);
+  border-top: 2px solid var(--border);
+  display: flex;
+  z-index: 200;
+}
+
+.bottom-nav__item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  border-right: 1px solid var(--border);
+  transition: background 0.1s, color 0.1s;
+  padding: 4px 2px;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.bottom-nav__item:last-child {
+  border-right: none;
+}
+
+.bottom-nav__item:hover {
+  background: var(--surface);
+  color: var(--fg);
+}
+
+.bottom-nav__item.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ============================================================
+   THICK RED RULE
+   ============================================================ */
+.red-rule {
+  height: 4px;
+  background: var(--accent);
+  margin: 0;
+}
+
+.section-rule {
+  height: 2px;
+  background: var(--border);
+  margin: 0;
+}
+
+/* ============================================================
+   SECTION LABELS
+   ============================================================ */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+  display: block;
+}
+
+/* ============================================================
+   VIEW 1: HOMEPAGE
+   ============================================================ */
+#view-home .hero {
+  padding: 60px 0 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+#view-home .hero__inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--col-pad);
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  position: relative;
+}
+
+#view-home .hero__text {
+  flex: 1;
+  padding-top: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+#view-home .hero__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+  display: block;
+}
+
+#view-home .hero__name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+#view-home .hero__desc {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--muted);
+  max-width: 460px;
+  border-left: 4px solid var(--accent);
+  padding-left: 20px;
+  margin-bottom: 32px;
+}
+
+#view-home .hero__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg);
+  border: 2px solid var(--fg);
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+
+#view-home .hero__cta:hover {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+#view-home .hero__number {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(160px, 22vw, 300px);
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.9;
+  letter-spacing: -0.04em;
+  margin-left: auto;
+  margin-top: -20px;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* Articles section */
+#view-home .articles-section {
+  padding: 0 0 60px;
+}
+
+#view-home .articles-section .container {
+  padding-top: 48px;
+}
+
+#view-home .articles-section__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--border);
+}
+
+#view-home .articles-section__title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+#view-home .articles-section__link {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.article-row {
+  display: grid;
+  grid-template-columns: 56px 1fr auto auto;
+  gap: 16px 24px;
+  align-items: baseline;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--grid-line);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.article-row:hover {
+  background: var(--surface);
+  margin: 0 -16px;
+  padding: 20px 16px;
+}
+
+.article-row__num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.5rem;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.article-row__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+}
+
+.article-row__tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+
+.tag--accent {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.article-row__date {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--muted);
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+}
+
+/* Currently reading */
+#view-home .reading-section {
+  padding: 60px 0;
+  background: var(--surface);
+  border-top: 2px solid var(--border);
+  border-bottom: 2px solid var(--border);
+}
+
+#view-home .reading-card {
+  border: 2px solid var(--accent);
+  padding: 32px;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.reading-cover {
+  background: var(--accent);
+  aspect-ratio: 2/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.8rem;
+  color: #fff;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.reading-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reading-meta__label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.reading-meta__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.8rem;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+.reading-meta__author {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+
+.reading-meta__genre {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--accent);
+  color: #fff;
+  padding: 3px 10px;
+  margin-top: 8px;
+  align-self: flex-start;
+}
+
+/* Projects */
+#view-home .projects-section {
+  padding: 60px 0;
+}
+
+#view-home .projects-section__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--border);
+}
+
+#view-home .projects-section__title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border: 1px solid var(--border);
+}
+
+.project-card {
+  padding: 28px 24px;
+  border-right: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.project-card:last-child {
+  border-right: none;
+}
+
+.project-card:hover {
+  background: var(--surface);
+}
+
+.project-card__num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 3rem;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.project-card__name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 12px;
+  line-height: 1.1;
+}
+
+.project-card__desc {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+/* Home footer */
+#view-home .home-footer {
+  border-top: 2px solid var(--border);
+  padding: 24px 0;
+}
+
+#view-home .home-footer__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#view-home .home-footer__copy {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   VIEW 2: BLOG LISTING
+   ============================================================ */
+#view-blog .blog-header {
+  padding: 48px 0 0;
+  border-bottom: 2px solid var(--border);
+}
+
+#view-blog .blog-header__inner {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-bottom: 24px;
+}
+
+#view-blog .blog-header__title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(3rem, 8vw, 7rem);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+#view-blog .blog-header__count {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(2rem, 5vw, 4rem);
+  color: var(--accent);
+  line-height: 1;
+  padding-bottom: 4px;
+}
+
+.filter-row {
+  display: flex;
+  gap: 0;
+  border-top: 1px solid var(--border);
+  overflow-x: auto;
+}
+
+.filter-btn {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  border-right: 1px solid var(--border);
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.1s, color 0.1s;
+}
+
+.filter-btn:last-child { border-right: none; }
+
+.filter-btn:hover {
+  background: var(--surface);
+  color: var(--fg);
+}
+
+.filter-btn.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Articles table */
+.articles-table {
+  padding: 0;
+}
+
+.article-table-row {
+  display: grid;
+  grid-template-columns: 52px 100px 1fr auto auto;
+  gap: 12px 20px;
+  align-items: center;
+  padding: 20px var(--col-pad);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.1s;
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+
+.article-table-row:hover {
+  background: var(--surface);
+}
+
+.article-table-header {
+  display: grid;
+  grid-template-columns: 52px 100px 1fr auto auto;
+  gap: 12px 20px;
+  align-items: center;
+  padding: 12px var(--col-pad);
+  background: var(--surface);
+  border-bottom: 2px solid var(--border);
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+
+.table-col-label {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.article-table-row__num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.4rem;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.article-table-row__date {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+.article-table-row__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(0.95rem, 2vw, 1.3rem);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+}
+
+.article-table-row__tags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+}
+
+.article-table-row__readtime {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  color: var(--muted);
+  white-space: nowrap;
+  text-align: right;
+  letter-spacing: 0.04em;
+}
+
+/* ============================================================
+   VIEW 3: ARTICLE DETAIL
+   ============================================================ */
+#view-article .article-layout {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--col-pad);
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 64px;
+  padding-top: 48px;
+  padding-bottom: 80px;
+}
+
+#view-article .article-main {}
+
+.article-num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 5rem;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.article-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.0;
+  margin-bottom: 28px;
+}
+
+.article-meta-bar {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 16px 0;
+  border-top: 2px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 48px;
+}
+
+.meta-item {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.meta-item span {
+  color: var(--fg);
+  margin-left: 6px;
+}
+
+.article-section {
+  margin-bottom: 48px;
+}
+
+.article-section-heading {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  padding-left: 20px;
+  border-left: 5px solid var(--accent);
+}
+
+.article-body-text {
+  font-size: 1.02rem;
+  line-height: 1.75;
+  color: var(--fg);
+  margin-bottom: 20px;
+  font-weight: 300;
+}
+
+.article-blockquote {
+  border-left: 5px solid var(--accent);
+  padding: 20px 28px;
+  margin: 32px 0;
+  background: var(--surface);
+}
+
+.article-blockquote p {
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--fg);
+}
+
+.article-blockquote cite {
+  display: block;
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-style: normal;
+}
+
+.code-block {
+  background: #0D0D0D;
+  color: #F5F5F5;
+  padding: 24px 28px;
+  overflow-x: auto;
+  margin: 28px 0;
+  border-left: 4px solid var(--accent);
+}
+
+[data-theme="dark"] .code-block {
+  background: #000;
+  border: 1px solid #333;
+  border-left: 4px solid var(--accent);
+}
+
+.code-block pre {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.7;
+  white-space: pre;
+}
+
+.code-block .code-lang {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.article-list {
+  margin: 16px 0 20px 0;
+}
+
+.article-list li {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--fg);
+  padding: 6px 0 6px 24px;
+  border-bottom: 1px solid var(--grid-line);
+  position: relative;
+  font-weight: 300;
+}
+
+.article-list li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Article sidebar */
+#view-article .article-sidebar {
+  position: sticky;
+  top: 80px;
+  align-self: start;
+  height: fit-content;
+}
+
+.toc-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+  display: block;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border);
+}
+
+.toc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.toc-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--grid-line);
+  cursor: pointer;
+  transition: color 0.1s;
+}
+
+.toc-item:hover .toc-item__title {
+  color: var(--accent);
+}
+
+.toc-item__num {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--accent);
+  flex-shrink: 0;
+  padding-top: 2px;
+  font-weight: 600;
+}
+
+.toc-item__title {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  font-weight: 400;
+  transition: color 0.12s;
+}
+
+/* Related articles */
+.related-section {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 48px var(--col-pad) 80px;
+  border-top: 2px solid var(--border);
+}
+
+.related-label {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 28px;
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.related-card {
+  border: 1px solid var(--border);
+  padding: 24px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.related-card:hover {
+  background: var(--surface);
+}
+
+.related-card__num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 2rem;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.related-card__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.related-card__meta {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   VIEW 4: BOOKS LISTING
+   ============================================================ */
+#view-books .books-header {
+  padding: 48px 0 32px;
+  border-bottom: 2px solid var(--border);
+}
+
+#view-books .books-header__title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(3rem, 8vw, 7rem);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  border-left: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+}
+
+.book-card {
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 32px;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 28px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.book-card:hover {
+  background: var(--surface);
+}
+
+.book-cover {
+  aspect-ratio: 2/3;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 12px;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 0.85rem;
+  color: #fff;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.book-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.book-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+}
+
+.book-author {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+
+.book-stars {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.star {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.star-empty {
+  background: var(--surface);
+  border: 1px solid var(--muted);
+}
+
+.book-genre {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 3px 8px;
+  align-self: flex-start;
+}
+
+.book-excerpt {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.55;
+  font-weight: 300;
+}
+
+/* ============================================================
+   VIEW 5: BOOK DETAIL
+   ============================================================ */
+#view-book-detail .book-detail-layout {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 48px var(--col-pad) 80px;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 64px;
+}
+
+.book-detail-left {}
+
+.book-detail-cover {
+  background: var(--accent);
+  aspect-ratio: 2/3;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 20px;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.5rem;
+  color: #fff;
+  text-transform: uppercase;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  margin-bottom: 32px;
+}
+
+.book-meta-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 2px solid var(--border);
+  border-bottom: 2px solid var(--border);
+}
+
+.book-meta-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--grid-line);
+  gap: 0;
+}
+
+.book-meta-row:last-child {
+  border-bottom: none;
+}
+
+.book-meta-key {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 10px 0;
+  border-right: 1px solid var(--grid-line);
+}
+
+.book-meta-val {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--fg);
+  padding: 10px 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.book-detail-right {}
+
+.book-review-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.0;
+  margin-bottom: 8px;
+}
+
+.book-review-author {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+  padding-bottom: 32px;
+  border-bottom: 2px solid var(--border);
+}
+
+.review-section {
+  margin-bottom: 48px;
+}
+
+.review-section__heading {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.review-section__heading::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.review-text {
+  font-size: 1rem;
+  line-height: 1.75;
+  font-weight: 300;
+  margin-bottom: 16px;
+  color: var(--fg);
+}
+
+.review-quote {
+  border-left: 5px solid var(--accent);
+  padding: 16px 24px;
+  margin: 24px 0;
+  background: var(--surface);
+}
+
+.review-quote p {
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1.65;
+  font-weight: 400;
+}
+
+.review-takeaways {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.review-takeaway {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 16px;
+  align-items: start;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--grid-line);
+}
+
+.review-takeaway__num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.4rem;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.review-takeaway__text {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  font-weight: 300;
+  padding-top: 4px;
+}
+
+/* ============================================================
+   VIEW 6: PROJECTS
+   ============================================================ */
+#view-projects .projects-header {
+  padding: 48px 0 32px;
+  border-bottom: 2px solid var(--border);
+}
+
+#view-projects .projects-header__inner {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+#view-projects .projects-header__title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(2.5rem, 7vw, 6rem);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+#view-projects .projects-header__year {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(2rem, 5vw, 4rem);
+  color: var(--accent);
+  line-height: 1;
+  padding-bottom: 4px;
+}
+
+.project-item {
+  border-bottom: 2px solid var(--border);
+  padding: 56px 0;
+}
+
+.project-item__inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--col-pad);
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 64px;
+  align-items: start;
+}
+
+.project-item__left {}
+
+.project-item__header {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.project-item__num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 4rem;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.project-item__name {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(2rem, 4vw, 3rem);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.project-item__badge {
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.project-item__desc {
+  font-size: 1rem;
+  line-height: 1.7;
+  font-weight: 300;
+  color: var(--fg);
+  margin-bottom: 24px;
+  max-width: 520px;
+}
+
+.project-item__stack {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.stack-tag {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  color: var(--muted);
+}
+
+.project-item__links {
+  display: flex;
+  gap: 24px;
+}
+
+.project-link {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  transition: color 0.12s;
+}
+
+.project-link:hover {
+  color: var(--accent);
+}
+
+/* Project geometric visuals */
+.project-item__visual {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.geo-1 {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.geo-1::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 100px;
+  height: 100px;
+  border: 3px solid var(--accent);
+}
+
+.geo-1::after {
+  content: "";
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  width: 100px;
+  height: 100px;
+  background: var(--accent);
+  opacity: 0.15;
+}
+
+.geo-1 .geo-inner {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background: var(--fg);
+  opacity: 0.1;
+  transform: rotate(45deg);
+}
+
+.geo-2 {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.geo-2::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+}
+
+.geo-2::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  width: 80px;
+  height: 80px;
+  background: var(--accent);
+  opacity: 0.2;
+}
+
+.geo-2 .geo-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  background: var(--accent);
+}
+
+.geo-3 {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.geo-3::before {
+  content: "";
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 0;
+  height: 0;
+  border-left: 80px solid transparent;
+  border-bottom: 140px solid var(--accent);
+  opacity: 0.3;
+}
+
+.geo-3::after {
+  content: "";
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  width: 80px;
+  height: 4px;
+  background: var(--accent);
+  box-shadow: 0 12px 0 var(--fg), 0 24px 0 var(--fg);
+  opacity: 0.3;
+}
+
+.geo-3 .geo-inner {
+  position: absolute;
+  top: 50%;
+  left: 30px;
+  transform: translateY(-50%);
+  width: 60px;
+  height: 60px;
+  border: 4px solid var(--fg);
+  opacity: 0.12;
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE
+   ============================================================ */
+@media (max-width: 768px) {
+  :root { --col-pad: 16px; }
+
+  .header-nav { display: none; }
+
+  /* Home hero */
+  #view-home .hero__inner {
+    flex-direction: column;
+  }
+  #view-home .hero__number {
+    font-size: 120px;
+    margin-left: 0;
+    align-self: flex-end;
+    margin-top: -20px;
+  }
+
+  /* Article rows */
+  .article-row {
+    grid-template-columns: 40px 1fr;
+    grid-template-rows: auto auto;
+  }
+  .article-row__tags { display: none; }
+  .article-row__date { grid-column: 2; }
+
+  /* Article table rows */
+  .article-table-row {
+    grid-template-columns: 40px 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 8px 12px;
+  }
+  .article-table-row__date { display: none; }
+  .article-table-row__readtime { display: none; }
+  .article-table-header { display: none; }
+
+  /* Article detail */
+  #view-article .article-layout {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding-top: 32px;
+  }
+  #view-article .article-sidebar {
+    position: static;
+    border-top: 2px solid var(--border);
+    padding-top: 32px;
+  }
+
+  /* Related */
+  .related-grid { grid-template-columns: 1fr; }
+
+  /* Books */
+  .books-grid { grid-template-columns: 1fr; }
+  .book-card { grid-template-columns: 80px 1fr; gap: 20px; padding: 24px 16px; }
+
+  /* Book detail */
+  #view-book-detail .book-detail-layout {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding-top: 32px;
+  }
+  .book-detail-cover { max-width: 180px; }
+
+  /* Projects */
+  .project-item__inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .project-item__visual { height: 160px; }
+
+  /* Projects header */
+  #view-projects .projects-header__inner { flex-direction: column; gap: 8px; align-items: flex-start; }
+
+  /* Blog header */
+  #view-blog .blog-header__inner { flex-direction: column; gap: 8px; align-items: flex-start; }
+}
+
+@media (max-width: 480px) {
+  .projects-grid { grid-template-columns: 1fr; }
+  .project-card { border-right: none; border-bottom: 1px solid var(--border); }
+  .project-card:last-child { border-bottom: none; }
+}
+
+/* ============================================================
+   MISC UTILITIES
+   ============================================================ */
+.mt-4  { margin-top: 4px; }
+.mt-8  { margin-top: 8px; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.mt-32 { margin-top: 32px; }
+.mt-48 { margin-top: 48px; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ============================================================
+     SITE HEADER
+     ============================================================ -->
+<header class="site-header" role="banner">
+  <div class="site-header__inner">
+    <div class="logo" onclick="showView('home')" aria-label="Diego Romero home">
+      <div class="logo__mark" aria-hidden="true">DR</div>
+      <div class="logo__text">Diego Romero<br>diegoromero.blog</div>
+    </div>
+    <nav class="header-nav" aria-label="Primary navigation">
+      <a onclick="showView('home')" id="nav-home" class="active">Home</a>
+      <a onclick="showView('blog')" id="nav-blog">Journal</a>
+      <a onclick="showView('books')" id="nav-books">Books</a>
+      <a onclick="showView('projects')" id="nav-projects">Work</a>
+    </nav>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark/light mode">
+      <span id="theme-label">Dark</span>
+    </button>
+  </div>
+</header>
+
+<!-- ============================================================
+     VIEW 1: HOMEPAGE
+     ============================================================ -->
+<main>
+
+<section id="view-home" class="view active" role="main" aria-label="Homepage">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero__inner">
+      <div class="hero__text">
+        <span class="hero__eyebrow">Est. 2022 / diegoromero.blog</span>
+        <h1 class="hero__name">Diego<br>Romero</h1>
+        <p class="hero__desc">Software Engineer — writing on technology, productivity, and books. Publishing ideas that compound over time.</p>
+        <span class="hero__cta" onclick="showView('blog')" role="button" tabindex="0">
+          Read the journal &rarr;
+        </span>
+      </div>
+      <div class="hero__number" aria-hidden="true">01</div>
+    </div>
+  </div>
+
+  <div class="red-rule"></div>
+
+  <!-- Latest Articles -->
+  <section class="articles-section">
+    <div class="container">
+      <div class="articles-section__header">
+        <h2 class="articles-section__title">Latest Articles</h2>
+        <span class="articles-section__link" onclick="showView('blog')" role="button" tabindex="0">View all &rarr;</span>
+      </div>
+
+      <div class="article-row" onclick="showView('article')" role="button" tabindex="0" aria-label="Read article: Rewriting My Blog With Claude Code">
+        <span class="article-row__num" aria-hidden="true">01</span>
+        <span class="article-row__title">Rewriting My Blog With Claude Code</span>
+        <div class="article-row__tags" aria-label="Tags">
+          <span class="tag tag--accent">ENG</span>
+          <span class="tag">AI</span>
+        </div>
+        <span class="article-row__date">Feb 14, 2026</span>
+      </div>
+
+      <div class="article-row" onclick="showView('article')" role="button" tabindex="0" aria-label="Read article: Why Talent Trumps Passion">
+        <span class="article-row__num" aria-hidden="true">02</span>
+        <span class="article-row__title">Why Talent Trumps Passion</span>
+        <div class="article-row__tags" aria-label="Tags">
+          <span class="tag tag--accent">PROD</span>
+        </div>
+        <span class="article-row__date">Jan 30, 2026</span>
+      </div>
+
+      <div class="article-row" onclick="showView('article')" role="button" tabindex="0" aria-label="Read article: The Compound Effect of Deliberate Practice">
+        <span class="article-row__num" aria-hidden="true">03</span>
+        <span class="article-row__title">The Compound Effect of Deliberate Practice</span>
+        <div class="article-row__tags" aria-label="Tags">
+          <span class="tag tag--accent">BOOK</span>
+          <span class="tag">PROD</span>
+        </div>
+        <span class="article-row__date">Jan 18, 2026</span>
+      </div>
+
+      <div class="article-row" onclick="showView('article')" role="button" tabindex="0" aria-label="Read article: Building AI-Powered Tools Without Losing the Human Touch">
+        <span class="article-row__num" aria-hidden="true">04</span>
+        <span class="article-row__title">Building AI-Powered Tools Without Losing the Human Touch</span>
+        <div class="article-row__tags" aria-label="Tags">
+          <span class="tag tag--accent">AI</span>
+          <span class="tag">ENG</span>
+        </div>
+        <span class="article-row__date">Jan 05, 2026</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Currently Reading -->
+  <section class="reading-section" aria-label="Currently Reading">
+    <div class="container">
+      <span class="section-label">Currently Reading</span>
+      <div class="reading-card" onclick="showView('book-detail')" role="button" tabindex="0" aria-label="View book: Deep Work by Cal Newport">
+        <div class="reading-cover" aria-hidden="true">DW</div>
+        <div class="reading-meta">
+          <span class="reading-meta__label">Now Reading</span>
+          <div class="reading-meta__title">Deep Work</div>
+          <div class="reading-meta__author">Cal Newport</div>
+          <p style="font-size:0.88rem;color:var(--muted);line-height:1.55;font-weight:300;margin-top:8px;">Rules for focused success in a distracted world. Newport argues that the ability to perform deep work is becoming increasingly rare and increasingly valuable.</p>
+          <span class="reading-meta__genre">Productivity</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="projects-section" aria-label="Projects">
+    <div class="container">
+      <div class="projects-section__header">
+        <h2 class="projects-section__title">Selected Work</h2>
+        <span class="articles-section__link" onclick="showView('projects')" role="button" tabindex="0">View all &rarr;</span>
+      </div>
+      <div class="projects-grid">
+        <div class="project-card" onclick="showView('projects')" role="button" tabindex="0">
+          <div class="project-card__num" aria-hidden="true">01</div>
+          <div class="project-card__name">Deepflow</div>
+          <p class="project-card__desc">AI-powered deep work timer with context-aware session management and productivity analytics.</p>
+        </div>
+        <div class="project-card" onclick="showView('projects')" role="button" tabindex="0">
+          <div class="project-card__num" aria-hidden="true">02</div>
+          <div class="project-card__name">Listu</div>
+          <p class="project-card__desc">Minimal, opinionated task management for engineers who think in systems and ship fast.</p>
+        </div>
+        <div class="project-card" onclick="showView('projects')" role="button" tabindex="0">
+          <div class="project-card__num" aria-hidden="true">03</div>
+          <div class="project-card__name">KODR</div>
+          <p class="project-card__desc">Interactive coding curriculum platform built for async, self-directed technical learning.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="home-footer" aria-label="Site footer">
+    <div class="container">
+      <div class="home-footer__inner">
+        <span class="home-footer__copy">Publishing every couple of days — diegoromero.blog</span>
+        <span class="home-footer__copy">&copy; 2026 Diego Romero</span>
+      </div>
+    </div>
+  </footer>
+
+</section>
+
+<!-- ============================================================
+     VIEW 2: BLOG LISTING
+     ============================================================ -->
+<section id="view-blog" class="view" role="main" aria-label="Blog listing">
+
+  <div class="container">
+    <div class="blog-header">
+      <div class="blog-header__inner">
+        <h1 class="blog-header__title">Journal</h1>
+        <span class="blog-header__count" aria-label="14 articles">14</span>
+      </div>
+      <div class="filter-row" role="group" aria-label="Filter articles by category">
+        <button class="filter-btn active" onclick="setFilter(this,'ALL')" aria-pressed="true">ALL</button>
+        <button class="filter-btn" onclick="setFilter(this,'ENG')" aria-pressed="false">ENG</button>
+        <button class="filter-btn" onclick="setFilter(this,'AI')" aria-pressed="false">AI</button>
+        <button class="filter-btn" onclick="setFilter(this,'PROD')" aria-pressed="false">PROD</button>
+        <button class="filter-btn" onclick="setFilter(this,'BOOK')" aria-pressed="false">BOOK</button>
+        <button class="filter-btn" onclick="setFilter(this,'FIN')" aria-pressed="false">FIN</button>
+        <button class="filter-btn" onclick="setFilter(this,'REACT')" aria-pressed="false">REACT</button>
+        <button class="filter-btn" onclick="setFilter(this,'NEXT')" aria-pressed="false">NEXT</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="articles-table" role="table" aria-label="Articles list">
+    <div class="article-table-header" role="row">
+      <span class="table-col-label" role="columnheader">#</span>
+      <span class="table-col-label" role="columnheader">Date</span>
+      <span class="table-col-label" role="columnheader">Title</span>
+      <span class="table-col-label" role="columnheader">Tags</span>
+      <span class="table-col-label" role="columnheader">Time</span>
+    </div>
+
+    <div class="article-table-row" onclick="showView('article')" role="row" tabindex="0" aria-label="Rewriting My Blog With Claude Code">
+      <span class="article-table-row__num" role="cell" aria-hidden="true">01</span>
+      <span class="article-table-row__date" role="cell">Feb 14, 2026</span>
+      <span class="article-table-row__title" role="cell">Rewriting My Blog With Claude Code</span>
+      <div class="article-table-row__tags" role="cell">
+        <span class="tag tag--accent">ENG</span>
+        <span class="tag">AI</span>
+      </div>
+      <span class="article-table-row__readtime" role="cell">8 min</span>
+    </div>
+
+    <div class="article-table-row" onclick="showView('article')" role="row" tabindex="0" aria-label="Why Talent Trumps Passion">
+      <span class="article-table-row__num" role="cell" aria-hidden="true">02</span>
+      <span class="article-table-row__date" role="cell">Jan 30, 2026</span>
+      <span class="article-table-row__title" role="cell">Why Talent Trumps Passion</span>
+      <div class="article-table-row__tags" role="cell">
+        <span class="tag tag--accent">PROD</span>
+      </div>
+      <span class="article-table-row__readtime" role="cell">6 min</span>
+    </div>
+
+    <div class="article-table-row" onclick="showView('article')" role="row" tabindex="0" aria-label="The Compound Effect of Deliberate Practice">
+      <span class="article-table-row__num" role="cell" aria-hidden="true">03</span>
+      <span class="article-table-row__date" role="cell">Jan 18, 2026</span>
+      <span class="article-table-row__title" role="cell">The Compound Effect of Deliberate Practice</span>
+      <div class="article-table-row__tags" role="cell">
+        <span class="tag tag--accent">BOOK</span>
+        <span class="tag">PROD</span>
+      </div>
+      <span class="article-table-row__readtime" role="cell">10 min</span>
+    </div>
+
+    <div class="article-table-row" onclick="showView('article')" role="row" tabindex="0" aria-label="Building AI-Powered Tools Without Losing the Human Touch">
+      <span class="article-table-row__num" role="cell" aria-hidden="true">04</span>
+      <span class="article-table-row__date" role="cell">Jan 05, 2026</span>
+      <span class="article-table-row__title" role="cell">Building AI-Powered Tools Without Losing the Human Touch</span>
+      <div class="article-table-row__tags" role="cell">
+        <span class="tag tag--accent">AI</span>
+        <span class="tag">ENG</span>
+      </div>
+      <span class="article-table-row__readtime" role="cell">7 min</span>
+    </div>
+
+    <div class="article-table-row" onclick="showView('article')" role="row" tabindex="0" aria-label="The Courage to Be Disliked: Notes on Adlerian Psychology">
+      <span class="article-table-row__num" role="cell" aria-hidden="true">05</span>
+      <span class="article-table-row__date" role="cell">Dec 22, 2025</span>
+      <span class="article-table-row__title" role="cell">The Courage to Be Disliked: Notes on Adlerian Psychology</span>
+      <div class="article-table-row__tags" role="cell">
+        <span class="tag tag--accent">BOOK</span>
+      </div>
+      <span class="article-table-row__readtime" role="cell">9 min</span>
+    </div>
+
+    <div class="article-table-row" onclick="showView('article')" role="row" tabindex="0" aria-label="How I Use tmux to Manage Multiple Projects">
+      <span class="article-table-row__num" role="cell" aria-hidden="true">06</span>
+      <span class="article-table-row__date" role="cell">Dec 10, 2025</span>
+      <span class="article-table-row__title" role="cell">How I Use tmux to Manage Multiple Projects</span>
+      <div class="article-table-row__tags" role="cell">
+        <span class="tag tag--accent">ENG</span>
+        <span class="tag">PROD</span>
+      </div>
+      <span class="article-table-row__readtime" role="cell">5 min</span>
+    </div>
+
+    <div class="article-table-row" onclick="showView('article')" role="row" tabindex="0" aria-label="Next.js App Router: Six Months In">
+      <span class="article-table-row__num" role="cell" aria-hidden="true">07</span>
+      <span class="article-table-row__date" role="cell">Nov 28, 2025</span>
+      <span class="article-table-row__title" role="cell">Next.js App Router: Six Months In</span>
+      <div class="article-table-row__tags" role="cell">
+        <span class="tag tag--accent">NEXT</span>
+        <span class="tag">REACT</span>
+      </div>
+      <span class="article-table-row__readtime" role="cell">11 min</span>
+    </div>
+  </div>
+
+</section>
+
+<!-- ============================================================
+     VIEW 3: ARTICLE DETAIL
+     ============================================================ -->
+<section id="view-article" class="view" role="main" aria-label="Article: Rewriting My Blog With Claude Code">
+
+  <div class="article-layout">
+
+    <!-- Main content -->
+    <article class="article-main">
+      <span class="article-num" aria-hidden="true">03</span>
+      <h1 class="article-title">Rewriting My Blog<br>With Claude Code</h1>
+
+      <div class="article-meta-bar" aria-label="Article metadata">
+        <span class="meta-item">Date<span>Feb 14, 2026</span></span>
+        <span class="meta-item">Read<span>8 min</span></span>
+        <span class="meta-item">Tags<span>ENG / AI</span></span>
+      </div>
+
+      <!-- Section 1 -->
+      <div class="article-section" id="sec-1">
+        <h2 class="article-section-heading">The Old Blog Was Holding Me Back</h2>
+        <p class="article-body-text">My previous blog was built on a Gatsby template I found in 2019. At the time it felt like the right call — get something live, start writing, iterate later. But later never came. The template's opinions about design accumulated like technical debt, and after three years I was fighting the framework more than I was writing.</p>
+        <p class="article-body-text">The CSS was a graveyard of half-implemented ideas: overridden Tailwind utilities, global styles that conflicted with component-level styles, dark mode implemented three different ways in three different files. The MDX pipeline was held together with deprecated plugins. Every time I opened the repo to write a post, I'd spend an hour firefighting before typing a single word.</p>
+        <p class="article-body-text">I knew I needed to rebuild. I also knew I needed help — not because I couldn't write the code, but because I didn't want the rebuild to become another three-year project.</p>
+      </div>
+
+      <!-- Section 2 -->
+      <div class="article-section" id="sec-2">
+        <h2 class="article-section-heading">Choosing Claude Code as My Collaborator</h2>
+        <p class="article-body-text">I've been experimenting with AI-assisted development for about a year. Most of that experimentation was autocomplete — Copilot-style tab completion that accelerates the mechanical parts of coding. Useful, but not transformative.</p>
+        <p class="article-body-text">Claude Code felt different from the first session. Instead of predicting the next line, I could describe an architecture and have it reason about trade-offs with me. I could say "I want the content model to work like this, and here's why" and get back a thoughtful response that pushed back where it needed to push back.</p>
+
+        <div class="article-blockquote">
+          <p>"The most surprising thing about working with Claude Code wasn't the speed — it was the quality of the questions it asked back. It caught assumptions I hadn't examined."</p>
+          <cite>Diego Romero, during the rebuild</cite>
+        </div>
+
+        <p class="article-body-text">We spent the first session on architecture alone. Content model, data layer, type safety, rendering strategy. No code written. Just thinking clearly before moving fast.</p>
+      </div>
+
+      <!-- Section 3 -->
+      <div class="article-section" id="sec-3">
+        <h2 class="article-section-heading">The Architecture I Landed On</h2>
+        <p class="article-body-text">The final stack is Next.js 14 with the App Router, Contentlayer for MDX processing, and Tailwind for styling — but with a custom design system layer that owns all the actual visual decisions. TypeScript throughout.</p>
+
+        <div class="code-block" role="region" aria-label="TypeScript code example">
+          <span class="code-lang">TypeScript — contentlayer.config.ts</span>
+          <pre><code>import { defineDocumentType, makeSource } from 'contentlayer/source-files'
+
+export const Post = defineDocumentType(() => ({
+  name: 'Post',
+  filePathPattern: `posts/**/*.mdx`,
+  contentType: 'mdx',
+  fields: {
+    title:       { type: 'string',  required: true },
+    date:        { type: 'date',    required: true },
+    summary:     { type: 'string',  required: true },
+    tags:        { type: 'list', of: { type: 'string' }, required: true },
+    readingTime: { type: 'number',  required: false },
+    draft:       { type: 'boolean', default: false },
+  },
+  computedFields: {
+    slug: {
+      type: 'string',
+      resolve: (doc) => doc._raw.flattenedPath.replace(/^posts\//, ''),
+    },
+    url: {
+      type: 'string',
+      resolve: (doc) => `/blog/${doc._raw.flattenedPath.replace(/^posts\//, '')}`,
+    },
+  },
+}))
+
+export default makeSource({
+  contentDirPath: 'content',
+  documentTypes: [Post],
+})</code></pre>
+        </div>
+
+        <p class="article-body-text">The content model is strict. Every post needs a title, date, summary, and tags. No orphan posts, no missing metadata. Contentlayer validates this at build time, which means broken content becomes a CI failure, not a runtime surprise.</p>
+      </div>
+
+      <!-- Section 4 -->
+      <div class="article-section" id="sec-4">
+        <h2 class="article-section-heading">What I Learned</h2>
+        <p class="article-body-text">Three weeks of weekends, maybe forty hours total. The blog is live, the content is migrated, and the codebase is something I'm actually proud of. Here's what stuck with me from the process:</p>
+
+        <ul class="article-list" aria-label="Key learnings">
+          <li>AI collaboration works best when you bring the architectural taste and let the AI handle implementation variance.</li>
+          <li>TypeScript strictness isn't overhead — it's the fastest feedback loop available at the content layer.</li>
+          <li>Design constraints are a gift. Starting from a clear typographic system made every decision faster.</li>
+          <li>The App Router's data model is genuinely different from Pages. Give yourself time to think in its terms, not the old terms.</li>
+          <li>Writing about building is different from building. The blog itself is now the lab where I think in public.</li>
+        </ul>
+
+        <div class="article-blockquote">
+          <p>"Ship the thing. The second draft of anything is always better than the first draft that never shipped."</p>
+          <cite>Principle I kept returning to during the rebuild</cite>
+        </div>
+      </div>
+
+    </article>
+
+    <!-- Sidebar -->
+    <aside class="article-sidebar" aria-label="Table of contents">
+      <span class="toc-label">Contents</span>
+      <nav class="toc-list" aria-label="Article sections">
+        <div class="toc-item" onclick="document.getElementById('sec-1').scrollIntoView({behavior:'smooth'})" role="button" tabindex="0">
+          <span class="toc-item__num">01</span>
+          <span class="toc-item__title">The Old Blog Was Holding Me Back</span>
+        </div>
+        <div class="toc-item" onclick="document.getElementById('sec-2').scrollIntoView({behavior:'smooth'})" role="button" tabindex="0">
+          <span class="toc-item__num">02</span>
+          <span class="toc-item__title">Choosing Claude Code as My Collaborator</span>
+        </div>
+        <div class="toc-item" onclick="document.getElementById('sec-3').scrollIntoView({behavior:'smooth'})" role="button" tabindex="0">
+          <span class="toc-item__num">03</span>
+          <span class="toc-item__title">The Architecture I Landed On</span>
+        </div>
+        <div class="toc-item" onclick="document.getElementById('sec-4').scrollIntoView({behavior:'smooth'})" role="button" tabindex="0">
+          <span class="toc-item__num">04</span>
+          <span class="toc-item__title">What I Learned</span>
+        </div>
+      </nav>
+    </aside>
+
+  </div>
+
+  <!-- Related Articles -->
+  <div class="related-section" aria-label="Related articles">
+    <h2 class="related-label">Related</h2>
+    <div class="related-grid">
+      <div class="related-card" onclick="showView('article')" role="button" tabindex="0">
+        <div class="related-card__num" aria-hidden="true">04</div>
+        <div class="related-card__title">Building AI-Powered Tools Without Losing the Human Touch</div>
+        <span class="related-card__meta">AI / ENG &mdash; Jan 05, 2026</span>
+      </div>
+      <div class="related-card" onclick="showView('article')" role="button" tabindex="0">
+        <div class="related-card__num" aria-hidden="true">07</div>
+        <div class="related-card__title">Next.js App Router: Six Months In</div>
+        <span class="related-card__meta">NEXT / REACT &mdash; Nov 28, 2025</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ============================================================
+     VIEW 4: BOOKS LISTING
+     ============================================================ -->
+<section id="view-books" class="view" role="main" aria-label="Reading list">
+
+  <div class="container">
+    <div class="books-header">
+      <h1 class="books-header__title">Reading<br>List</h1>
+    </div>
+  </div>
+
+  <div class="container" style="padding-top:40px;padding-bottom:80px;">
+    <div class="books-grid">
+
+      <div class="book-card" onclick="showView('book-detail')" role="button" tabindex="0" aria-label="View: Deep Work by Cal Newport">
+        <div class="book-cover" style="background:#E63329;" aria-hidden="true">Deep<br>Work</div>
+        <div class="book-info">
+          <div class="book-title">Deep Work</div>
+          <div class="book-author">Cal Newport</div>
+          <div class="book-stars" aria-label="5 out of 5 stars">
+            <span class="star" aria-hidden="true"></span>
+            <span class="star" aria-hidden="true"></span>
+            <span class="star" aria-hidden="true"></span>
+            <span class="star" aria-hidden="true"></span>
+            <span class="star" aria-hidden="true"></span>
+          </div>
+          <span class="book-genre">Productivity</span>
+          <p class="book-excerpt">Rules for focused success in a distracted world. A convincing argument that depth of concentration is the new superpower.</p>
+        </div>
+      </div>
+
+      <div class="book-card" onclick="showView('book-detail')" role="button" tabindex="0" aria-label="View: The Psychology of Money by Morgan Housel">
+        <div class="book-cover" style="background:#1A1A1A;" aria-hidden="true">Psych<br>Money</div>
+        <div class="book-info">
+          <div class="book-title">The Psychology of Money</div>
+          <div class="book-author">Morgan Housel</div>
+          <div class="book-stars" aria-label="5 out of 5 stars">
+            <span class="star" aria-hidden="true"></span>
+            <span class="star" aria-hidden="true"></span>
+            <span class="star" aria-hidden="true"></span>
+            <span class="star" aria-hidden="true"></span>
+            <span class="star" aria-hidden="true"></span>
+          </div>
+          <span class="book-genre">Finance</span>
+          <p class="book-excerpt">Timeless lessons on wealth, greed, and happiness. Housel shows that doing well with money has little to do with IQ.</p>
+        </div>
+      </div>
+
+      <div class="book-card" onclick="showView('book-detail')" role="button" tabindex="0" aria-label="View: The Ride of a Lifetime by Robert Iger">
+        <div class="book-cover" style="background:#0A3D8F;" aria-hidden="true">Ride of<br>Lifetime</div>
+        <div class="book-info">
+          <div class="book-title">The Ride of a Lifetime</div>
+          <div class="book-author">Robert Iger</div>
+          <div class="book-stars" aria-label="5 out of 5 stars">
+            <span class="star" aria-hidden="true"></span>
+            <span class="star" aria-hidden="true"></span>
+            <span class="star" aria-hidden="true"></span>
+            <span class="star" aria-hidden="true"></span>
+            <span class="star" aria-hidden="true"></span>
+          </div>
+          <span class="book-genre">Biography</span>
+          <p class="book-excerpt">Lessons learned over a career at Disney. Iger transformed one of the world's most iconic companies through bold, principled leadership.</p>
+        </div>
+      </div>
+
+      <div class="book-card" onclick="showView('book-detail')" role="button" tabindex="0" aria-label="View: Shoe Dog by Phil Knight">
+        <div class="book-cover" style="background:#2D4A1E;" aria-hidden="true">Shoe<br>Dog</div>
+        <div class="book-info">
+          <div class="book-title">Shoe Dog</div>
+          <div class="book-author">Phil Knight</div>
+          <div class="book-stars" aria-label="5 out of 5 stars">
+            <span class="star" aria-hidden="true"></span>
+            <span class="star" aria-hidden="true"></span>
+            <span class="star" aria-hidden="true"></span>
+            <span class="star" aria-hidden="true"></span>
+            <span class="star" aria-hidden="true"></span>
+          </div>
+          <span class="book-genre">Business</span>
+          <p class="book-excerpt">Phil Knight's memoir of building Nike from nothing. Raw, honest, and one of the best business origin stories ever written.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+<!-- ============================================================
+     VIEW 5: BOOK DETAIL
+     ============================================================ -->
+<section id="view-book-detail" class="view" role="main" aria-label="Book review: Deep Work">
+
+  <div class="book-detail-layout">
+
+    <!-- Left column -->
+    <div class="book-detail-left">
+      <div class="book-detail-cover" style="background:#E63329;" aria-hidden="true">
+        Deep<br>Work
+      </div>
+
+      <div class="book-meta-grid" role="table" aria-label="Book metadata">
+        <div class="book-meta-row" role="row">
+          <span class="book-meta-key" role="rowheader">Author</span>
+          <span class="book-meta-val" role="cell">Cal Newport</span>
+        </div>
+        <div class="book-meta-row" role="row">
+          <span class="book-meta-key" role="rowheader">Date Read</span>
+          <span class="book-meta-val" role="cell">Jan 2026</span>
+        </div>
+        <div class="book-meta-row" role="row">
+          <span class="book-meta-key" role="rowheader">Rating</span>
+          <span class="book-meta-val" role="cell" aria-label="5 out of 5">
+            <span style="display:flex;gap:4px;align-items:center;">
+              <span class="star" aria-hidden="true"></span>
+              <span class="star" aria-hidden="true"></span>
+              <span class="star" aria-hidden="true"></span>
+              <span class="star" aria-hidden="true"></span>
+              <span class="star" aria-hidden="true"></span>
+            </span>
+          </span>
+        </div>
+        <div class="book-meta-row" role="row">
+          <span class="book-meta-key" role="rowheader">Genre</span>
+          <span class="book-meta-val" role="cell">Productivity</span>
+        </div>
+        <div class="book-meta-row" role="row">
+          <span class="book-meta-key" role="rowheader">Pages</span>
+          <span class="book-meta-val" role="cell">296</span>
+        </div>
+        <div class="book-meta-row" role="row">
+          <span class="book-meta-key" role="rowheader">Publisher</span>
+          <span class="book-meta-val" role="cell">Grand Central</span>
+        </div>
+      </div>
+
+      <div style="margin-top:32px;">
+        <span class="book-genre" style="display:inline-block;margin-bottom:8px;">Productivity</span><br>
+        <span class="book-genre" style="display:inline-block;">Non-Fiction</span>
+      </div>
+    </div>
+
+    <!-- Right column -->
+    <div class="book-detail-right">
+      <div class="book-review-title">Deep Work</div>
+      <div class="book-review-author">by Cal Newport &mdash; 2016</div>
+
+      <!-- 01 / SUMMARY -->
+      <div class="review-section" id="rev-1">
+        <h2 class="review-section__heading">01 / Summary</h2>
+        <p class="review-text">Cal Newport's central argument is deceptively simple: the ability to focus without distraction on cognitively demanding work is becoming both increasingly rare and increasingly valuable. He calls this capacity "deep work" and contrasts it with "shallow work" — the logistical, administrative, inbox-maintenance kind of work that dominates most modern knowledge workers' days.</p>
+        <p class="review-text">Newport divides the book into two parts. The first makes the case for deep work's value through a mix of economic theory, neuroscience, and examples ranging from Carl Jung's tower in Bollingen to modern programmers like John Carmack. The second half is ruthlessly practical: four scheduling philosophies (monastic, bimodal, rhythmic, journalistic), the importance of embracing boredom, quitting social media, and draining the shallows from your schedule.</p>
+        <p class="review-text">What distinguishes this from generic productivity advice is the underlying theoretical framework. Newport grounds his prescriptions in deliberate practice research and the idea that attention is a finite cognitive resource that can be trained or squandered.</p>
+      </div>
+
+      <!-- 02 / IMPRESSIONS -->
+      <div class="review-section" id="rev-2">
+        <h2 class="review-section__heading">02 / Impressions</h2>
+        <p class="review-text">I came to this book already convinced of its thesis, which made the experience both affirming and occasionally frustrating. When Newport is good, he's very good — the chapter on the craftsman mindset and "the any benefit fallacy" of social media is as clear-eyed as any productivity writing I've read. The framework for scheduling depth (time blocks, shutdown rituals, the "Done for the Day" hard stop) is directly applicable and I've since integrated most of it.</p>
+
+        <div class="review-quote">
+          <p>"A deep life is a good life, any way you look at it."</p>
+        </div>
+
+        <p class="review-text">Where I found myself pushing back was in the portraits of ultra-deep workers Newport holds up as exemplars. The monastic lifestyle he implies is the ideal works for tenured academics and established craftspeople. For engineers working in collaborative product teams, the rhythmic and journalistic philosophies are more realistic — and Newport does cover these, but they feel like afterthoughts compared to the more romantic, isolation-focused model he seems to personally prefer.</p>
+        <p class="review-text">The writing is clear and tight. No chapter overstays its welcome. As a reader I felt respected — Newport assumes you're capable of drawing your own implementation conclusions from well-argued principles.</p>
+      </div>
+
+      <!-- 03 / KEY TAKEAWAYS -->
+      <div class="review-section" id="rev-3">
+        <h2 class="review-section__heading">03 / Key Takeaways</h2>
+        <div class="review-takeaways">
+          <div class="review-takeaway">
+            <span class="review-takeaway__num" aria-hidden="true">01</span>
+            <p class="review-takeaway__text">Deep work — focused, distraction-free effort on hard problems — produces results out of proportion to the hours spent. It is a skill that can be systematically trained.</p>
+          </div>
+          <div class="review-takeaway">
+            <span class="review-takeaway__num" aria-hidden="true">02</span>
+            <p class="review-takeaway__text">Time-block your schedule. Don't keep a to-do list — keep a calendar. Assign every hour a job, and when plans change, revise the calendar rather than abandoning it.</p>
+          </div>
+          <div class="review-takeaway">
+            <span class="review-takeaway__num" aria-hidden="true">03</span>
+            <p class="review-takeaway__text">Embrace boredom deliberately. If you reach for your phone every time there's a pause, you're training your brain to crave distraction, not depth. Boredom is practice for concentration.</p>
+          </div>
+          <div class="review-takeaway">
+            <span class="review-takeaway__num" aria-hidden="true">04</span>
+            <p class="review-takeaway__text">Apply the craftsman mindset to tool selection: adopt a tool only if its positive impacts substantially outweigh its negatives. The "any benefit" logic for social media is a trap.</p>
+          </div>
+          <div class="review-takeaway">
+            <span class="review-takeaway__num" aria-hidden="true">05</span>
+            <p class="review-takeaway__text">Shutdown rituals matter. A real end to the workday — including a review of open tasks and an explicit shutdown declaration — allows genuine cognitive rest, which fuels tomorrow's depth.</p>
+          </div>
+          <div class="review-takeaway">
+            <span class="review-takeaway__num" aria-hidden="true">06</span>
+            <p class="review-takeaway__text">Measure lead indicators, not lag. Track hours of deep work per week. That number is within your control; output and outcomes are not always.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ============================================================
+     VIEW 6: PROJECTS
+     ============================================================ -->
+<section id="view-projects" class="view" role="main" aria-label="Projects">
+
+  <div class="container">
+    <div class="projects-header">
+      <div class="projects-header__inner">
+        <h1 class="projects-header__title">Selected<br>Work</h1>
+        <span class="projects-header__year" aria-hidden="true">2025</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="red-rule"></div>
+
+  <!-- Project 01: Deepflow -->
+  <article class="project-item" aria-label="Project: Deepflow">
+    <div class="project-item__inner">
+      <div class="project-item__left">
+        <div class="project-item__header">
+          <span class="project-item__num" aria-hidden="true">01</span>
+          <h2 class="project-item__name">Deepflow</h2>
+        </div>
+        <span class="project-item__badge">Web App</span>
+        <p class="project-item__desc">An AI-powered deep work timer that adapts to your cognitive patterns. Deepflow tracks your focus sessions, learns when you're most productive, and intelligently schedules your deep work blocks to match your natural rhythms. It integrates with your calendar and surfaces insights about attention quality — not just time spent.</p>
+        <div class="project-item__stack" aria-label="Tech stack">
+          <span class="stack-tag">Next.js 14</span>
+          <span class="stack-tag">TypeScript</span>
+          <span class="stack-tag">Prisma</span>
+          <span class="stack-tag">OpenAI API</span>
+          <span class="stack-tag">Vercel</span>
+          <span class="stack-tag">PostgreSQL</span>
+        </div>
+        <div class="project-item__links">
+          <span class="project-link" role="button" tabindex="0">Live Demo &rarr;</span>
+          <span class="project-link" role="button" tabindex="0">GitHub &rarr;</span>
+          <span class="project-link" role="button" tabindex="0">Case Study &rarr;</span>
+        </div>
+      </div>
+      <div class="project-item__visual" aria-hidden="true">
+        <div class="geo-1">
+          <div class="geo-inner"></div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Project 02: Listu -->
+  <article class="project-item" aria-label="Project: Listu">
+    <div class="project-item__inner">
+      <div class="project-item__left">
+        <div class="project-item__header">
+          <span class="project-item__num" aria-hidden="true">02</span>
+          <h2 class="project-item__name">Listu</h2>
+        </div>
+        <span class="project-item__badge">Web App</span>
+        <p class="project-item__desc">Minimal, opinionated task management designed for engineers who think in systems. Listu enforces a strict hierarchy: Projects contain Areas contain Tasks. No subtasks, no tags, no labels — just the structure that actually maps to how software gets built. It's deliberately constrained and deliberately fast.</p>
+        <div class="project-item__stack" aria-label="Tech stack">
+          <span class="stack-tag">React</span>
+          <span class="stack-tag">tRPC</span>
+          <span class="stack-tag">Tailwind CSS</span>
+          <span class="stack-tag">SQLite</span>
+          <span class="stack-tag">Turso</span>
+          <span class="stack-tag">Zod</span>
+        </div>
+        <div class="project-item__links">
+          <span class="project-link" role="button" tabindex="0">Live Demo &rarr;</span>
+          <span class="project-link" role="button" tabindex="0">GitHub &rarr;</span>
+        </div>
+      </div>
+      <div class="project-item__visual" aria-hidden="true">
+        <div class="geo-2">
+          <div class="geo-inner"></div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Project 03: KODR -->
+  <article class="project-item" aria-label="Project: KODR">
+    <div class="project-item__inner">
+      <div class="project-item__left">
+        <div class="project-item__header">
+          <span class="project-item__num" aria-hidden="true">03</span>
+          <h2 class="project-item__name">KODR</h2>
+        </div>
+        <span class="project-item__badge">Platform</span>
+        <p class="project-item__desc">An interactive coding curriculum platform built for async, self-directed technical learning. KODR combines structured lesson paths with an in-browser code editor and automated test runner — so learners get instant feedback without leaving the learning environment. Built for people who learn by doing, not watching.</p>
+        <div class="project-item__stack" aria-label="Tech stack">
+          <span class="stack-tag">Next.js</span>
+          <span class="stack-tag">Monaco Editor</span>
+          <span class="stack-tag">Node.js</span>
+          <span class="stack-tag">Docker</span>
+          <span class="stack-tag">Redis</span>
+          <span class="stack-tag">AWS Lambda</span>
+        </div>
+        <div class="project-item__links">
+          <span class="project-link" role="button" tabindex="0">Live Demo &rarr;</span>
+          <span class="project-link" role="button" tabindex="0">GitHub &rarr;</span>
+          <span class="project-link" role="button" tabindex="0">Write-up &rarr;</span>
+        </div>
+      </div>
+      <div class="project-item__visual" aria-hidden="true">
+        <div class="geo-3">
+          <div class="geo-inner"></div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+</section>
+
+</main>
+
+<!-- ============================================================
+     BOTTOM NAV
+     ============================================================ -->
+<nav class="bottom-nav" role="navigation" aria-label="Page navigation">
+  <div class="bottom-nav__item active" id="tab-home" onclick="showView('home')" role="tab" tabindex="0" aria-selected="true" aria-label="Home">
+    HOME
+  </div>
+  <div class="bottom-nav__item" id="tab-blog" onclick="showView('blog')" role="tab" tabindex="0" aria-selected="false" aria-label="Journal">
+    JOURNAL
+  </div>
+  <div class="bottom-nav__item" id="tab-article" onclick="showView('article')" role="tab" tabindex="0" aria-selected="false" aria-label="Article">
+    ARTICLE
+  </div>
+  <div class="bottom-nav__item" id="tab-books" onclick="showView('books')" role="tab" tabindex="0" aria-selected="false" aria-label="Books">
+    BOOKS
+  </div>
+  <div class="bottom-nav__item" id="tab-book-detail" onclick="showView('book-detail')" role="tab" tabindex="0" aria-selected="false" aria-label="Book Review">
+    REVIEW
+  </div>
+  <div class="bottom-nav__item" id="tab-projects" onclick="showView('projects')" role="tab" tabindex="0" aria-selected="false" aria-label="Work">
+    WORK
+  </div>
+</nav>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+/* ---- State ---- */
+var currentView = 'home';
+var currentTheme = 'light';
+
+/* ---- View switching ---- */
+function showView(name) {
+  // Hide all views
+  var views = document.querySelectorAll('.view');
+  views.forEach(function(v) {
+    v.classList.remove('active');
+  });
+
+  // Show target view
+  var target = document.getElementById('view-' + name);
+  if (!target) return;
+  target.classList.add('active');
+  currentView = name;
+
+  // Update bottom nav tabs
+  var tabs = document.querySelectorAll('.bottom-nav__item');
+  tabs.forEach(function(t) {
+    t.classList.remove('active');
+    t.setAttribute('aria-selected', 'false');
+  });
+  var activeTab = document.getElementById('tab-' + name);
+  if (activeTab) {
+    activeTab.classList.add('active');
+    activeTab.setAttribute('aria-selected', 'true');
+  }
+
+  // Update header nav
+  var headerLinks = document.querySelectorAll('.header-nav a');
+  headerLinks.forEach(function(l) { l.classList.remove('active'); });
+  var headerMap = { home: 'nav-home', blog: 'nav-blog', books: 'nav-books', 'book-detail': 'nav-books', projects: 'nav-projects' };
+  if (headerMap[name]) {
+    var hl = document.getElementById(headerMap[name]);
+    if (hl) hl.classList.add('active');
+  }
+
+  // Scroll to top of page on view change
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+/* ---- Theme toggle ---- */
+function toggleTheme() {
+  var html = document.documentElement;
+  if (currentTheme === 'light') {
+    html.setAttribute('data-theme', 'dark');
+    currentTheme = 'dark';
+    document.getElementById('theme-label').textContent = 'Light';
+  } else {
+    html.setAttribute('data-theme', 'light');
+    currentTheme = 'light';
+    document.getElementById('theme-label').textContent = 'Dark';
+  }
+}
+
+/* ---- Filter buttons (blog listing) ---- */
+function setFilter(btn, category) {
+  // Update button states
+  var btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(function(b) {
+    b.classList.remove('active');
+    b.setAttribute('aria-pressed', 'false');
+  });
+  btn.classList.add('active');
+  btn.setAttribute('aria-pressed', 'true');
+
+  // Show/hide rows by tag (simple simulation)
+  var rows = document.querySelectorAll('.article-table-row');
+  rows.forEach(function(row) {
+    if (category === 'ALL') {
+      row.style.display = '';
+      return;
+    }
+    var tags = row.querySelectorAll('.tag');
+    var match = false;
+    tags.forEach(function(t) {
+      if (t.textContent.trim() === category) match = true;
+    });
+    row.style.display = match ? '' : 'none';
+  });
+}
+
+/* ---- Keyboard navigation for interactive elements ---- */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' || e.key === ' ') {
+    var el = document.activeElement;
+    if (el && (el.getAttribute('role') === 'button' || el.getAttribute('role') === 'tab')) {
+      e.preventDefault();
+      el.click();
+    }
+  }
+});
+
+/* ---- Prefer color scheme media query ---- */
+(function() {
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    currentTheme = 'dark';
+    var label = document.getElementById('theme-label');
+    if (label) label.textContent = 'Light';
+  }
+})();
+</script>
+
+</body>
+</html>

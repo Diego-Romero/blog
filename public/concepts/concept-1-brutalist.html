@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diego Romero — Brutalist Concept</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─────────────────────────────────────────────
+       COLOR SYSTEM
+    ───────────────────────────────────────────── */
+    :root {
+      --bg: #ffffff;
+      --fg: #0a0a0a;
+      --accent: #FF2D00;
+      --border: #0a0a0a;
+      --muted: #888888;
+      --surface: #f0f0f0;
+    }
+    [data-theme="dark"] {
+      --bg: #0a0a0a;
+      --fg: #f0f0f0;
+      --accent: #FF2D00;
+      --border: #f0f0f0;
+      --muted: #666666;
+      --surface: #1a1a1a;
+    }
+
+    /* ─────────────────────────────────────────────
+       RESET + BASE
+    ───────────────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Space Mono', monospace;
+      background-color: var(--bg);
+      color: var(--fg);
+      font-size: 14px;
+      line-height: 1.7;
+      transition: background-color 0.2s, color 0.2s;
+      padding-top: 56px;
+      padding-bottom: 72px;
+    }
+    a {
+      color: var(--fg);
+      text-decoration: none;
+    }
+    a:hover {
+      color: var(--accent);
+    }
+    h1, h2, h3, h4 {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 0.04em;
+      line-height: 1.05;
+    }
+    p {
+      margin-bottom: 1rem;
+    }
+    ul {
+      padding-left: 1.5rem;
+    }
+    li {
+      margin-bottom: 0.4rem;
+    }
+    img {
+      max-width: 100%;
+    }
+
+    /* ─────────────────────────────────────────────
+       TOP NAV
+    ───────────────────────────────────────────── */
+    .top-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: 56px;
+      background: var(--bg);
+      border-bottom: 3px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .top-nav__logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.08em;
+      color: var(--fg);
+      cursor: pointer;
+    }
+    .top-nav__logo span {
+      color: var(--accent);
+    }
+    .top-nav__right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .theme-toggle {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 6px 12px;
+      background: transparent;
+      border: 2px solid var(--border);
+      color: var(--fg);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .theme-toggle:hover {
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    /* ─────────────────────────────────────────────
+       BOTTOM NAV BAR
+    ───────────────────────────────────────────── */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: 56px;
+      background: var(--fg);
+      border-top: 4px solid var(--accent);
+      display: flex;
+      align-items: stretch;
+    }
+    .bottom-nav__btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      border-right: 2px solid rgba(128,128,128,0.3);
+      color: var(--bg);
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .bottom-nav__btn:last-child {
+      border-right: none;
+    }
+    .bottom-nav__btn:hover {
+      background: rgba(255,45,0,0.2);
+    }
+    .bottom-nav__btn.active {
+      background: var(--accent);
+      color: #fff;
+    }
+    @media (max-width: 480px) {
+      .bottom-nav__btn {
+        font-size: 8px;
+        letter-spacing: 0.04em;
+      }
+    }
+
+    /* ─────────────────────────────────────────────
+       VIEW CONTAINER + TRANSITIONS
+    ───────────────────────────────────────────── */
+    .view {
+      display: none;
+      animation: fadeIn 0.18s ease-in-out;
+    }
+    .view.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─────────────────────────────────────────────
+       SHARED UTILITIES
+    ───────────────────────────────────────────── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .section-header {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 42px;
+      letter-spacing: 0.06em;
+      border-bottom: 3px solid var(--border);
+      padding-bottom: 10px;
+      margin-bottom: 28px;
+    }
+    .tag-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      background: var(--accent);
+      color: #fff;
+      margin-right: 4px;
+      margin-bottom: 4px;
+    }
+    .tag-badge.outline {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--fg);
+    }
+    .tag-badge.outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .reading-time {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+    .date-label {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .red-rule {
+      height: 4px;
+      background: var(--accent);
+      margin: 16px 0 28px 0;
+    }
+
+    /* ─────────────────────────────────────────────
+       VIEW 1: HOME
+    ───────────────────────────────────────────── */
+    #view-home {
+      padding: 60px 0 40px;
+    }
+    .hero {
+      padding: 0 24px;
+      max-width: 1100px;
+      margin: 0 auto 56px;
+    }
+    .hero__name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(72px, 12vw, 148px);
+      line-height: 0.92;
+      letter-spacing: 0.02em;
+      color: var(--fg);
+    }
+    .hero__name span {
+      color: var(--accent);
+    }
+    .hero__tagline {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(13px, 1.8vw, 18px);
+      color: var(--fg);
+      margin-top: 20px;
+      max-width: 620px;
+      line-height: 1.6;
+    }
+    .hero__sub {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    /* Article Cards */
+    .article-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 3px solid var(--border);
+    }
+    @media (max-width: 768px) {
+      .article-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+    .article-card {
+      padding: 24px;
+      border-right: 3px solid var(--border);
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+    .article-card:last-child {
+      border-right: none;
+    }
+    @media (max-width: 768px) {
+      .article-card {
+        border-right: none;
+        border-bottom: 3px solid var(--border);
+      }
+      .article-card:last-child {
+        border-bottom: none;
+      }
+    }
+    .article-card:hover {
+      background: var(--surface);
+    }
+    .article-card__tags {
+      margin-bottom: 10px;
+    }
+    .article-card__title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+      line-height: 1.1;
+    }
+    .article-card__excerpt {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    .article-card__meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Currently Reading */
+    .currently-reading {
+      margin-top: 56px;
+    }
+    .book-feature {
+      display: flex;
+      align-items: stretch;
+      border: 3px solid var(--border);
+    }
+    @media (max-width: 768px) {
+      .book-feature {
+        flex-direction: column;
+      }
+    }
+    .book-feature__cover {
+      width: 120px;
+      min-width: 120px;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    @media (max-width: 768px) {
+      .book-feature__cover {
+        width: 100%;
+        height: 80px;
+      }
+    }
+    .book-feature__cover-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      color: #fff;
+      letter-spacing: 0.12em;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+    }
+    @media (max-width: 768px) {
+      .book-feature__cover-label {
+        writing-mode: horizontal-tb;
+        transform: none;
+      }
+    }
+    .book-feature__info {
+      padding: 24px;
+      border-left: 3px solid var(--border);
+      flex: 1;
+    }
+    @media (max-width: 768px) {
+      .book-feature__info {
+        border-left: none;
+        border-top: 3px solid var(--border);
+      }
+    }
+    .book-feature__status {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .book-feature__title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+    .book-feature__author {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .stars {
+      color: var(--accent);
+      font-size: 16px;
+      letter-spacing: 2px;
+    }
+    .book-feature__note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 10px;
+      max-width: 480px;
+    }
+
+    /* Projects section */
+    .projects-home {
+      margin-top: 56px;
+    }
+    .project-home-card {
+      border: 3px solid var(--border);
+      border-left: 6px solid var(--accent);
+      padding: 20px 24px;
+      margin-bottom: -3px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+    .project-home-card:hover {
+      background: var(--surface);
+    }
+    @media (max-width: 768px) {
+      .project-home-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
+    .project-home-card__name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.06em;
+    }
+    .project-home-card__desc {
+      font-size: 12px;
+      color: var(--muted);
+      max-width: 460px;
+      margin-top: 4px;
+    }
+    .project-home-card__right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+    @media (max-width: 768px) {
+      .project-home-card__right {
+        align-items: flex-start;
+      }
+    }
+    .project-home-card__tech {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+    .arrow-link {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    /* ─────────────────────────────────────────────
+       VIEW 2: BLOG LISTING
+    ───────────────────────────────────────────── */
+    #view-blog {
+      padding: 60px 0 40px;
+    }
+    .blog-header {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+    .blog-header .section-header {
+      margin-bottom: 0;
+      border-bottom: none;
+    }
+    .article-count {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+    .blog-divider {
+      height: 3px;
+      background: var(--border);
+      margin-bottom: 24px;
+    }
+    .tag-filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+    .tag-filter-btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border: 2px solid var(--border);
+      background: transparent;
+      color: var(--fg);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .tag-filter-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .tag-filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .article-list {
+      border-top: 3px solid var(--border);
+    }
+    .article-row {
+      display: grid;
+      grid-template-columns: 110px 1fr auto auto;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .article-row:hover {
+      background: var(--surface);
+      padding-left: 8px;
+    }
+    @media (max-width: 768px) {
+      .article-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        padding: 14px 0;
+      }
+    }
+    .article-row__date {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+    .article-row__title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.04em;
+    }
+    .article-row__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .article-row__time {
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+      text-align: right;
+    }
+    @media (max-width: 768px) {
+      .article-row__time {
+        text-align: left;
+      }
+    }
+
+    /* ─────────────────────────────────────────────
+       VIEW 3: ARTICLE DETAIL
+    ───────────────────────────────────────────── */
+    #view-article {
+      padding: 60px 0 40px;
+    }
+    .article-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 0;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    @media (max-width: 900px) {
+      .article-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .article-sidebar {
+      padding-right: 32px;
+      border-right: 3px solid var(--border);
+    }
+    @media (max-width: 900px) {
+      .article-sidebar {
+        border-right: none;
+        border-bottom: 3px solid var(--border);
+        padding-right: 0;
+        padding-bottom: 24px;
+        margin-bottom: 32px;
+      }
+    }
+    .toc-header {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    .toc-sticky {
+      position: sticky;
+      top: 80px;
+    }
+    .toc-list {
+      list-style: none;
+      padding: 0;
+    }
+    .toc-list li {
+      margin-bottom: 0;
+    }
+    .toc-list a {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      padding: 7px 0 7px 12px;
+      border-left: 3px solid var(--border);
+      transition: color 0.15s, border-color 0.15s;
+      line-height: 1.4;
+    }
+    .toc-list a:hover,
+    .toc-list a.active {
+      color: var(--accent);
+      border-left-color: var(--accent);
+    }
+    .article-main {
+      padding-left: 40px;
+    }
+    @media (max-width: 900px) {
+      .article-main {
+        padding-left: 0;
+      }
+    }
+    .article-meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--border);
+    }
+    .article-title-main {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 5vw, 64px);
+      letter-spacing: 0.04em;
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+    .article-body h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      letter-spacing: 0.06em;
+      margin: 40px 0 16px;
+      color: var(--fg);
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 8px;
+    }
+    .article-body p {
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--fg);
+      margin-bottom: 1.2rem;
+    }
+    .article-body ul {
+      margin-bottom: 1.2rem;
+    }
+    .article-body ul li {
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 0.5rem;
+    }
+    .article-blockquote {
+      border-left: 5px solid var(--accent);
+      padding: 16px 24px;
+      margin: 28px 0;
+      background: var(--surface);
+    }
+    .article-blockquote p {
+      font-style: italic;
+      font-size: 15px;
+      margin-bottom: 8px;
+      color: var(--fg);
+    }
+    .article-blockquote cite {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-style: normal;
+    }
+    .code-block {
+      background: #0a0a0a;
+      color: #f0f0f0;
+      padding: 24px;
+      margin: 24px 0;
+      overflow-x: auto;
+      border: 2px solid #333;
+      position: relative;
+    }
+    [data-theme="dark"] .code-block {
+      background: #111;
+      border-color: #333;
+    }
+    .code-block::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .code-block pre {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      white-space: pre;
+    }
+    .code-kw   { color: #ff79c6; }
+    .code-type { color: #8be9fd; }
+    .code-str  { color: #f1fa8c; }
+    .code-cm   { color: #6272a4; font-style: italic; }
+    .related-posts {
+      margin-top: 56px;
+      padding-top: 28px;
+      border-top: 3px solid var(--border);
+    }
+    .related-posts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 3px solid var(--border);
+    }
+    @media (max-width: 768px) {
+      .related-posts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .related-post-card {
+      padding: 20px;
+      border-right: 3px solid var(--border);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .related-post-card:last-child {
+      border-right: none;
+    }
+    @media (max-width: 768px) {
+      .related-post-card {
+        border-right: none;
+        border-bottom: 3px solid var(--border);
+      }
+      .related-post-card:last-child {
+        border-bottom: none;
+      }
+    }
+    .related-post-card:hover {
+      background: var(--surface);
+    }
+    .related-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .related-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+
+    /* ─────────────────────────────────────────────
+       VIEW 4: BOOKS LISTING
+    ───────────────────────────────────────────── */
+    #view-books {
+      padding: 60px 0 40px;
+    }
+    .books-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 3px solid var(--border);
+    }
+    @media (max-width: 768px) {
+      .books-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .book-card {
+      display: flex;
+      border-right: 3px solid var(--border);
+      border-bottom: 3px solid var(--border);
+      cursor: pointer;
+      transition: background 0.15s;
+      overflow: hidden;
+    }
+    .book-card:nth-child(2n) {
+      border-right: none;
+    }
+    .book-card:nth-child(3),
+    .book-card:nth-child(4) {
+      border-bottom: none;
+    }
+    @media (max-width: 768px) {
+      .book-card {
+        border-right: none;
+      }
+      .book-card:nth-child(3) {
+        border-bottom: 3px solid var(--border);
+      }
+      .book-card:nth-child(4) {
+        border-bottom: none;
+      }
+    }
+    .book-card:hover {
+      background: var(--surface);
+    }
+    .book-card__spine {
+      width: 64px;
+      min-width: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .book-card__spine-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 11px;
+      color: #fff;
+      letter-spacing: 0.15em;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+      white-space: nowrap;
+    }
+    .book-card__content {
+      padding: 20px 20px 20px 16px;
+      border-left: 3px solid var(--border);
+      flex: 1;
+    }
+    .book-card__genre {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .book-card__title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      letter-spacing: 0.04em;
+      line-height: 1.05;
+      margin-bottom: 4px;
+    }
+    .book-card__author {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .book-card__stars {
+      color: var(--accent);
+      font-size: 18px;
+      letter-spacing: 3px;
+    }
+
+    /* ─────────────────────────────────────────────
+       VIEW 5: BOOK DETAIL
+    ───────────────────────────────────────────── */
+    #view-book-detail {
+      padding: 60px 0 40px;
+    }
+    .book-detail-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 0;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    @media (max-width: 900px) {
+      .book-detail-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .book-detail-sidebar {
+      padding-right: 32px;
+      border-right: 3px solid var(--border);
+    }
+    @media (max-width: 900px) {
+      .book-detail-sidebar {
+        border-right: none;
+        border-bottom: 3px solid var(--border);
+        padding-right: 0;
+        padding-bottom: 24px;
+        margin-bottom: 32px;
+      }
+    }
+    .book-detail-cover {
+      width: 100%;
+      aspect-ratio: 2/3;
+      background: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .book-detail-cover::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        rgba(255,255,255,0.05) 0px,
+        rgba(255,255,255,0.05) 2px,
+        transparent 2px,
+        transparent 12px
+      );
+    }
+    .book-detail-cover__text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      color: #fff;
+      letter-spacing: 0.1em;
+      text-align: center;
+      padding: 16px;
+      z-index: 1;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .book-meta-list {
+      list-style: none;
+      padding: 0;
+    }
+    .book-meta-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      margin-bottom: 0;
+    }
+    .book-meta-list li:last-child {
+      border-bottom: none;
+    }
+    .book-meta-list .meta-key {
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 10px;
+    }
+    .book-meta-list .meta-val {
+      text-align: right;
+    }
+    .book-detail-main {
+      padding-left: 40px;
+    }
+    @media (max-width: 900px) {
+      .book-detail-main {
+        padding-left: 0;
+      }
+    }
+    .book-detail-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(40px, 6vw, 72px);
+      letter-spacing: 0.04em;
+      line-height: 0.95;
+      margin-bottom: 6px;
+    }
+    .book-detail-author {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+    .book-review-body h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.06em;
+      margin: 36px 0 14px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 6px;
+    }
+    .book-review-body p {
+      font-size: 14px;
+      line-height: 1.85;
+      margin-bottom: 1.1rem;
+    }
+    .book-review-body ul {
+      margin-bottom: 1.1rem;
+    }
+    .book-review-body ul li {
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    /* ─────────────────────────────────────────────
+       VIEW 6: PROJECTS
+    ───────────────────────────────────────────── */
+    #view-projects {
+      padding: 60px 0 40px;
+    }
+    .project-block {
+      border: 3px solid var(--border);
+      margin-bottom: -3px;
+      overflow: hidden;
+    }
+    .project-block__header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      gap: 20px;
+      padding: 32px;
+      border-bottom: 3px solid var(--border);
+    }
+    @media (max-width: 768px) {
+      .project-block__header {
+        grid-template-columns: 1fr;
+        padding: 20px;
+      }
+    }
+    .project-block__name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 7vw, 88px);
+      letter-spacing: 0.04em;
+      line-height: 1;
+      color: var(--fg);
+    }
+    .project-type-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 2px solid var(--fg);
+      color: var(--fg);
+      white-space: nowrap;
+      margin-top: 8px;
+      display: inline-block;
+    }
+    .project-block__visual {
+      height: 180px;
+      border-bottom: 3px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .project-visual-deepflow {
+      background: var(--fg);
+    }
+    .project-visual-deepflow::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent 0px,
+          transparent 38px,
+          var(--accent) 38px,
+          var(--accent) 40px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent 0px,
+          transparent 38px,
+          rgba(255,45,0,0.25) 38px,
+          rgba(255,45,0,0.25) 40px
+        );
+    }
+    .project-visual-deepflow::after {
+      content: 'DEEPFLOW';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 56px;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.08);
+    }
+    .project-visual-listu {
+      background: #1a1a2e;
+    }
+    .project-visual-listu::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          135deg,
+          transparent 0px,
+          transparent 24px,
+          rgba(255,45,0,0.15) 24px,
+          rgba(255,45,0,0.15) 26px
+        );
+    }
+    .project-visual-listu::after {
+      content: 'LISTU';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 56px;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.08);
+    }
+    .project-visual-kodr {
+      background: #0a1628;
+    }
+    .project-visual-kodr::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(255,45,0,0.12) 0px,
+        rgba(255,45,0,0.12) 1px,
+        transparent 1px,
+        transparent 20px
+      );
+    }
+    .project-visual-kodr::after {
+      content: '$ kodr --init';
+      position: absolute;
+      top: 50%;
+      left: 32px;
+      transform: translateY(-50%);
+      font-family: 'Space Mono', monospace;
+      font-size: 22px;
+      color: var(--accent);
+      opacity: 0.6;
+    }
+    .project-block__body {
+      padding: 28px 32px;
+    }
+    @media (max-width: 768px) {
+      .project-block__body {
+        padding: 20px;
+      }
+    }
+    .project-block__desc {
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--fg);
+      max-width: 680px;
+      margin-bottom: 20px;
+    }
+    .project-tech-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .tech-pill {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 4px 10px;
+      border: 2px solid var(--border);
+      color: var(--fg);
+      text-transform: uppercase;
+    }
+    .project-links {
+      display: flex;
+      gap: 12px;
+    }
+    .project-link-btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 7px 16px;
+      border: 2px solid var(--border);
+      color: var(--fg);
+      background: transparent;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .project-link-btn:hover {
+      background: var(--fg);
+      color: var(--bg);
+    }
+    .project-link-btn.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .project-link-btn.primary:hover {
+      background: transparent;
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <nav class="top-nav">
+    <div class="top-nav__logo" onclick="switchView('home')">DR<span>.</span></div>
+    <div class="top-nav__right">
+      <button class="theme-toggle" id="themeToggle">DARK MODE</button>
+    </div>
+  </nav>
+
+  <!-- ─────────────────────────────────────────── -->
+  <!-- VIEW 1: HOME                                -->
+  <!-- ─────────────────────────────────────────── -->
+  <section id="view-home" class="view active">
+    <div class="hero">
+      <h1 class="hero__name">DIEGO<br><span>ROMERO</span></h1>
+      <div class="red-rule"></div>
+      <p class="hero__tagline">Software engineer. I write about technology, productivity, and books.</p>
+      <p class="hero__sub">Publishing every couple of days &rarr;</p>
+    </div>
+
+    <div class="container">
+
+      <!-- Latest Articles -->
+      <div class="section-header">LATEST//ARTICLES</div>
+      <div class="article-cards">
+        <div class="article-card" onclick="switchView('article')">
+          <div class="article-card__tags">
+            <span class="tag-badge">engineering</span>
+            <span class="tag-badge">ai</span>
+          </div>
+          <div class="article-card__title">Rewriting My Blog With Claude Code</div>
+          <p class="article-card__excerpt">The old Next.js setup was overengineered for what I actually needed. I rebuilt it entirely using AI as a collaborator — here's what I learned.</p>
+          <div class="article-card__meta">
+            <span class="date-label">Feb 10, 2026</span>
+            <span class="reading-time">8 min read</span>
+          </div>
+        </div>
+        <div class="article-card" onclick="switchView('blog')">
+          <div class="article-card__tags">
+            <span class="tag-badge">productivity</span>
+          </div>
+          <div class="article-card__title">On Focus and Deep Work</div>
+          <p class="article-card__excerpt">Deep Work changed how I think about concentration. Cal Newport's framework is ruthless about what attention actually costs — and what it produces.</p>
+          <div class="article-card__meta">
+            <span class="date-label">Feb 6, 2026</span>
+            <span class="reading-time">12 min read</span>
+          </div>
+        </div>
+        <div class="article-card" onclick="switchView('blog')">
+          <div class="article-card__tags">
+            <span class="tag-badge">books</span>
+            <span class="tag-badge">finance</span>
+          </div>
+          <div class="article-card__title">The Psychology of Money — My Notes</div>
+          <p class="article-card__excerpt">Morgan Housel writes about money the way nobody taught us in school. This one stuck with me for weeks after finishing it.</p>
+          <div class="article-card__meta">
+            <span class="date-label">Jan 28, 2026</span>
+            <span class="reading-time">6 min read</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Currently Reading -->
+      <div class="currently-reading">
+        <div class="section-header">CURRENTLY//READING</div>
+        <div class="book-feature">
+          <div class="book-feature__cover">
+            <span class="book-feature__cover-label">DEEP WORK</span>
+          </div>
+          <div class="book-feature__info">
+            <div class="book-feature__status">&#9632; Now Reading</div>
+            <div class="book-feature__title">DEEP WORK</div>
+            <div class="book-feature__author">Cal Newport &mdash; Productivity</div>
+            <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="book-feature__note">Rules for focused success in a distracted world. Newport's core argument is simple and devastating: the ability to perform deep work is becoming increasingly rare and increasingly valuable. If you can master it, you'll thrive.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Projects -->
+      <div class="projects-home">
+        <div class="section-header">THINGS//I'VE BUILT</div>
+        <div class="project-home-card" onclick="switchView('projects')">
+          <div>
+            <div class="project-home-card__name">DEEPFLOW</div>
+            <div class="project-home-card__desc">A focus timer built for deep work sessions. Track your concentration, set intentions, and build a streak.</div>
+          </div>
+          <div class="project-home-card__right">
+            <span class="project-home-card__tech">React &bull; TypeScript &bull; Next.js &bull; Firebase</span>
+            <span class="arrow-link">View &rarr;</span>
+          </div>
+        </div>
+        <div class="project-home-card" onclick="switchView('projects')">
+          <div>
+            <div class="project-home-card__name">LISTU</div>
+            <div class="project-home-card__desc">Habit tracker for iOS. Simple, fast, and beautiful. Build the habits that matter.</div>
+          </div>
+          <div class="project-home-card__right">
+            <span class="project-home-card__tech">Swift &bull; SwiftUI</span>
+            <span class="arrow-link">View &rarr;</span>
+          </div>
+        </div>
+        <div class="project-home-card" onclick="switchView('projects')">
+          <div>
+            <div class="project-home-card__name">KODR</div>
+            <div class="project-home-card__desc">Developer tooling for the terminal. Scaffolding, automation, and workflow improvements.</div>
+          </div>
+          <div class="project-home-card__right">
+            <span class="project-home-card__tech">Node.js &bull; TypeScript</span>
+            <span class="arrow-link">View &rarr;</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /container -->
+  </section>
+
+  <!-- ─────────────────────────────────────────── -->
+  <!-- VIEW 2: BLOG LISTING                        -->
+  <!-- ─────────────────────────────────────────── -->
+  <section id="view-blog" class="view">
+    <div class="container">
+      <div class="blog-header">
+        <div class="section-header">ALL ARTICLES</div>
+        <span class="article-count">5 posts</span>
+      </div>
+      <div class="blog-divider"></div>
+
+      <!-- Tag Filters -->
+      <div class="tag-filter-row" id="tagFilters">
+        <button class="tag-filter-btn active" data-tag="all">ALL</button>
+        <button class="tag-filter-btn" data-tag="engineering">engineering</button>
+        <button class="tag-filter-btn" data-tag="ai">ai</button>
+        <button class="tag-filter-btn" data-tag="productivity">productivity</button>
+        <button class="tag-filter-btn" data-tag="books">books</button>
+        <button class="tag-filter-btn" data-tag="finance">finance</button>
+        <button class="tag-filter-btn" data-tag="react">react</button>
+        <button class="tag-filter-btn" data-tag="nextjs">nextjs</button>
+      </div>
+
+      <!-- Article List -->
+      <div class="article-list" id="articleList">
+        <div class="article-row" data-tags="engineering,ai" onclick="switchView('article')">
+          <span class="article-row__date">Feb 10, 2026</span>
+          <span class="article-row__title">Rewriting My Blog With Claude Code</span>
+          <div class="article-row__tags">
+            <span class="tag-badge">engineering</span>
+            <span class="tag-badge">ai</span>
+          </div>
+          <span class="article-row__time">8 min</span>
+        </div>
+        <div class="article-row" data-tags="productivity" onclick="switchView('article')">
+          <span class="article-row__date">Feb 6, 2026</span>
+          <span class="article-row__title">On Focus and Deep Work</span>
+          <div class="article-row__tags">
+            <span class="tag-badge">productivity</span>
+          </div>
+          <span class="article-row__time">12 min</span>
+        </div>
+        <div class="article-row" data-tags="books,finance" onclick="switchView('article')">
+          <span class="article-row__date">Jan 28, 2026</span>
+          <span class="article-row__title">The Psychology of Money — My Notes</span>
+          <div class="article-row__tags">
+            <span class="tag-badge">books</span>
+            <span class="tag-badge">finance</span>
+          </div>
+          <span class="article-row__time">6 min</span>
+        </div>
+        <div class="article-row" data-tags="react,nextjs" onclick="switchView('article')">
+          <span class="article-row__date">Jan 20, 2026</span>
+          <span class="article-row__title">Types of Rendering in Next.js</span>
+          <div class="article-row__tags">
+            <span class="tag-badge">react</span>
+            <span class="tag-badge">nextjs</span>
+          </div>
+          <span class="article-row__time">9 min</span>
+        </div>
+        <div class="article-row" data-tags="productivity" onclick="switchView('article')">
+          <span class="article-row__date">Jan 14, 2026</span>
+          <span class="article-row__title">Concentration &amp; the Pomodoro Technique</span>
+          <div class="article-row__tags">
+            <span class="tag-badge">productivity</span>
+          </div>
+          <span class="article-row__time">5 min</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────── -->
+  <!-- VIEW 3: ARTICLE DETAIL                      -->
+  <!-- ─────────────────────────────────────────── -->
+  <section id="view-article" class="view">
+    <div class="article-layout">
+
+      <!-- Sidebar TOC -->
+      <aside class="article-sidebar">
+        <div class="toc-sticky">
+          <div class="toc-header">Contents</div>
+          <ul class="toc-list">
+            <li><a href="#toc-1" class="toc-link">The Old Blog Was Holding Me Back</a></li>
+            <li><a href="#toc-2" class="toc-link">Choosing Claude Code as My Collaborator</a></li>
+            <li><a href="#toc-3" class="toc-link">The Architecture I Landed On</a></li>
+            <li><a href="#toc-4" class="toc-link">What I Learned About Writing and Building</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Main Article -->
+      <main class="article-main">
+        <div class="article-meta-bar">
+          <span class="date-label">Feb 10, 2026</span>
+          <span class="reading-time">8 min read</span>
+          <span class="tag-badge">engineering</span>
+          <span class="tag-badge">ai</span>
+        </div>
+        <h1 class="article-title-main">Rewriting My Blog With Claude Code</h1>
+        <div class="red-rule"></div>
+
+        <div class="article-body">
+
+          <h2 id="toc-1">The Old Blog Was Holding Me Back</h2>
+          <p>
+            The previous version of this blog was built with Next.js 14, Tailwind CSS, MDX, a custom content layer, and about a dozen npm packages whose sole purpose was to make other packages work. It was, objectively, too much. Every time I wanted to write something, I'd open the project and spend fifteen minutes fighting the toolchain instead of actually writing.
+          </p>
+          <p>
+            The irony wasn't lost on me: I was a software engineer who had engineered himself into a situation where publishing a post felt like deploying a microservice. Syntax highlighting config, frontmatter schemas, TypeScript type errors from packages that hadn't been updated in two years — it was friction everywhere. The kind of friction that, over weeks, becomes a reason not to write at all.
+          </p>
+          <p>
+            I wanted something leaner. Something where the act of writing and the act of publishing were as close together as possible. What I didn't anticipate was that rebuilding it would teach me as much about how I work as it did about how software works.
+          </p>
+
+          <h2 id="toc-2">Choosing Claude Code as My Collaborator</h2>
+          <p>
+            I'd been using Claude in the browser for months — mostly for code review, rubber-duck debugging, and talking through architecture decisions. The Claude Code CLI felt like a natural extension of that workflow, except now the model could actually see my project, run commands, read files, and iterate in the context of real code rather than pasted snippets.
+          </p>
+          <p>
+            The workflow I landed on was almost conversational. I'd describe what I wanted — "a blog post type with slug, title, date, tags, reading time, and markdown content" — and Claude Code would propose the structure, write the types, scaffold the component, and point out edge cases I hadn't considered. I wasn't just prompting; I was pair programming. The difference matters. With pair programming, you're both accountable to the code.
+          </p>
+          <p>
+            What surprised me most was how much faster I moved on decisions I'd normally agonize over. When a collaborator proposes something reasonable and explains their reasoning, "good enough, ship it" becomes the right call far more often than "let me spend two hours researching the optimal approach." Speed comes from reduced decision friction, not from typing faster.
+          </p>
+
+          <h2 id="toc-3">The Architecture I Landed On</h2>
+          <p>
+            The final structure is deliberately simple. Blog posts are Markdown files in a <code>/content</code> directory. A small TypeScript module reads, parses, and sorts them at build time. No database, no CMS, no external API calls. The content type ended up looking like this:
+          </p>
+
+          <div class="code-block" data-lang="TypeScript">
+            <pre><span class="code-cm">// types/blog.ts</span>
+
+<span class="code-kw">interface</span> <span class="code-type">BlogPost</span> {
+  slug:        <span class="code-type">string</span>;
+  title:       <span class="code-type">string</span>;
+  date:        <span class="code-type">string</span>;
+  readingTime: <span class="code-type">number</span>;
+  tags:        <span class="code-type">string</span>[];
+  content:     <span class="code-type">string</span>;
+  excerpt?:    <span class="code-type">string</span>;
+  published:   <span class="code-type">boolean</span>;
+}
+
+<span class="code-kw">interface</span> <span class="code-type">Book</span> {
+  slug:    <span class="code-type">string</span>;
+  title:   <span class="code-type">string</span>;
+  author:  <span class="code-type">string</span>;
+  rating:  <span class="code-type">number</span>;
+  genre:   <span class="code-type">string</span>;
+  review:  <span class="code-type">string</span>;
+  readAt:  <span class="code-type">string</span>;
+  pages:   <span class="code-type">number</span>;
+  cover:   <span class="code-type">string</span>;
+}
+
+<span class="code-kw">export type</span> { <span class="code-type">BlogPost</span>, <span class="code-type">Book</span> };</pre>
+          </div>
+
+          <p>
+            That's it. No <code>remark</code> plugin pipeline, no complex schema validation, no generated types. Just a plain interface that describes what a post is. The rendering is handled by a single <code>marked</code> call with a syntax highlighting plugin. The whole content module is under 80 lines.
+          </p>
+
+          <h2 id="toc-4">What I Learned About Writing and Building</h2>
+
+          <div class="article-blockquote">
+            <p>"The best tool is the one that disappears. You stop thinking about it and start thinking about what you're actually trying to say."</p>
+            <cite>— Something I wrote in my notes around 2 AM during the rewrite</cite>
+          </div>
+
+          <p>
+            There's a version of this post where I evangelize AI-assisted development as a category-defining shift. I'm going to resist that framing, because the truth is more specific and more useful: Claude Code was useful to me, in this project, because it reduced the cost of exploring an idea. Not every idea — but enough of them that the work moved faster and I stayed curious instead of getting bogged down.
+          </p>
+          <p>
+            Here's what actually changed in how I work:
+          </p>
+          <ul>
+            <li>I write the <em>intention</em> first, in plain English, before writing any code. It forces clarity I used to skip over.</li>
+            <li>Overengineering is now immediately visible. When I describe something convoluted, the response reflects that convolusion back at me.</li>
+            <li>Decision debt accumulates slower. When something is proposed and I accept it, I've thought about it at least once. That's better than my usual process of copy-pasting from Stack Overflow and moving on.</li>
+            <li>The gap between "I want to try this" and "I have a working prototype" is much shorter — which means more ideas get tested instead of remaining hypothetical.</li>
+            <li>Code I didn't write is still code I'm responsible for. That discipline matters. Reading everything Claude Code produced was non-negotiable.</li>
+          </ul>
+
+          <p>
+            The blog you're reading right now is the outcome. It loads fast, it's easy to add to, and I actually want to open it and write things. That's the whole goal.
+          </p>
+        </div>
+
+        <!-- Related Posts -->
+        <div class="related-posts">
+          <div class="section-header" style="font-size:28px;">RELATED POSTS</div>
+          <div class="related-posts-grid">
+            <div class="related-post-card" onclick="switchView('blog')">
+              <div class="related-label">Next &rarr;</div>
+              <div class="related-title">On Focus and Deep Work</div>
+              <span class="tag-badge">productivity</span>
+            </div>
+            <div class="related-post-card" onclick="switchView('blog')">
+              <div class="related-label">Also worth reading</div>
+              <div class="related-title">Types of Rendering in Next.js</div>
+              <span class="tag-badge">react</span>
+              <span class="tag-badge">nextjs</span>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────── -->
+  <!-- VIEW 4: BOOKS LISTING                       -->
+  <!-- ─────────────────────────────────────────── -->
+  <section id="view-books" class="view">
+    <div class="container">
+      <div class="section-header">BOOKS I'VE READ</div>
+      <div class="books-grid">
+
+        <div class="book-card" onclick="switchView('book-detail')">
+          <div class="book-card__spine" style="background: #FF2D00;">
+            <span class="book-card__spine-text">DEEP WORK</span>
+          </div>
+          <div class="book-card__content">
+            <div class="book-card__genre">Productivity</div>
+            <div class="book-card__title">DEEP WORK</div>
+            <div class="book-card__author">Cal Newport</div>
+            <div class="book-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          </div>
+        </div>
+
+        <div class="book-card">
+          <div class="book-card__spine" style="background: #1a1a1a;">
+            <span class="book-card__spine-text" style="color:#FF2D00;">PSYCH. OF MONEY</span>
+          </div>
+          <div class="book-card__content">
+            <div class="book-card__genre">Finance</div>
+            <div class="book-card__title">THE PSYCHOLOGY OF MONEY</div>
+            <div class="book-card__author">Morgan Housel</div>
+            <div class="book-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          </div>
+        </div>
+
+        <div class="book-card">
+          <div class="book-card__spine" style="background: #0a3d62;">
+            <span class="book-card__spine-text">RIDE OF A LIFETIME</span>
+          </div>
+          <div class="book-card__content">
+            <div class="book-card__genre">Biography</div>
+            <div class="book-card__title">RIDE OF A LIFETIME</div>
+            <div class="book-card__author">Robert Iger</div>
+            <div class="book-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          </div>
+        </div>
+
+        <div class="book-card">
+          <div class="book-card__spine" style="background: #2d3436;">
+            <span class="book-card__spine-text">SHOE DOG</span>
+          </div>
+          <div class="book-card__content">
+            <div class="book-card__genre">Business</div>
+            <div class="book-card__title">SHOE DOG</div>
+            <div class="book-card__author">Phil Knight</div>
+            <div class="book-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────── -->
+  <!-- VIEW 5: BOOK DETAIL                         -->
+  <!-- ─────────────────────────────────────────── -->
+  <section id="view-book-detail" class="view">
+    <div class="book-detail-layout">
+
+      <!-- Sidebar -->
+      <aside class="book-detail-sidebar">
+        <div class="book-detail-cover">
+          <div class="book-detail-cover__text">DEEP<br>WORK<br>&mdash;<br>CAL NEWPORT</div>
+        </div>
+        <ul class="book-meta-list">
+          <li>
+            <span class="meta-key">Author</span>
+            <span class="meta-val">Cal Newport</span>
+          </li>
+          <li>
+            <span class="meta-key">Read</span>
+            <span class="meta-val">January 2025</span>
+          </li>
+          <li>
+            <span class="meta-key">Rating</span>
+            <span class="meta-val" style="color: var(--accent);">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          </li>
+          <li>
+            <span class="meta-key">Genre</span>
+            <span class="meta-val">Productivity</span>
+          </li>
+          <li>
+            <span class="meta-key">Pages</span>
+            <span class="meta-val">296</span>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Main -->
+      <main class="book-detail-main">
+        <div class="book-detail-title">DEEP WORK</div>
+        <div class="book-detail-author">by Cal Newport</div>
+        <div class="red-rule"></div>
+
+        <div class="book-review-body">
+
+          <h2>What This Book Is About</h2>
+          <p>
+            Deep Work is Cal Newport's argument that the ability to focus without distraction on cognitively demanding tasks is both increasingly rare and increasingly valuable in our modern economy. Newport defines deep work as "professional activities performed in a state of distraction-free concentration that push your cognitive capabilities to their limit." The counterpoint — shallow work — is logistical, replicable, and does not create much new value in the world.
+          </p>
+          <p>
+            The book is structured in two parts. The first makes the case for why deep work matters: drawing on examples from Carl Jung, J.K. Rowling, and various academics and entrepreneurs, Newport argues that the people who produce the most meaningful output in their fields are those who have protected their attention most ferociously. The second part is practical — four rules for incorporating deep work into a normal professional life.
+          </p>
+          <p>
+            Newport doesn't moralize or claim that shallow work is inherently bad. His position is simpler and more brutal: if you're trying to produce things that are genuinely hard and genuinely valuable, shallow work will crowd out the conditions under which those things are possible. The math is unforgiving. Attention is finite. How you spend it determines what you can produce.
+          </p>
+
+          <h2>Why It Resonated</h2>
+          <p>
+            I read Deep Work at a moment when I'd started noticing a pattern in my own work: I was perpetually busy, perpetually behind, and producing less than I felt capable of. My calendar was full of meetings. My Slack was always open. I was reachable by default and unavailable for actual thinking by accident. I recognized myself immediately in Newport's description of the shallow worker — not because I was lazy, but because the environment I'd built for myself made depth structurally impossible.
+          </p>
+          <p>
+            What hit hardest was Newport's observation that knowledge workers often can't tell the difference between being productive and appearing productive. The same behaviors that signal effort in an office — rapid email responses, always available on chat, in every meeting — are often the exact behaviors that prevent the kind of focused work that actually moves things forward. I had been optimizing for looking productive rather than being effective.
+          </p>
+          <p>
+            After finishing the book I made several changes that have stuck. I block 3-hour deep work sessions in my calendar three times a week. My phone stays face-down and silent during those blocks. I check email twice a day instead of reactively. These changes are small in absolute terms, but the compounding effect on output has been substantial. I produce more, and what I produce is better.
+          </p>
+
+          <h2>Key Takeaways</h2>
+          <ul>
+            <li>Deep work is a skill that atrophies without deliberate practice — you cannot context-switch all day and then flip a switch into focus mode at will.</li>
+            <li>Schedule every minute of your workday (loosely). Not to be rigid, but to force intentionality about how you're spending time.</li>
+            <li>Embrace boredom. The urge to reach for your phone in every idle moment trains your brain to expect constant stimulation — which makes sustained focus harder.</li>
+            <li>The "any benefit" justification for social media and distraction tools is insufficient. Evaluate tools by their actual contribution to your goals, not just their absence of obvious harm.</li>
+            <li>Shutdown rituals matter. A clear end to the workday signals to your brain that incomplete tasks are captured and can be released from active processing — which protects recovery time.</li>
+            <li>Most knowledge workers never push their cognitive limits. The ceiling is much higher than daily shallow work would suggest, but you can't find it without extended, uninterrupted effort.</li>
+          </ul>
+
+          <div class="article-blockquote">
+            <p>"If you don't produce, you won't thrive — no matter how skilled or talented you are."</p>
+            <cite>— Cal Newport, Deep Work</cite>
+          </div>
+
+          <div class="article-blockquote">
+            <p>"The ability to perform deep work is becoming increasingly rare at exactly the same time it is becoming increasingly valuable in our economy. The few who cultivate this skill, and then make it the core of their working life, will thrive."</p>
+            <cite>— Cal Newport, Deep Work</cite>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────── -->
+  <!-- VIEW 6: PROJECTS                            -->
+  <!-- ─────────────────────────────────────────── -->
+  <section id="view-projects" class="view">
+    <div class="container">
+      <div class="section-header">THINGS I'VE BUILT</div>
+
+      <!-- DEEPFLOW -->
+      <div class="project-block">
+        <div class="project-block__header">
+          <div>
+            <div class="project-block__name">DEEPFLOW</div>
+            <span class="project-type-badge">Web App</span>
+          </div>
+          <div style="text-align:right;">
+            <div class="date-label">2025 &mdash; Active</div>
+          </div>
+        </div>
+        <div class="project-visual-deepflow project-block__visual"></div>
+        <div class="project-block__body">
+          <p class="project-block__desc">
+            A focus timer built for deep work sessions. Deepflow lets you set a clear intention before each session, track your concentration in real-time, and build a daily streak that makes showing up feel consequential. It's minimal by design — the interface disappears so your work doesn't have to compete for attention.
+          </p>
+          <div class="project-tech-row">
+            <span class="tech-pill">React</span>
+            <span class="tech-pill">TypeScript</span>
+            <span class="tech-pill">Next.js</span>
+            <span class="tech-pill">Firebase</span>
+            <span class="tech-pill">Tailwind CSS</span>
+          </div>
+          <div class="project-links">
+            <button class="project-link-btn primary">Live App &rarr;</button>
+            <button class="project-link-btn">GitHub</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LISTU -->
+      <div class="project-block">
+        <div class="project-block__header">
+          <div>
+            <div class="project-block__name">LISTU</div>
+            <span class="project-type-badge">iOS App</span>
+          </div>
+          <div style="text-align:right;">
+            <div class="date-label">2024 &mdash; App Store</div>
+          </div>
+        </div>
+        <div class="project-visual-listu project-block__visual"></div>
+        <div class="project-block__body">
+          <p class="project-block__desc">
+            Habit tracker for iOS built around the idea that simplicity is a feature, not a compromise. Listu gives you a clean list of the habits you're trying to build, a daily check-in, and a streak counter that makes consistency feel like a game. No subscriptions, no social features, no algorithmic nudges. Just you and your list.
+          </p>
+          <div class="project-tech-row">
+            <span class="tech-pill">Swift</span>
+            <span class="tech-pill">SwiftUI</span>
+            <span class="tech-pill">Core Data</span>
+            <span class="tech-pill">WidgetKit</span>
+          </div>
+          <div class="project-links">
+            <button class="project-link-btn primary">App Store &rarr;</button>
+            <button class="project-link-btn">GitHub</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- KODR -->
+      <div class="project-block">
+        <div class="project-block__header">
+          <div>
+            <div class="project-block__name">KODR</div>
+            <span class="project-type-badge">CLI Tool</span>
+          </div>
+          <div style="text-align:right;">
+            <div class="date-label">2025 &mdash; npm</div>
+          </div>
+        </div>
+        <div class="project-visual-kodr project-block__visual"></div>
+        <div class="project-block__body">
+          <p class="project-block__desc">
+            Developer tooling for the terminal. Kodr is an opinionated scaffolding and automation CLI that reflects the way I actually set up projects — TypeScript-first, sensible defaults, no ceremony. Run <code>kodr init</code> and get a production-ready repo skeleton with formatting, linting, and git hooks configured in under ten seconds.
+          </p>
+          <div class="project-tech-row">
+            <span class="tech-pill">Node.js</span>
+            <span class="tech-pill">TypeScript</span>
+            <span class="tech-pill">Commander.js</span>
+            <span class="tech-pill">Zod</span>
+          </div>
+          <div class="project-links">
+            <button class="project-link-btn primary">npm &rarr;</button>
+            <button class="project-link-btn">GitHub</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav" id="bottomNav">
+    <button class="bottom-nav__btn active" data-view="home" onclick="switchView('home')">HOME</button>
+    <button class="bottom-nav__btn" data-view="blog" onclick="switchView('blog')">BLOG</button>
+    <button class="bottom-nav__btn" data-view="article" onclick="switchView('article')">ARTICLE</button>
+    <button class="bottom-nav__btn" data-view="books" onclick="switchView('books')">BOOKS</button>
+    <button class="bottom-nav__btn" data-view="book-detail" onclick="switchView('book-detail')">BOOK</button>
+    <button class="bottom-nav__btn" data-view="projects" onclick="switchView('projects')">PROJECTS</button>
+  </nav>
+
+  <script>
+    // ─────────────────────────────────────────────
+    // VIEW SWITCHING
+    // ─────────────────────────────────────────────
+    const views = {
+      'home':        document.getElementById('view-home'),
+      'blog':        document.getElementById('view-blog'),
+      'article':     document.getElementById('view-article'),
+      'books':       document.getElementById('view-books'),
+      'book-detail': document.getElementById('view-book-detail'),
+      'projects':    document.getElementById('view-projects'),
+    };
+
+    const navBtns = document.querySelectorAll('.bottom-nav__btn');
+
+    function switchView(name) {
+      // Hide all
+      Object.values(views).forEach(v => v.classList.remove('active'));
+      // Show target
+      if (views[name]) views[name].classList.add('active');
+      // Update nav
+      navBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.view === name);
+      });
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    // ─────────────────────────────────────────────
+    // DARK MODE TOGGLE
+    // ─────────────────────────────────────────────
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+
+    themeToggle.addEventListener('click', () => {
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      themeToggle.textContent = isDark ? 'DARK MODE' : 'LIGHT MODE';
+    });
+
+    // ─────────────────────────────────────────────
+    // TAG FILTERING (Blog view)
+    // ─────────────────────────────────────────────
+    const tagFilterBtns = document.querySelectorAll('.tag-filter-btn');
+    const articleRows   = document.querySelectorAll('.article-row');
+
+    tagFilterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Update active button
+        tagFilterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const selectedTag = btn.dataset.tag;
+
+        articleRows.forEach(row => {
+          if (selectedTag === 'all') {
+            row.style.display = '';
+          } else {
+            const tags = (row.dataset.tags || '').split(',');
+            row.style.display = tags.includes(selectedTag) ? '' : 'none';
+          }
+        });
+      });
+    });
+
+    // ─────────────────────────────────────────────
+    // TOC ACTIVE STATE (scroll spy, simple version)
+    // ─────────────────────────────────────────────
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    function updateToc() {
+      const headings = ['toc-1','toc-2','toc-3','toc-4'].map(id => document.getElementById(id));
+      let activeId = null;
+
+      headings.forEach(h => {
+        if (!h) return;
+        const rect = h.getBoundingClientRect();
+        if (rect.top <= 120) activeId = h.id;
+      });
+
+      tocLinks.forEach(link => {
+        const href = link.getAttribute('href').replace('#', '');
+        link.classList.toggle('active', href === activeId);
+      });
+    }
+
+    window.addEventListener('scroll', updateToc, { passive: true });
+  </script>
+</body>
+</html>

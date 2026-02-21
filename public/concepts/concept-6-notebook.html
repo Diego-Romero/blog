@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diego Romero — Field Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ─── CSS Variables ─────────────────────────────────────────────── */
+:root {
+  --bg: #F7F3E9;
+  --bg-lines: rgba(180, 160, 120, 0.25);
+  --bg-margin: #E8A0A0;
+  --fg: #1A1208;
+  --fg2: #4A3820;
+  --accent: #C13B1B;
+  --accent2: #1B4A6B;
+  --border: rgba(90, 70, 40, 0.3);
+  --muted: #8B7355;
+  --surface: #F0EAD8;
+  --sticky: #FFFACD;
+  --font-hand: 'Caveat', cursive;
+  --font-body: 'Libre Baskerville', serif;
+  --font-mono: 'Courier Prime', monospace;
+  --line-height: 32px;
+}
+
+[data-theme="dark"] {
+  --bg: #1A1510;
+  --bg-lines: rgba(80, 70, 50, 0.4);
+  --bg-margin: rgba(120, 40, 40, 0.3);
+  --fg: #E8C870;
+  --fg2: #C4A050;
+  --accent: #E84B2B;
+  --accent2: #5BA0D8;
+  --border: rgba(180, 140, 80, 0.25);
+  --muted: #8B7040;
+  --surface: #251E14;
+  --sticky: #2A2410;
+}
+
+/* ─── Reset & Base ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg);
+  background-image:
+    repeating-linear-gradient(
+      transparent,
+      transparent 31px,
+      var(--bg-lines) 31px,
+      var(--bg-lines) 32px
+    );
+  background-size: 100% 32px;
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: var(--line-height);
+  min-height: 100vh;
+  padding-bottom: 80px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  position: relative;
+}
+
+/* SVG noise filter for paper texture */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  z-index: 0;
+}
+
+/* ─── Red Margin Line ───────────────────────────────────────────── */
+.margin-line {
+  position: fixed;
+  left: 72px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--bg-margin);
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* ─── Hole Punches ──────────────────────────────────────────────── */
+.hole-punches {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 70px;
+  pointer-events: none;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.hole-punch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+  flex-shrink: 0;
+}
+
+/* ─── Page Layout ───────────────────────────────────────────────── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 40px 40px 40px 100px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Views ─────────────────────────────────────────────────────── */
+.view { display: none; animation: pageFade 0.3s ease; }
+.view.active { display: block; }
+
+@keyframes pageFade {
+  from { opacity: 0; transform: translateY(4px) rotate(0.1deg); }
+  to   { opacity: 1; transform: translateY(0) rotate(0deg); }
+}
+
+/* ─── Typography ────────────────────────────────────────────────── */
+h1, h2, h3 { font-family: var(--font-hand); font-weight: 600; color: var(--fg); }
+h1 { font-size: 3rem; line-height: 1.1; }
+h2 { font-size: 2rem; line-height: 1.2; }
+h3 { font-size: 1.5rem; }
+
+p { margin-bottom: 1rem; line-height: var(--line-height); }
+
+a { color: var(--accent2); text-decoration: underline; text-underline-offset: 3px; }
+a:hover { color: var(--accent); }
+
+strong { font-weight: 700; }
+em { font-style: italic; }
+
+/* ─── Tag Stamps ────────────────────────────────────────────────── */
+.tag-stamp {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1.5px solid var(--accent);
+  padding: 2px 7px 1px;
+  display: inline-block;
+  transform: rotate(-1.5deg);
+  box-shadow: 2px 2px 0 rgba(193, 59, 27, 0.12);
+  cursor: pointer;
+  transition: background 0.15s;
+  background: transparent;
+}
+
+.tag-stamp:nth-child(even) { transform: rotate(1deg); }
+.tag-stamp:nth-child(3n)   { transform: rotate(-0.5deg); }
+.tag-stamp.active-tag, .tag-stamp:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* ─── Handwritten Underline (wavy CSS) ─────────────────────────── */
+.wavy-under {
+  text-decoration: underline wavy var(--accent);
+  text-underline-offset: 5px;
+}
+
+.ruled-under {
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 4px;
+  margin-bottom: 24px;
+}
+
+/* ─── Ruled Section Block ───────────────────────────────────────── */
+.ruled-block {
+  background-image:
+    repeating-linear-gradient(
+      transparent,
+      transparent 31px,
+      var(--bg-lines) 31px,
+      var(--bg-lines) 32px
+    );
+  background-size: 100% 32px;
+  background-color: var(--surface);
+  border-left: 3px solid var(--border);
+  padding: 24px 24px 24px 28px;
+  margin: 24px 0;
+  border-radius: 0 2px 2px 0;
+}
+
+/* ─── Sticky Note Cards ─────────────────────────────────────────── */
+.sticky-note {
+  background: var(--sticky);
+  border: 1px solid rgba(180, 160, 80, 0.4);
+  padding: 20px 20px 28px;
+  position: relative;
+  box-shadow: 3px 4px 8px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  overflow: hidden;
+}
+
+.sticky-note:hover {
+  transform: translateY(-3px) rotate(0deg) !important;
+  box-shadow: 5px 8px 16px rgba(0,0,0,0.16);
+}
+
+/* Folded corner */
+.sticky-note::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 24px 24px;
+  border-color: transparent transparent rgba(160, 140, 60, 0.35) transparent;
+}
+
+[data-theme="dark"] .sticky-note {
+  background: #2A2410;
+  border-color: rgba(100, 90, 40, 0.4);
+}
+
+.sticky-note-title {
+  font-family: var(--font-hand);
+  font-size: 1.4rem;
+  color: var(--fg);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.sticky-note-excerpt {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--fg2);
+  line-height: 1.6;
+}
+
+.sticky-note-meta {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+/* ─── Dashed Separator ──────────────────────────────────────────── */
+.dashed-sep {
+  border: none;
+  border-top: 1px dashed var(--border);
+  margin: 28px 0;
+}
+
+.scallop-sep {
+  border: none;
+  height: 8px;
+  margin: 28px 0;
+  background-image: radial-gradient(circle at 8px 8px, transparent 6px, var(--border) 6px, var(--border) 7px, transparent 7px);
+  background-size: 16px 8px;
+  background-position: 0 0;
+}
+
+/* ─── Article Entry ─────────────────────────────────────────────── */
+.article-entry {
+  padding: 20px 0;
+  position: relative;
+  cursor: pointer;
+  transition: padding-left 0.15s;
+}
+
+.article-entry:hover { padding-left: 8px; }
+
+.article-entry-date {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  float: right;
+  margin-top: 4px;
+}
+
+.article-entry-title {
+  font-family: var(--font-hand);
+  font-size: 1.8rem;
+  color: var(--fg);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.article-entry-excerpt {
+  font-size: 0.9rem;
+  color: var(--fg2);
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.article-entry-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.reading-time {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-left: auto;
+}
+
+/* ─── Library Card Catalog ──────────────────────────────────────── */
+.book-card {
+  display: flex;
+  gap: 20px;
+  padding: 20px 0;
+  cursor: pointer;
+  transition: transform 0.15s;
+  align-items: flex-start;
+}
+
+.book-card:hover { transform: translateX(4px); }
+
+.book-spine {
+  width: 24px;
+  min-height: 120px;
+  border-radius: 2px 0 0 2px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-family: var(--font-hand);
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.8);
+  letter-spacing: 0.1em;
+  box-shadow: inset -2px 0 4px rgba(0,0,0,0.2), 2px 0 4px rgba(0,0,0,0.15);
+}
+
+.book-card-content {
+  flex: 1;
+}
+
+.book-card-title {
+  font-family: var(--font-hand);
+  font-size: 1.5rem;
+  color: var(--fg);
+  line-height: 1.2;
+}
+
+.book-card-meta {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--fg2);
+  margin: 4px 0;
+}
+
+.book-stars {
+  color: var(--accent);
+  font-size: 1rem;
+  letter-spacing: 2px;
+  margin: 6px 0;
+}
+
+.book-card-footer {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+/* ─── Stamp Badge ───────────────────────────────────────────────── */
+.stamp-badge {
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-8deg);
+  box-shadow: inset 0 0 0 2px var(--bg), 0 0 0 1px var(--accent);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* ─── Book Detail Layout ────────────────────────────────────────── */
+.book-detail-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.book-cover-css {
+  aspect-ratio: 2/3;
+  border-radius: 3px 6px 6px 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  text-align: center;
+  box-shadow: -3px 3px 0 rgba(0,0,0,0.15), 3px 3px 8px rgba(0,0,0,0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.book-cover-css::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  background: rgba(0,0,0,0.2);
+}
+
+.book-cover-title {
+  font-family: var(--font-hand);
+  font-size: 1.8rem;
+  color: #FFF8E7;
+  line-height: 1.2;
+  margin-bottom: 12px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+}
+
+.book-cover-author {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: rgba(255, 248, 231, 0.8);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.book-meta-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 16px;
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--fg2);
+  line-height: 1.8;
+}
+
+/* ─── Pinned Note / Blockquote ──────────────────────────────────── */
+.pinned-note {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 24px 24px 20px;
+  margin: 24px 0;
+  position: relative;
+  font-style: italic;
+  font-family: var(--font-body);
+  color: var(--fg2);
+  transform: rotate(0.3deg);
+  box-shadow: 2px 3px 6px rgba(0,0,0,0.1);
+}
+
+.pinned-note::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* ─── Code Block ────────────────────────────────────────────────── */
+.code-block {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  background: #F5EFD8;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--muted);
+  padding: 20px;
+  overflow-x: auto;
+  line-height: 1.7;
+  color: #2A1A08;
+  white-space: pre;
+  margin: 20px 0;
+}
+
+[data-theme="dark"] .code-block {
+  background: #1E1810;
+  color: #D4B870;
+}
+
+/* ─── Article Body ──────────────────────────────────────────────── */
+.article-body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: var(--line-height);
+  color: var(--fg);
+}
+
+.article-body h2 {
+  font-family: var(--font-hand);
+  font-size: 1.7rem;
+  margin: 36px 0 12px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+}
+
+.article-body p {
+  margin-bottom: 16px;
+}
+
+.article-body ul, .article-body ol {
+  padding-left: 28px;
+  margin-bottom: 16px;
+}
+
+.article-body li {
+  margin-bottom: 8px;
+  line-height: var(--line-height);
+}
+
+/* ─── TOC Margin Notes ──────────────────────────────────────────── */
+.article-layout {
+  position: relative;
+}
+
+.toc-margin {
+  position: absolute;
+  left: -160px;
+  top: 0;
+  width: 140px;
+}
+
+.toc-note {
+  font-family: var(--font-hand);
+  font-size: 0.85rem;
+  color: var(--muted);
+  transform: rotate(-1deg);
+  cursor: pointer;
+  padding: 2px 0;
+  transition: color 0.15s;
+  line-height: 1.4;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.toc-note:hover { color: var(--accent); }
+.toc-note::before { content: '→ '; }
+
+/* ─── Project Cards ─────────────────────────────────────────────── */
+.project-entry {
+  padding: 28px 0;
+  position: relative;
+}
+
+.project-name {
+  font-family: var(--font-hand);
+  font-size: 2.2rem;
+  color: var(--fg);
+  text-decoration: underline wavy var(--border);
+  text-underline-offset: 6px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.project-sketch {
+  float: right;
+  width: 120px;
+  height: 80px;
+  border: 2px dashed var(--border);
+  margin: 0 0 16px 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-sketch-inner {
+  width: 60%;
+  height: 60%;
+  border: 1px dashed var(--muted);
+  position: relative;
+}
+
+.project-sketch-inner::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  width: 80%;
+  height: 2px;
+  background: var(--border);
+  box-shadow: 0 10px 0 var(--border), 0 20px 0 var(--border);
+}
+
+.project-status-stamp {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  display: inline-block;
+  transform: rotate(1.5deg);
+  margin-left: 12px;
+  vertical-align: middle;
+}
+
+.status-live {
+  color: #1A4A1A;
+  border: 2px solid #1A4A1A;
+  box-shadow: 2px 2px 0 rgba(26, 74, 26, 0.15);
+}
+
+[data-theme="dark"] .status-live {
+  color: #70D870;
+  border-color: #70D870;
+}
+
+.status-progress {
+  color: var(--accent2);
+  border: 2px solid var(--accent2);
+  box-shadow: 2px 2px 0 rgba(27, 74, 107, 0.15);
+}
+
+.project-link {
+  font-family: var(--font-hand);
+  font-size: 1.05rem;
+  color: var(--accent2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.project-link:hover { color: var(--accent); }
+
+/* ─── Homepage Specific ─────────────────────────────────────────── */
+.masthead {
+  padding: 40px 0 20px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 32px;
+}
+
+.masthead-name {
+  font-family: var(--font-hand);
+  font-size: 4rem;
+  color: var(--fg);
+  line-height: 1;
+  display: inline-block;
+  text-decoration: underline wavy var(--accent);
+  text-underline-offset: 6px;
+}
+
+.masthead-sub {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  margin-top: 8px;
+  text-transform: uppercase;
+}
+
+.toc-intro {
+  padding: 20px 0;
+}
+
+.toc-entry {
+  font-family: var(--font-hand);
+  font-size: 1.2rem;
+  color: var(--fg2);
+  padding: 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.toc-entry:hover { color: var(--accent); }
+
+.toc-dots {
+  flex: 1;
+  border-bottom: 1px dotted var(--border);
+  height: 1px;
+  margin-top: 4px;
+}
+
+.toc-page-num {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.section-label {
+  font-family: var(--font-hand);
+  font-size: 1.6rem;
+  color: var(--fg);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+  margin: 36px 0 20px;
+}
+
+.sticky-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.sticky-note:nth-child(1) { transform: rotate(-1.2deg); }
+.sticky-note:nth-child(2) { transform: rotate(0.8deg); }
+.sticky-note:nth-child(3) { transform: rotate(-0.5deg); }
+
+.featured-book {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  margin: 20px 0;
+}
+
+.featured-book-info {
+  flex: 1;
+}
+
+.featured-book-title {
+  font-family: var(--font-hand);
+  font-size: 1.8rem;
+  color: var(--fg);
+}
+
+.featured-book-author {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.featured-book-excerpt {
+  font-size: 0.9rem;
+  color: var(--fg2);
+  margin-top: 8px;
+}
+
+.doodle {
+  display: inline-block;
+  font-family: var(--font-hand);
+  color: var(--muted);
+  font-size: 0.9rem;
+  transform: rotate(-2deg);
+  margin: 8px 0;
+}
+
+/* ─── Bottom Nav ────────────────────────────────────────────────── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 52px;
+  background: var(--surface);
+  border-top: 2px solid var(--border);
+  display: flex;
+  align-items: stretch;
+  z-index: 100;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+}
+
+.nav-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-hand);
+  font-size: 0.9rem;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.15s;
+  padding-bottom: 2px;
+  position: relative;
+  user-select: none;
+  text-align: center;
+  letter-spacing: 0.03em;
+}
+
+.nav-tab:hover {
+  color: var(--fg);
+  background: rgba(0,0,0,0.03);
+}
+
+.nav-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  background: var(--bg);
+}
+
+/* ─── Theme Toggle ──────────────────────────────────────────────── */
+.theme-toggle {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  z-index: 200;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.15s;
+}
+
+.theme-toggle:hover {
+  color: var(--fg);
+  border-color: var(--fg);
+}
+
+/* ─── Blog Header ───────────────────────────────────────────────── */
+.view-header {
+  padding: 36px 0 16px;
+  margin-bottom: 20px;
+}
+
+.view-title {
+  font-family: var(--font-hand);
+  font-size: 3rem;
+  color: var(--fg);
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 8px;
+  display: inline-block;
+}
+
+.view-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 6px;
+}
+
+/* ─── Tag Filter Row ────────────────────────────────────────────── */
+.tag-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0 24px;
+}
+
+/* ─── Related Posts ─────────────────────────────────────────────── */
+.related-posts {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px dashed var(--border);
+}
+
+.related-post-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  cursor: pointer;
+  transition: padding-left 0.15s;
+}
+
+.related-post-link:hover { padding-left: 8px; }
+
+.related-post-arrow {
+  font-family: var(--font-mono);
+  color: var(--accent);
+  font-size: 1.1rem;
+}
+
+.related-post-title {
+  font-family: var(--font-hand);
+  font-size: 1.3rem;
+  color: var(--fg);
+}
+
+.related-post-meta {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-left: auto;
+}
+
+/* ─── Numbered List Mono ────────────────────────────────────────── */
+.mono-list {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  color: var(--fg2);
+  list-style: decimal;
+  padding-left: 24px;
+  line-height: 2;
+}
+
+/* ─── Responsive ────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .page-wrap {
+    padding: 24px 20px 24px 80px;
+  }
+
+  .margin-line { left: 52px; }
+  .hole-punches { width: 50px; }
+  .hole-punch { width: 16px; height: 16px; }
+
+  .sticky-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .book-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .toc-margin {
+    display: none;
+  }
+
+  .masthead-name { font-size: 2.6rem; }
+  .view-title { font-size: 2.2rem; }
+  .nav-tab { font-size: 0.75rem; }
+
+  .project-sketch { display: none; }
+
+  .featured-book { flex-direction: column; }
+}
+
+@media (max-width: 480px) {
+  .page-wrap {
+    padding: 20px 16px 20px 64px;
+  }
+
+  .margin-line { left: 44px; }
+  .hole-punches { width: 40px; }
+  .hole-punch { width: 14px; height: 14px; }
+
+  h1 { font-size: 2rem; }
+  .masthead-name { font-size: 2rem; }
+}
+
+/* ─── Print styles ──────────────────────────────────────────────── */
+@media print {
+  .bottom-nav, .theme-toggle, .margin-line, .hole-punches { display: none; }
+  .page-wrap { padding: 20px; }
+  .view { display: block !important; }
+}
+
+/* ─── Article detail wrapper ─────────────────────────────────────── */
+.article-page {
+  padding-left: 40px; /* extra left room for TOC margin notes on desktop */
+}
+
+@media (max-width: 900px) {
+  .article-page { padding-left: 0; }
+}
+
+/* ─── Inline highlight ───────────────────────────────────────────── */
+code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1px 5px;
+  border-radius: 1px;
+}
+
+/* ─── Hidden filter ──────────────────────────────────────────────── */
+.article-entry.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<!-- Decorative margin elements -->
+<div class="margin-line"></div>
+
+<div class="hole-punches">
+  <div class="hole-punch"></div>
+  <div class="hole-punch"></div>
+  <div class="hole-punch"></div>
+</div>
+
+<!-- Theme toggle -->
+<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">☽ night writing</button>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- VIEW 1: Homepage                                                -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div id="view-home" class="view active">
+  <div class="page-wrap">
+
+    <!-- Masthead -->
+    <header class="masthead">
+      <div class="masthead-name">Diego Romero</div>
+      <div class="masthead-sub">Software Engineer · Field Notes · diegoromero.blog</div>
+    </header>
+
+    <!-- Table of Contents intro -->
+    <div class="toc-intro">
+      <div class="doodle">— contents of this notebook —</div>
+      <div class="toc-entry" onclick="switchView('view-blog')">
+        <span>Field Notes</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">2</span>
+      </div>
+      <div class="toc-entry" onclick="switchView('view-article')">
+        <span>Article: Rewriting My Blog with Claude Code</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">3</span>
+      </div>
+      <div class="toc-entry" onclick="switchView('view-books')">
+        <span>Reading Log</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">4</span>
+      </div>
+      <div class="toc-entry" onclick="switchView('view-book-detail')">
+        <span>Review: Deep Work</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">5</span>
+      </div>
+      <div class="toc-entry" onclick="switchView('view-projects')">
+        <span>Things I've Built</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">6</span>
+      </div>
+    </div>
+
+    <hr class="dashed-sep">
+
+    <!-- Hero note -->
+    <div class="ruled-block">
+      <p style="font-family: var(--font-hand); font-size: 1.35rem; color: var(--fg); margin: 0; line-height: 1.7;">
+        Welcome to my field notes on technology, books, and building software.
+        I publish every couple of days — quick observations, longer essays, and whatever I happen to be reading.
+        Pull up a chair. The coffee is hot and the notebook is open.
+      </p>
+    </div>
+
+    <!-- Latest articles -->
+    <div class="section-label">Latest Notes</div>
+    <div class="sticky-grid">
+
+      <div class="sticky-note" onclick="switchView('view-article')">
+        <div class="sticky-note-meta">Feb. 10th, 2026 · 6 min read</div>
+        <div class="sticky-note-title">Rewriting My Blog With Claude Code</div>
+        <div class="sticky-note-excerpt">I handed the keys to an AI and asked it to redesign everything. Here's what actually happened — and what I had to take back.</div>
+        <div style="margin-top: 12px; display: flex; gap: 6px; flex-wrap: wrap;">
+          <span class="tag-stamp">ai</span>
+          <span class="tag-stamp">dev</span>
+        </div>
+      </div>
+
+      <div class="sticky-note" onclick="switchView('view-blog')">
+        <div class="sticky-note-meta">Feb. 3rd, 2026 · 8 min read</div>
+        <div class="sticky-note-title">Why Talent Trumps Passion</div>
+        <div class="sticky-note-excerpt">Cal Newport's counter-intuitive argument changed how I think about building a career. Stop looking for your passion; get so good they can't ignore you.</div>
+        <div style="margin-top: 12px; display: flex; gap: 6px; flex-wrap: wrap;">
+          <span class="tag-stamp">career</span>
+          <span class="tag-stamp">books</span>
+        </div>
+      </div>
+
+      <div class="sticky-note" onclick="switchView('view-blog')">
+        <div class="sticky-note-meta">Jan. 27th, 2026 · 4 min read</div>
+        <div class="sticky-note-title">My Tmux Setup in 2026</div>
+        <div class="sticky-note-excerpt">The terminal configuration I've been refining for two years. Sessions, windows, panes — and why I finally stopped using screen.</div>
+        <div style="margin-top: 12px; display: flex; gap: 6px; flex-wrap: wrap;">
+          <span class="tag-stamp">tools</span>
+          <span class="tag-stamp">terminal</span>
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="dashed-sep">
+
+    <!-- Featured Book -->
+    <div class="section-label">Currently on the Desk</div>
+    <div class="featured-book">
+      <div class="stamp-badge">
+        <span style="font-size: 1rem; line-height: 1;">★★★★★</span>
+        <span style="margin-top: 2px;">Must</span>
+        <span>Read</span>
+      </div>
+      <div class="featured-book-info">
+        <div class="featured-book-title">Deep Work</div>
+        <div class="featured-book-author">Cal Newport · Non-Fiction · 2016</div>
+        <div class="featured-book-excerpt">
+          The book that made me turn off Slack notifications permanently. Newport argues that the ability to focus without distraction is the superpower of the knowledge economy — and it's becoming rare at exactly the moment it's becoming valuable.
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="tag-stamp">productivity</span>
+          <span class="tag-stamp">focus</span>
+          <button style="background: none; border: none; cursor: pointer;" onclick="switchView('view-book-detail')">
+            <span class="project-link" style="margin-left: 12px;">Read my review →</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <hr class="dashed-sep">
+
+    <!-- Projects -->
+    <div class="section-label">Things I've Built</div>
+
+    <div style="padding: 8px 0;">
+      <div style="font-family: var(--font-hand); font-size: 1.5rem; text-decoration: underline wavy var(--border); text-underline-offset: 4px; margin-bottom: 6px; display: inline-block;">Deepflow</div>
+      <span class="project-status-stamp status-live">Live</span>
+      <p style="font-size: 0.9rem; color: var(--fg2); margin-top: 6px;">A focus timer built around deep work sessions. Ships without notifications, without social features, without noise.</p>
+    </div>
+
+    <div style="padding: 8px 0;">
+      <div style="font-family: var(--font-hand); font-size: 1.5rem; text-decoration: underline wavy var(--border); text-underline-offset: 4px; margin-bottom: 6px; display: inline-block;">Listu</div>
+      <span class="project-status-stamp status-live">Live</span>
+      <p style="font-size: 0.9rem; color: var(--fg2); margin-top: 6px;">Collaborative lists that don't try to become a project management suite. Just lists.</p>
+    </div>
+
+    <div style="padding: 8px 0;">
+      <div style="font-family: var(--font-hand); font-size: 1.5rem; text-decoration: underline wavy var(--border); text-underline-offset: 4px; margin-bottom: 6px; display: inline-block;">KODR</div>
+      <span class="project-status-stamp status-progress">In Progress</span>
+      <p style="font-size: 0.9rem; color: var(--fg2); margin-top: 6px;">A learning platform for developers who prefer reading over watching videos. Work in progress — sign up for early access.</p>
+    </div>
+
+    <div class="doodle" style="margin-top: 32px; text-align: center; display: block;">— end of page 1 —</div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- VIEW 2: Blog Listing                                            -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div id="view-blog" class="view">
+  <div class="page-wrap">
+
+    <div class="view-header">
+      <div class="view-title">Field Notes</div>
+      <div class="view-subtitle">Written observations · Technology & Ideas · Volume III</div>
+    </div>
+
+    <!-- Tag filters -->
+    <div class="tag-filter-row" id="tagFilters">
+      <span class="tag-stamp active-tag" data-tag="all" onclick="filterArticles('all')">All</span>
+      <span class="tag-stamp" data-tag="ai" onclick="filterArticles('ai')">AI</span>
+      <span class="tag-stamp" data-tag="dev" onclick="filterArticles('dev')">Dev</span>
+      <span class="tag-stamp" data-tag="books" onclick="filterArticles('books')">Books</span>
+      <span class="tag-stamp" data-tag="career" onclick="filterArticles('career')">Career</span>
+      <span class="tag-stamp" data-tag="tools" onclick="filterArticles('tools')">Tools</span>
+    </div>
+
+    <!-- Article 1 -->
+    <div class="article-entry" data-tags="ai dev" onclick="switchView('view-article')">
+      <div class="article-entry-date">Feb. 10th, 2026</div>
+      <div class="article-entry-title">Rewriting My Blog With Claude Code</div>
+      <div class="article-entry-excerpt">
+        I handed the keys to an AI and asked it to redesign everything. Here's what actually happened — the parts that worked beautifully, the parts I had to wrestle back, and what it taught me about the future of software development.
+      </div>
+      <div class="article-entry-footer">
+        <span class="tag-stamp">ai</span>
+        <span class="tag-stamp">dev</span>
+        <span class="reading-time">6 min read</span>
+      </div>
+    </div>
+
+    <hr class="scallop-sep">
+
+    <!-- Article 2 -->
+    <div class="article-entry" data-tags="career books">
+      <div class="article-entry-date">Feb. 3rd, 2026</div>
+      <div class="article-entry-title">Why Talent Trumps Passion</div>
+      <div class="article-entry-excerpt">
+        The "follow your passion" advice sounds warm and encouraging. Cal Newport thinks it's career suicide. After sitting with his argument for a year, I think he's more right than most people are willing to admit.
+      </div>
+      <div class="article-entry-footer">
+        <span class="tag-stamp">career</span>
+        <span class="tag-stamp">books</span>
+        <span class="reading-time">8 min read</span>
+      </div>
+    </div>
+
+    <hr class="scallop-sep">
+
+    <!-- Article 3 -->
+    <div class="article-entry" data-tags="tools">
+      <div class="article-entry-date">Jan. 27th, 2026</div>
+      <div class="article-entry-title">My Tmux Setup in 2026</div>
+      <div class="article-entry-excerpt">
+        Terminal multiplexers are the kind of tool that feel unnecessary until the moment they click — and then you wonder how you ever worked without them. I've been refining this configuration for two years.
+      </div>
+      <div class="article-entry-footer">
+        <span class="tag-stamp">tools</span>
+        <span class="tag-stamp">terminal</span>
+        <span class="reading-time">4 min read</span>
+      </div>
+    </div>
+
+    <hr class="scallop-sep">
+
+    <!-- Article 4 -->
+    <div class="article-entry" data-tags="dev ai">
+      <div class="article-entry-date">Jan. 19th, 2026</div>
+      <div class="article-entry-title">The Courage to Be Disliked: Notes on a Surprising Book</div>
+      <div class="article-entry-excerpt">
+        A Socratic dialogue about Adlerian psychology that reads like philosophy but hits like a gut punch. I expected self-help platitudes. I got a framework for rethinking every relationship I have.
+      </div>
+      <div class="article-entry-footer">
+        <span class="tag-stamp">books</span>
+        <span class="tag-stamp">philosophy</span>
+        <span class="reading-time">7 min read</span>
+      </div>
+    </div>
+
+    <hr class="scallop-sep">
+
+    <!-- Article 5 -->
+    <div class="article-entry" data-tags="career dev">
+      <div class="article-entry-date">Jan. 11th, 2026</div>
+      <div class="article-entry-title">On Building Things That Last</div>
+      <div class="article-entry-excerpt">
+        Every project starts with good intentions and a clean architecture. Most of them end up as a pile of patches held together by optimism. Here's what I've learned about the difference between the ones that survived and the ones that didn't.
+      </div>
+      <div class="article-entry-footer">
+        <span class="tag-stamp">career</span>
+        <span class="tag-stamp">dev</span>
+        <span class="reading-time">10 min read</span>
+      </div>
+    </div>
+
+    <hr class="dashed-sep">
+    <div class="doodle" style="text-align: center; display: block;">— end of notes —</div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- VIEW 3: Article Detail                                          -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div id="view-article" class="view">
+  <div class="page-wrap article-page">
+
+    <div class="article-layout">
+
+      <!-- TOC Margin Notes (desktop only) -->
+      <div class="toc-margin">
+        <div style="font-family: var(--font-hand); font-size: 0.7rem; color: var(--muted); margin-bottom: 16px; transform: rotate(1deg);">— in this note —</div>
+        <a class="toc-note" href="#sec1">The Old Blog</a>
+        <a class="toc-note" href="#sec2">Claude Code</a>
+        <a class="toc-note" href="#sec3">Architecture</a>
+        <a class="toc-note" href="#sec4">What I Learned</a>
+      </div>
+
+      <!-- Article Header -->
+      <div style="padding-top: 36px;">
+        <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); margin-bottom: 8px;">
+          Feb. 10th, 2026
+        </div>
+        <h1 class="wavy-under" style="font-size: 2.6rem; line-height: 1.15; margin-bottom: 16px;">
+          Rewriting My Blog With Claude Code
+        </h1>
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;">
+          <span class="tag-stamp">ai</span>
+          <span class="tag-stamp">dev</span>
+          <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted);">6 min read</span>
+        </div>
+        <hr class="dashed-sep" style="margin-top: 0;">
+      </div>
+
+      <!-- Article Body -->
+      <div class="article-body">
+
+        <h2 id="sec1">The Old Blog Was Holding Me Back</h2>
+
+        <p>I started this blog three years ago on a framework that felt cutting-edge at the time. I won't name it — there's enough tribal fighting in the frontend world without me adding to it. What I will say is that by early 2025, every time I wanted to publish something, I found myself fighting the tooling instead of writing.</p>
+
+        <p>The build pipeline had seventeen steps. The config files had config files. I had a <code>tailwind.config.js</code> that referenced a <code>theme.config.js</code> that imported values from a <code>design-tokens.json</code> that I hadn't touched in two years. It was archaeology every time I needed to change a color.</p>
+
+        <div class="pinned-note">
+          "The irony is that I had built the most flexible possible system — and the flexibility had become the cage. When everything is configurable, nothing is decided."
+        </div>
+
+        <p>I needed a fresh start. And I wanted to try something different: instead of architecting it myself from scratch, I wanted to see what would happen if I described what I wanted to a capable AI and let it do the heavy lifting.</p>
+
+        <h2 id="sec2">Choosing Claude Code as My Collaborator</h2>
+
+        <p>I had been using AI assistants for code since the GPT-3 era, but Claude Code felt different. The context window was large enough to hold an entire codebase in mind. The tool-calling let it actually run commands, read files, and see the results. It wasn't autocomplete — it was something closer to pair programming.</p>
+
+        <p>My workflow was simple: I described the blog I wanted in plain English. What it should look like. How it should feel. What content I had. Then I let Claude Code work, watching the files materialize and asking questions when something surprised me.</p>
+
+        <p>The first surprise was how much better its first draft was than mine would have been. Not because it knew more about design — it didn't — but because it didn't carry the mental baggage I did. It hadn't spent three years accumulating small compromises. It just built the thing I described.</p>
+
+        <h2 id="sec3">The Architecture I Landed On</h2>
+
+        <p>After a few iterations, we landed on Next.js with a content layer that reads from MDX files. Nothing revolutionary. But the structure was clean in a way my previous site never was:</p>
+
+        <pre class="code-block">/app
+  /blog
+    /[slug]
+      page.tsx
+  /books
+    page.tsx
+  /projects
+    page.tsx
+/content
+  /posts
+    *.mdx
+  /books
+    *.mdx
+/components
+  Article.tsx
+  BookCard.tsx
+  TagStamp.tsx
+/lib
+  content.ts   # single source of truth for data
+  utils.ts</pre>
+
+        <p>The key insight — which Claude Code kept nudging me toward — was that the content schema should drive the component design, not the other way around. When you start with a clean data model, the UI practically writes itself.</p>
+
+        <p>I also wrote almost none of the CSS myself. I described the visual direction ("ruled notebook, analog feel, warm paper tones") and reviewed what came back. Sometimes I pushed back. Mostly I accepted it and moved on.</p>
+
+        <h2 id="sec4">What I Learned</h2>
+
+        <p>The thing that struck me most was how quickly my role shifted. I went from being the person who writes code to being the person who decides what the code should do and whether it did it well. The judgment part — the taste — that's still entirely mine. The implementation became almost incidental.</p>
+
+        <p>I don't think this is loss. I think it's a transfer of effort toward the parts that actually matter: clarity of thought, editorial judgment, knowing what you want and why. The tools will keep improving. The harder skill — having something worth saying and knowing how to say it — that's what I want to spend my time on.</p>
+
+        <div class="pinned-note">
+          "Build faster so you can think more. The goal was never the scaffolding — it was always what you'd put inside it."
+        </div>
+
+        <p>The blog you're reading right now is the result. It took a weekend instead of a month. I'm not sure I could have done it better by hand — and I'm certain I wouldn't have had as much fun doing it.</p>
+
+      </div>
+
+      <!-- Related posts -->
+      <div class="related-posts">
+        <div style="font-family: var(--font-hand); font-size: 1.2rem; color: var(--muted); margin-bottom: 16px;">— more field notes —</div>
+        <div class="related-post-link" onclick="switchView('view-blog')">
+          <span class="related-post-arrow">→</span>
+          <span class="related-post-title">Why Talent Trumps Passion</span>
+          <span class="related-post-meta">8 min · Feb. 3rd</span>
+        </div>
+        <div class="related-post-link" onclick="switchView('view-blog')">
+          <span class="related-post-arrow">→</span>
+          <span class="related-post-title">My Tmux Setup in 2026</span>
+          <span class="related-post-meta">4 min · Jan. 27th</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- VIEW 4: Books Listing                                           -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div id="view-books" class="view">
+  <div class="page-wrap">
+
+    <div class="view-header">
+      <div class="view-title">Reading Log</div>
+      <div class="view-subtitle">Books finished · Ranked by impact · Updated regularly</div>
+    </div>
+
+    <hr class="dashed-sep">
+
+    <!-- Book 1 -->
+    <div class="book-card" onclick="switchView('view-book-detail')">
+      <div class="book-spine" style="background: #8B3A1A;">Deep Work</div>
+      <div class="book-card-content">
+        <div class="book-card-title">Deep Work</div>
+        <div class="book-card-meta">Cal Newport · Non-Fiction · Business / Productivity</div>
+        <div class="book-stars">★★★★★</div>
+        <p style="font-size: 0.88rem; color: var(--fg2); line-height: 1.6;">
+          The book that restructured how I approach my workday. Newport's argument is uncomfortable and correct: the ability to focus deeply is rare, valuable, and you almost certainly aren't developing it.
+        </p>
+        <div class="book-card-footer">
+          <span class="tag-stamp">productivity</span>
+          <span class="tag-stamp">focus</span>
+          <span class="tag-stamp">career</span>
+          <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); margin-left: auto;">Jan. 2026</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="scallop-sep">
+
+    <!-- Book 2 -->
+    <div class="book-card">
+      <div class="book-spine" style="background: #1A4A2A;">Psychology</div>
+      <div class="book-card-content">
+        <div class="book-card-title">The Psychology of Money</div>
+        <div class="book-card-meta">Morgan Housel · Non-Fiction · Finance / Behavior</div>
+        <div class="book-stars">★★★★★</div>
+        <p style="font-size: 0.88rem; color: var(--fg2); line-height: 1.6;">
+          Short chapters, enormous ideas. Housel's thesis is that your financial outcomes have more to do with your behavior than your intelligence. I've gifted this book four times.
+        </p>
+        <div class="book-card-footer">
+          <span class="tag-stamp">finance</span>
+          <span class="tag-stamp">behavior</span>
+          <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); margin-left: auto;">Dec. 2025</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="scallop-sep">
+
+    <!-- Book 3 -->
+    <div class="book-card">
+      <div class="book-spine" style="background: #1A2A4A;">The Ride</div>
+      <div class="book-card-content">
+        <div class="book-card-title">The Ride of a Lifetime</div>
+        <div class="book-card-meta">Robert Iger · Memoir · Leadership / Business</div>
+        <div class="book-stars">★★★★★</div>
+        <p style="font-size: 0.88rem; color: var(--fg2); line-height: 1.6;">
+          Iger's account of running Disney reads less like a business memoir and more like a masterclass in patience. His chapter on acquiring Pixar alone is worth the cover price.
+        </p>
+        <div class="book-card-footer">
+          <span class="tag-stamp">leadership</span>
+          <span class="tag-stamp">memoir</span>
+          <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); margin-left: auto;">Nov. 2025</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="scallop-sep">
+
+    <!-- Book 4 -->
+    <div class="book-card">
+      <div class="book-spine" style="background: #3A3A1A;">Shoe Dog</div>
+      <div class="book-card-content">
+        <div class="book-card-title">Shoe Dog</div>
+        <div class="book-card-meta">Phil Knight · Memoir · Entrepreneurship</div>
+        <div class="book-stars">★★★★★</div>
+        <p style="font-size: 0.88rem; color: var(--fg2); line-height: 1.6;">
+          The most honest startup memoir I've read. Knight doesn't sand down the desperation, the near-bankruptcy, the dysfunctional relationships. Nike almost failed — repeatedly. That's the point.
+        </p>
+        <div class="book-card-footer">
+          <span class="tag-stamp">startup</span>
+          <span class="tag-stamp">memoir</span>
+          <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); margin-left: auto;">Oct. 2025</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="dashed-sep">
+    <div class="doodle" style="text-align: center; display: block;">— still reading: Thinking Fast and Slow —</div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- VIEW 5: Book Detail                                             -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div id="view-book-detail" class="view">
+  <div class="page-wrap">
+
+    <div class="view-header" style="padding-bottom: 0;">
+      <div class="view-subtitle">Book Review · Reading Log</div>
+    </div>
+
+    <div class="book-detail-grid" style="margin-top: 24px;">
+
+      <!-- Left: Book Cover + Meta Card -->
+      <div>
+        <div class="book-cover-css" style="background: linear-gradient(160deg, #8B3A1A 0%, #6A2810 100%);">
+          <div class="book-cover-title">Deep Work</div>
+          <div class="book-cover-author">Cal Newport</div>
+          <div style="margin-top: 16px; font-size: 1.1rem; color: rgba(255,248,231,0.7); letter-spacing: 3px;">★★★★★</div>
+        </div>
+
+        <div class="book-meta-card">
+          <div>Title: Deep Work</div>
+          <div>Author: Cal Newport</div>
+          <div>Published: 2016</div>
+          <div>Genre: Business</div>
+          <div>Pages: 296</div>
+          <div>Read: Jan. 2026</div>
+          <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border);">
+            Rating: ★★★★★
+          </div>
+        </div>
+
+        <div style="margin-top: 12px; text-align: center;">
+          <span class="stamp-badge" style="display: inline-flex;">
+            <span style="font-size: 0.8rem;">Must</span>
+            <span>Read</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Right: Review -->
+      <div>
+        <h1 style="font-size: 2.2rem; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 20px;">Deep Work</h1>
+
+        <div class="article-body">
+
+          <h2 style="margin-top: 0;">Summary:</h2>
+
+          <p>Newport's core claim is deceptively simple: in an increasingly distracted world, the ability to focus without distraction on cognitively demanding work is both rare and extremely valuable. He calls this "deep work" — and he argues that most knowledge workers are systematically destroying their ability to do it.</p>
+
+          <p>The book is split into two parts. The first makes the case that deep work is valuable and becoming rarer. The second is a practical manual for how to cultivate it: scheduling strategies, attention training, productivity philosophies. It is unusually concrete for a business book.</p>
+
+          <div class="pinned-note">
+            "The ability to perform deep work is becoming increasingly rare at exactly the same time it is becoming increasingly valuable in our economy. The few who cultivate this skill, and then make it the core of their working life, will thrive."
+            <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); margin-top: 8px; font-style: normal;">— Cal Newport, Deep Work</div>
+          </div>
+
+          <h2>My Thoughts:</h2>
+
+          <p>I came to this book a skeptic. The premise sounded like productivity-book marketing copy. By page forty I was taking notes in the margins. Newport is the rare business author who backs his arguments with evidence, cites his sources, and doesn't repeat himself.</p>
+
+          <p>What I found most compelling was the chapter on attention residue — the phenomenon where switching between tasks leaves a "residue" of attention on the previous task, degrading your capacity for the next one. This explains why my mornings feel different when I check email first versus when I don't. It wasn't discipline I was missing; it was understanding of how attention actually works.</p>
+
+          <div class="pinned-note">
+            "Clarity about what matters provides clarity about what does not."
+            <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); margin-top: 8px; font-style: normal;">— my favorite line in the book</div>
+          </div>
+
+          <h2>Things I Do Differently Now:</h2>
+
+          <ol class="mono-list">
+            <li>Email is checked twice a day — 10am and 4pm. Not before, not between.</li>
+            <li>My calendar has 4-hour "deep blocks" that are treated like meetings with my most important client.</li>
+            <li>Slack is closed during deep blocks. The world has not ended.</li>
+            <li>I track my deep work hours each week. Aim for 20. It's harder than it sounds.</li>
+            <li>I've stopped multitasking as a default. I finish one thing before starting the next.</li>
+          </ol>
+
+          <p style="margin-top: 20px; font-style: italic; color: var(--muted);">If you work with information and ideas for a living, read this book. It will not tell you anything comfortable, but it will tell you things that are true.</p>
+
+        </div>
+
+        <hr class="dashed-sep">
+
+        <div class="related-post-link" onclick="switchView('view-books')">
+          <span class="related-post-arrow">←</span>
+          <span style="font-family: var(--font-hand); font-size: 1.1rem; color: var(--muted);">Back to Reading Log</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- VIEW 6: Projects                                                -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div id="view-projects" class="view">
+  <div class="page-wrap">
+
+    <div class="view-header">
+      <div class="view-title">Things I've Built</div>
+      <div class="view-subtitle">Personal projects · Side experiments · Shipped and otherwise</div>
+    </div>
+
+    <hr class="dashed-sep">
+
+    <!-- Project 1: Deepflow -->
+    <div class="project-entry">
+      <div>
+        <div class="project-sketch">
+          <div class="project-sketch-inner">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 20px; height: 20px; border-radius: 50%; border: 1px dashed var(--muted);"></div>
+          </div>
+          <div style="position: absolute; bottom: 4px; right: 6px; font-family: var(--font-mono); font-size: 9px; color: var(--muted);">timer.sketch</div>
+        </div>
+        <span class="project-name">Deepflow</span>
+        <span class="project-status-stamp status-live">Live</span>
+      </div>
+
+      <div class="ruled-block" style="clear: both;">
+        <p style="margin-bottom: 0; font-size: 0.95rem;">
+          A focus timer built around the deep work philosophy. No social features. No gamification. No notifications.
+          You set a duration, describe what you're working on, and start. That's it.
+        </p>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0;">
+        <span class="tag-stamp">React</span>
+        <span class="tag-stamp">Next.js</span>
+        <span class="tag-stamp">TypeScript</span>
+        <span class="tag-stamp">Supabase</span>
+      </div>
+
+      <p style="font-size: 0.9rem; color: var(--fg2); margin-top: 8px;">
+        Built it because every focus app I tried was trying to be a habit tracker or a social network.
+        I wanted something that got out of the way. The constraint turned out to be the feature.
+      </p>
+
+      <div style="margin-top: 12px;">
+        <a class="project-link" href="https://deepflow.app" target="_blank">deepflow.app →</a>
+      </div>
+    </div>
+
+    <hr class="scallop-sep">
+
+    <!-- Project 2: Listu -->
+    <div class="project-entry">
+      <div>
+        <div class="project-sketch">
+          <div class="project-sketch-inner">
+            <div style="position: absolute; top: 15%; left: 10%; right: 10%; height: 2px; background: var(--border);"></div>
+            <div style="position: absolute; top: 45%; left: 10%; right: 10%; height: 2px; background: var(--border);"></div>
+            <div style="position: absolute; top: 75%; left: 10%; right: 10%; height: 2px; background: var(--border);"></div>
+          </div>
+          <div style="position: absolute; bottom: 4px; right: 6px; font-family: var(--font-mono); font-size: 9px; color: var(--muted);">lists.sketch</div>
+        </div>
+        <span class="project-name">Listu</span>
+        <span class="project-status-stamp status-live">Live</span>
+      </div>
+
+      <div class="ruled-block" style="clear: both;">
+        <p style="margin-bottom: 0; font-size: 0.95rem;">
+          Shared lists for people who live together. Groceries, chores, weekend plans.
+          Real-time, collaborative, and intentionally small. Doesn't aspire to be a project manager.
+        </p>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0;">
+        <span class="tag-stamp">React Native</span>
+        <span class="tag-stamp">Expo</span>
+        <span class="tag-stamp">Firebase</span>
+      </div>
+
+      <p style="font-size: 0.9rem; color: var(--fg2); margin-top: 8px;">
+        My partner and I kept using Notes app for shopping lists and hating it.
+        I built Listu over a weekend and we've used it daily ever since. Sometimes the best products solve one problem extremely well.
+      </p>
+
+      <div style="margin-top: 12px;">
+        <a class="project-link" href="https://listu.app" target="_blank">listu.app →</a>
+      </div>
+    </div>
+
+    <hr class="scallop-sep">
+
+    <!-- Project 3: KODR -->
+    <div class="project-entry">
+      <div>
+        <div class="project-sketch">
+          <div class="project-sketch-inner">
+            <div style="position: absolute; top: 20%; left: 15%; width: 35%; height: 60%; border: 1px dashed var(--muted);"></div>
+            <div style="position: absolute; top: 30%; right: 10%; width: 30%; height: 40%; border: 1px dashed var(--muted);"></div>
+          </div>
+          <div style="position: absolute; bottom: 4px; right: 6px; font-family: var(--font-mono); font-size: 9px; color: var(--muted);">platform.sketch</div>
+        </div>
+        <span class="project-name">KODR</span>
+        <span class="project-status-stamp status-progress">In Progress</span>
+      </div>
+
+      <div class="ruled-block" style="clear: both;">
+        <p style="margin-bottom: 0; font-size: 0.95rem;">
+          A learning platform for developers who learn by reading rather than watching.
+          Structured courses delivered as long-form articles, with inline exercises and projects.
+          No video. No auto-playing anything.
+        </p>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0;">
+        <span class="tag-stamp">Next.js</span>
+        <span class="tag-stamp">MDX</span>
+        <span class="tag-stamp">TypeScript</span>
+        <span class="tag-stamp">Postgres</span>
+      </div>
+
+      <p style="font-size: 0.9rem; color: var(--fg2); margin-top: 8px;">
+        In progress — working on the first curriculum track (modern web development fundamentals).
+        Building it the way I wish I'd learned: opinionated, practical, prose-first.
+        Early access sign-up is open.
+      </p>
+
+      <div style="margin-top: 12px;">
+        <a class="project-link" href="https://kodr.dev" target="_blank">kodr.dev →</a>
+      </div>
+    </div>
+
+    <hr class="dashed-sep">
+    <div class="doodle" style="text-align: center; display: block;">— more things always in progress —</div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- Bottom Navigation                                               -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<nav class="bottom-nav">
+  <div class="nav-tab active" data-view="view-home" onclick="switchView('view-home')">Home</div>
+  <div class="nav-tab" data-view="view-blog" onclick="switchView('view-blog')">Notes</div>
+  <div class="nav-tab" data-view="view-article" onclick="switchView('view-article')">Article</div>
+  <div class="nav-tab" data-view="view-books" onclick="switchView('view-books')">Books</div>
+  <div class="nav-tab" data-view="view-book-detail" onclick="switchView('view-book-detail')">Review</div>
+  <div class="nav-tab" data-view="view-projects" onclick="switchView('view-projects')">Builds</div>
+</nav>
+
+<script>
+/* ─── Theme Toggle ──────────────────────────────────────────────── */
+function toggleTheme() {
+  const html = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  if (html.getAttribute('data-theme') === 'dark') {
+    html.setAttribute('data-theme', 'light');
+    btn.textContent = '☽ night writing';
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    btn.textContent = '☀ day writing';
+  }
+}
+
+/* ─── View Switcher ─────────────────────────────────────────────── */
+function switchView(viewId) {
+  // Hide all views
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  // Show target
+  const target = document.getElementById(viewId);
+  if (target) {
+    target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  // Update nav tabs
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.view === viewId);
+  });
+}
+
+/* ─── Blog Tag Filter ───────────────────────────────────────────── */
+function filterArticles(tag) {
+  // Update stamp states
+  document.querySelectorAll('#tagFilters .tag-stamp').forEach(stamp => {
+    stamp.classList.toggle('active-tag', stamp.dataset.tag === tag);
+  });
+
+  // Filter article entries
+  document.querySelectorAll('#view-blog .article-entry').forEach(entry => {
+    if (tag === 'all') {
+      entry.classList.remove('hidden');
+    } else {
+      const tags = (entry.dataset.tags || '').split(' ');
+      entry.classList.toggle('hidden', !tags.includes(tag));
+    }
+  });
+
+  // Show/hide separators — hide sep after hidden entry
+  const entries = Array.from(document.querySelectorAll('#view-blog .article-entry'));
+  entries.forEach((entry, i) => {
+    // find the next sibling hr
+    let next = entry.nextElementSibling;
+    while (next && next.tagName !== 'HR' && !next.classList.contains('scallop-sep')) {
+      next = next.nextElementSibling;
+    }
+    if (next && next.tagName === 'HR') {
+      next.style.display = entry.classList.contains('hidden') ? 'none' : '';
+    }
+  });
+}
+
+/* ─── Init ──────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', function() {
+  // System dark mode preference
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.getElementById('themeToggle').textContent = '☀ day writing';
+  }
+});
+</script>
+</body>
+</html>
