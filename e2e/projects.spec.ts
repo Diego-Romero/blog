@@ -42,10 +42,7 @@ test.describe("Projects page", () => {
       .locator(".project-card")
       .filter({ has: page.locator(".project-card-title", { hasText: "Deepflow" }) })
     await expect(card).toBeVisible()
-    await expect(card.locator(".project-card-link")).toHaveAttribute(
-      "href",
-      /deepflow\.me/
-    )
+    await expect(card.locator(".project-card-link")).toHaveAttribute("href", /deepflow\.me/)
   })
 
   test("terminal titlebar dots render on each card", async ({ page }) => {

@@ -84,6 +84,7 @@ playwright.config.ts    # Playwright configuration
 ## Design System — Terminal Warm
 
 ### Fonts
+
 - **Space Mono** (`font-mono`) — Headers, nav, UI chrome, code-like elements
 - **Lora** (`font-serif`) — Body text, article reading (warm serif for comfort)
 - **Fira Code** (`font-code`) — Code blocks and inline code
@@ -92,19 +93,20 @@ Fonts loaded via Google Fonts in `app/layout.tsx` with CSS variable fallbacks.
 
 ### Colors
 
-| Token       | Dark Mode   | Light Mode  | Usage                    |
-|-------------|-------------|-------------|--------------------------|
-| `--bg`      | `#1A1A2E`   | `#FAFAF5`   | Page background          |
-| `--fg`      | `#E8E8E0`   | `#1A1A2E`   | Primary text             |
-| `--accent`  | `#FFB000`   | `#FFB000`   | Amber — links, highlights, active states |
-| `--accent2` | `#00D26A`   | `#00A855`   | Green — secondary accent, prompts |
-| `--surface` | `#232338`   | `#F0F0E8`   | Card/block backgrounds   |
-| `--border`  | `#2E2E4A`   | `#D8D8C8`   | Borders, dividers        |
-| `--muted`   | `#B8B8B8`   | `#6A6A7A`   | Secondary/muted text     |
+| Token       | Dark Mode | Light Mode | Usage                                    |
+| ----------- | --------- | ---------- | ---------------------------------------- |
+| `--bg`      | `#1A1A2E` | `#FAFAF5`  | Page background                          |
+| `--fg`      | `#E8E8E0` | `#1A1A2E`  | Primary text                             |
+| `--accent`  | `#FFB000` | `#FFB000`  | Amber — links, highlights, active states |
+| `--accent2` | `#00D26A` | `#00A855`  | Green — secondary accent, prompts        |
+| `--surface` | `#232338` | `#F0F0E8`  | Card/block backgrounds                   |
+| `--border`  | `#2E2E4A` | `#D8D8C8`  | Borders, dividers                        |
+| `--muted`   | `#B8B8B8` | `#6A6A7A`  | Secondary/muted text                     |
 
 CSS custom properties defined in `css/tailwind.css`. Tailwind `primary` maps to amber, `gray` maps to the custom charcoal/cream scale.
 
 ### Design Principles
+
 - Terminal prompt (`diego@blog:~$`) in nav as brand identity
 - Monospace for UI chrome, serif for reading — clear visual hierarchy
 - `$ whoami` hero block on homepage with cursor blink animation
@@ -116,6 +118,7 @@ CSS custom properties defined in `css/tailwind.css`. Tailwind `primary` maps to 
 ## Content Model (Contentlayer)
 
 ### Blog Post (`data/blog/*.mdx`)
+
 ```yaml
 ---
 title: string (required)
@@ -132,9 +135,11 @@ layout: string (optional: PostLayout | PostSimple | PostBanner)
 Computed fields: `readingTime`, `slug`, `path`, `toc` (table of contents)
 
 ### Book Review (`data/book/*.mdx`)
+
 Same schema as Blog. Stored in `data/book/` directory.
 
 ### Author (`data/authors/*.mdx`)
+
 ```yaml
 ---
 name: string
@@ -151,6 +156,7 @@ github: string
 ## Key Conventions
 
 ### Adding a Blog Post
+
 1. Create `data/blog/my-post-slug.mdx` with frontmatter
 2. Write content in MDX (supports JSX components, see `MDXComponents.tsx`)
 3. Add images to `public/static/images/blog/my-post-slug/`
@@ -158,15 +164,19 @@ github: string
 5. Tags are auto-collected and written to `app/tag-data.json`
 
 ### Adding a Book Review
+
 Same as blog post but in `data/book/` directory.
 
 ### Adding a Project
+
 Edit `data/projectsData.ts` — add an object with `title`, `description`, `imgSrc`, `href`.
 
 ### Modifying Navigation
+
 Edit `data/headerNavLinks.ts` — array of `{ href, title }` objects.
 
 ### Styling Changes
+
 1. **Theme colors** → `tailwind.config.js` (`primary`, `gray` palettes) + `css/tailwind.css` (CSS custom properties)
 2. **Prose/article styles** → `.prose` overrides in `css/tailwind.css`
 3. **Component styles** → Tailwind utility classes in component files
@@ -175,6 +185,7 @@ Edit `data/headerNavLinks.ts` — array of `{ href, title }` objects.
 ## Important Notes
 
 ### Build & Deploy
+
 - Vercel auto-deploys from `main` branch (currently deploying from `redesign/terminal-warm`)
 - Always run `pnpm build` locally before pushing — catches type errors and content issues
 - Contentlayer generates `.contentlayer/` directory (gitignored) during build
@@ -182,12 +193,14 @@ Edit `data/headerNavLinks.ts` — array of `{ href, title }` objects.
 - Search index generated at build time → `public/search.json`
 
 ### Known Quirks
+
 - `contentlayer` uses `assert` syntax for imports which triggers Node deprecation warnings — harmless
 - KBar (search) component styles are hardcoded in pliny — override via Tailwind color config, not CSS selectors
 - The `tsconfig.tsbuildinfo` must not be deleted or build may break
 - Blog and Book types share the same schema but render at different URL paths (`/blog/*` vs `/book/*`)
 
 ### What NOT to Do
+
 - Don't delete `data/blog/` or `data/book/` content without checking live site impact
 - Don't change `contentlayer.config.ts` field names without updating all layouts
 - Don't use `colors.pink` for Tailwind primary — it was replaced with amber for Terminal Warm
@@ -195,12 +208,14 @@ Edit `data/headerNavLinks.ts` — array of `{ href, title }` objects.
 - Don't push directly to `main` without build verification
 
 ### Testing
+
 - E2e tests live in `e2e/` — run with `pnpm test:e2e`
 - Tests cover: homepage, blog, articles, books, projects, navigation, theme toggle, SEO
 - Playwright config uses the dev server (auto-started) with Chromium
 - Always run tests after design/layout changes
 
 ## Author & Site Info
+
 - **Author:** Diego Romero
 - **Site URL:** https://www.diegoromero.blog
 - **GitHub:** https://github.com/Diego-Romero/blog
