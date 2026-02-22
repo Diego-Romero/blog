@@ -17,7 +17,7 @@ const MUTED = "#6A6A7A"
 
 function icon(size) {
   const r = Math.round(size * 0.18)
-  const fs = Math.round(size * 0.48)
+  const fs = Math.round(size * 0.7)
   // Center the "d>" as a single unit
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
   <rect width="${size}" height="${size}" rx="${r}" fill="${DARK}"/>
