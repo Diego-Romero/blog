@@ -13,95 +13,100 @@ export default function AuthorLayout({ children, content }: Props) {
 
   return (
     <div className="content-container">
-      <div className="page-header">
-        <p className="section-label">about</p>
-        <h1 className="section-title" style={{ fontSize: "1.6rem" }}>
-          Hello, I&apos;m {name}
-        </h1>
-      </div>
-
+      {/* ── Hero header ──────────────────────────────── */}
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "1fr",
-          gap: "3rem",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "1.5rem",
+          paddingBottom: "2.5rem",
+          borderBottom: "1px solid var(--border)",
+          marginBottom: "2.5rem",
         }}
-        className="xl:grid-cols-[280px_1fr]"
       >
-        {/* Sidebar — avatar + meta */}
-        <aside
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "0.75rem",
-            paddingTop: "0.5rem",
-          }}
-          className="xl:items-start"
-        >
-          {avatar && (
-            <Image
-              src={avatar}
-              alt={name}
-              width={160}
-              height={160}
-              style={{
-                borderRadius: "0",
-                border: "2px solid var(--border)",
-                width: "160px",
-                height: "160px",
-                objectFit: "cover",
-              }}
-            />
-          )}
-
-          <div
+        {avatar && (
+          <Image
+            src={avatar}
+            alt={name}
+            width={140}
+            height={140}
             style={{
-              background: "var(--surface)",
-              border: "1px solid var(--border)",
-              padding: "1rem",
-              width: "100%",
-              maxWidth: "280px",
+              borderRadius: "50%",
+              border: "3px solid var(--accent)",
+              width: "140px",
+              height: "140px",
+              objectFit: "cover",
+            }}
+          />
+        )}
+
+        <div style={{ textAlign: "center" }}>
+          <h1
+            style={{
               fontFamily: "var(--font-space-mono), 'Space Mono', monospace",
-              fontSize: "0.72rem",
+              fontSize: "2rem",
+              fontWeight: 700,
+              marginBottom: "0.5rem",
+              lineHeight: 1.2,
             }}
           >
-            <div style={{ color: "var(--accent)", fontWeight: 700, marginBottom: "0.5rem" }}>
-              {"// profile"}
-            </div>
-            {name && (
-              <div style={{ marginBottom: "0.25rem" }}>
-                <span style={{ color: "var(--accent2)" }}>name</span>
-                <span style={{ color: "var(--muted)" }}>: </span>
-                <span style={{ color: "var(--fg)" }}>{name}</span>
-              </div>
-            )}
+            {name}
+          </h1>
+
+          {/* Terminal-style metadata */}
+          <div
+            style={{
+              fontFamily: "var(--font-space-mono), 'Space Mono', monospace",
+              fontSize: "0.75rem",
+              color: "var(--muted)",
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: "0.25rem 1rem",
+            }}
+          >
             {occupation && (
-              <div style={{ marginBottom: "0.25rem" }}>
-                <span style={{ color: "var(--accent2)" }}>role</span>
-                <span style={{ color: "var(--muted)" }}>: </span>
-                <span style={{ color: "var(--fg)" }}>{occupation}</span>
-              </div>
+              <span>
+                <span style={{ color: "var(--accent)" }}>role</span>
+                {" → "}
+                {occupation}
+              </span>
             )}
             {company && (
-              <div style={{ marginBottom: "0.75rem" }}>
-                <span style={{ color: "var(--accent2)" }}>co</span>
-                <span style={{ color: "var(--muted)" }}> : </span>
-                <span style={{ color: "var(--fg)" }}>{company}</span>
-              </div>
+              <span>
+                <span style={{ color: "var(--accent)" }}>@</span>
+                {company}
+              </span>
             )}
-            <div style={{ display: "flex", gap: "0.75rem", marginTop: "0.5rem" }}>
-              <SocialIcon kind="github" href={github} size={5} />
-              <SocialIcon kind="linkedin" href={linkedin} size={5} />
-              <SocialIcon kind="twitter" href={twitter} size={5} />
-            </div>
           </div>
-        </aside>
 
-        {/* Content */}
-        <div className="prose prose-lg dark:prose-invert" style={{ paddingBottom: "3rem" }}>
-          {children}
+          {/* Social links */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "1rem",
+              marginTop: "1rem",
+            }}
+          >
+            <SocialIcon kind="github" href={github} size={5} />
+            <SocialIcon kind="linkedin" href={linkedin} size={5} />
+            <SocialIcon kind="twitter" href={twitter} size={5} />
+          </div>
         </div>
+      </div>
+
+      {/* ── Content ──────────────────────────────────── */}
+      <div
+        className="prose prose-lg dark:prose-invert"
+        style={{
+          maxWidth: "680px",
+          margin: "0 auto",
+          paddingBottom: "3rem",
+        }}
+      >
+        {children}
       </div>
     </div>
   )
