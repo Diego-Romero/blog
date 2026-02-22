@@ -1,1449 +1,1646 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-theme="dark">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Terminal Cyan &mdash; diegoromero.blog</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
-  <style>
-    /* ============================================
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Terminal Cyan &mdash; diegoromero.blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Fira+Code:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ============================================
        CSS CUSTOM PROPERTIES & THEME
     ============================================ */
-    :root {
-      --bg: #1C1C2E;
-      --fg: #C8C8D0;
-      --accent: #00E5CC;
-      --accent2: #FF6B6B;
-      --surface: #252538;
-      --muted: #8A8A9A;
-      --border: #323250;
-      --nav-h: 56px;
-      --bottom-nav-h: 52px;
-      --max-w: 760px;
-      --transition: 0.15s ease;
-    }
-
-    [data-theme="light"] {
-      --bg: #F0F4F8;
-      --fg: #1C2832;
-      --accent: #00C4B0;
-      --accent2: #FF5757;
-      --surface: #E4EBF2;
-      --muted: #5A6A7A;
-      --border: #C8D4E0;
-    }
-
-    /* ============================================
-       RESET & BASE
-    ============================================ */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Lora', Georgia, serif;
-      background: var(--bg);
-      color: var(--fg);
-      font-size: 16px;
-      line-height: 1.7;
-      min-height: 100vh;
-      transition: background var(--transition), color var(--transition);
-      overflow-x: hidden;
-    }
-
-    /* CRT scanline overlay */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 9998;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0, 0, 0, 0.015) 2px,
-        rgba(0, 0, 0, 0.015) 4px
-      );
-    }
-
-    /* ============================================
-       TYPOGRAPHY
-    ============================================ */
-    h1, h2, h3, h4 {
-      font-family: 'Space Mono', monospace;
-      line-height: 1.25;
-      letter-spacing: -0.02em;
-    }
-
-    p { margin-bottom: 1.25rem; }
-    p:last-child { margin-bottom: 0; }
-
-    a {
-      color: var(--accent);
-      text-decoration: none;
-      transition: opacity var(--transition);
-    }
-    a:hover { opacity: 0.8; }
-
-    strong { font-weight: 600; }
-    em { font-style: italic; }
-
-    /* ============================================
-       CURSOR BLINK
-    ============================================ */
-    .cursor::after {
-      content: '○';
-      animation: blink 1s step-end infinite;
-      color: var(--accent);
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    /* ============================================
-       TOP NAV
-    ============================================ */
-    .top-nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: var(--nav-h);
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 1.5rem;
-      z-index: 100;
-      transition: background var(--transition), border-color var(--transition);
-    }
-
-    .nav-logo {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--fg);
-      letter-spacing: 0;
-    }
-
-    .nav-logo .prompt-at,
-    .nav-logo .prompt-colon,
-    .nav-logo .prompt-tilde,
-    .nav-logo .prompt-dollar {
-      color: var(--accent);
-    }
-
-    .nav-logo .prompt-host {
-      color: var(--accent2);
-    }
-
-    .theme-toggle {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      font-weight: 700;
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      padding: 0.3rem 0.6rem;
-      cursor: pointer;
-      transition: all var(--transition);
-      letter-spacing: 0.05em;
-    }
-
-    .theme-toggle:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    /* ============================================
-       BOTTOM NAV
-    ============================================ */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: var(--bottom-nav-h);
-      background: var(--bg);
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: stretch;
-      z-index: 100;
-      transition: background var(--transition), border-color var(--transition);
-    }
-
-    .bottom-nav-btn {
-      flex: 1;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      background: none;
-      border: none;
-      border-right: 1px solid var(--border);
-      color: var(--muted);
-      cursor: pointer;
-      transition: all var(--transition);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 0.25rem;
-    }
-
-    .bottom-nav-btn:last-child { border-right: none; }
-
-    .bottom-nav-btn:hover {
-      background: var(--surface);
-      color: var(--accent);
-    }
-
-    .bottom-nav-btn.active {
-      color: var(--accent);
-      background: var(--surface);
-      border-top: 2px solid var(--accent);
-    }
-
-    /* ============================================
-       MAIN CONTENT AREA
-    ============================================ */
-    .main {
-      padding-top: var(--nav-h);
-      padding-bottom: var(--bottom-nav-h);
-      min-height: 100vh;
-    }
-
-    .view {
-      display: none;
-      opacity: 0;
-      transition: opacity var(--transition);
-    }
-
-    .view.active {
-      display: block;
-      opacity: 1;
-    }
-
-    .container {
-      max-width: var(--max-w);
-      margin: 0 auto;
-      padding: 0 1.5rem;
-    }
-
-    /* ============================================
-       PROGRESS BAR
-    ============================================ */
-    .progress-bar {
-      position: fixed;
-      top: var(--nav-h);
-      left: 0;
-      height: 2px;
-      background: var(--accent);
-      width: 0%;
-      z-index: 99;
-      transition: width 0.1s linear;
-    }
-
-    /* ============================================
-       VIEW: HOME
-    ============================================ */
-    .hero {
-      padding: 4rem 0 3rem;
-    }
-
-    .hero-prompt {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.85rem;
-      color: var(--accent2);
-      margin-bottom: 0.75rem;
-      letter-spacing: 0.02em;
-    }
-
-    .hero-prompt .prompt-dollar {
-      color: var(--accent);
-      margin-right: 0.5rem;
-    }
-
-    .hero-name {
-      font-family: 'Space Mono', monospace;
-      font-size: clamp(2rem, 6vw, 3.5rem);
-      font-weight: 700;
-      color: var(--fg);
-      margin-bottom: 1rem;
-      letter-spacing: -0.03em;
-    }
-
-    .hero-tagline {
-      font-family: 'Lora', serif;
-      font-size: 1.15rem;
-      color: var(--muted);
-      margin-bottom: 2rem;
-      max-width: 520px;
-      line-height: 1.65;
-      overflow: hidden;
-    }
-
-    .typewriter-text {
-      display: inline-block;
-      overflow: hidden;
-      border-right: none;
-      white-space: normal;
-      animation: typewriter 2.2s steps(60, end) 0.4s both;
-    }
-
-    @keyframes typewriter {
-      from { max-height: 0; opacity: 0; }
-      to { max-height: 100px; opacity: 1; }
-    }
-
-    .hero-links {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      padding: 0.6rem 1.2rem;
-      border: 1px solid var(--border);
-      background: none;
-      color: var(--fg);
-      cursor: pointer;
-      transition: all var(--transition);
-    }
-
-    .btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      box-shadow: 0 0 12px rgba(0, 229, 204, 0.15);
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #1C1C2E;
-      border-color: var(--accent);
-    }
-
-    .btn-primary:hover {
-      background: transparent;
-      color: var(--accent);
-    }
-
-    /* ============================================
-       SECTION HEADERS
-    ============================================ */
-    .section-header {
-      padding: 2.5rem 0 1.5rem;
-    }
-
-    .section-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 0.4rem;
-    }
-
-    .section-label::before {
-      content: '// ';
-      color: var(--muted);
-    }
-
-    .section-title {
-      font-family: 'Space Mono', monospace;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--fg);
-    }
-
-    /* ============================================
-       TERMINAL CARDS (ARTICLE CARDS)
-    ============================================ */
-    .terminal-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      margin-bottom: 1.25rem;
-      position: relative;
-      transition: all var(--transition);
-      overflow: hidden;
-    }
-
-    .terminal-card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 0 12px rgba(0, 229, 204, 0.15);
-    }
-
-    .terminal-card:hover::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.03) 0px,
-        rgba(0, 0, 0, 0.03) 1px,
-        transparent 1px,
-        transparent 3px
-      );
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .terminal-titlebar {
-      background: var(--border);
-      padding: 0.45rem 0.75rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .terminal-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-
-    .dot-red { background: #FF5F57; }
-    .dot-yellow { background: #FEBC2E; }
-    .dot-green { background: #28C840; }
-
-    .terminal-titlebar-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--muted);
-      margin-left: 0.5rem;
-      letter-spacing: 0.05em;
-    }
-
-    .terminal-card-body {
-      padding: 1.25rem;
-    }
-
-    .card-meta {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--accent2);
-      margin-bottom: 0.6rem;
-      letter-spacing: 0.05em;
-    }
-
-    .card-title {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--fg);
-      margin-bottom: 0.6rem;
-      line-height: 1.35;
-    }
-
-    .card-excerpt {
-      font-family: 'Lora', serif;
-      font-size: 0.9rem;
-      color: var(--muted);
-      line-height: 1.6;
-      margin-bottom: 0.9rem;
-    }
-
-    .card-tags {
-      display: flex;
-      gap: 0.4rem;
-      flex-wrap: wrap;
-    }
-
-    .tag {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.65rem;
-      padding: 0.2rem 0.5rem;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      letter-spacing: 0.03em;
-      cursor: pointer;
-      transition: all var(--transition);
-    }
-
-    .tag:hover, .tag.active {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: rgba(0, 229, 204, 0.06);
-    }
-
-    .card-read-more {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--accent);
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 0;
-    }
-
-    .card-read-more::before { content: '> '; }
-    .card-read-more:hover { opacity: 0.75; }
-
-    /* ============================================
-       VIEW: BLOG
-    ============================================ */
-    .blog-header {
-      padding: 2.5rem 0 1.5rem;
-    }
-
-    .blog-filter-bar {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
-      padding: 0.75rem;
-      border: 1px solid var(--border);
-      background: var(--surface);
-    }
-
-    .filter-prefix {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.72rem;
-      color: var(--accent);
-      white-space: nowrap;
-      letter-spacing: 0.02em;
-    }
-
-    .blog-list {
-      border: 1px solid var(--border);
-    }
-
-    .blog-row {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 0.75rem;
-      align-items: baseline;
-      padding: 0.85rem 1rem;
-      border-bottom: 1px solid var(--border);
-      cursor: pointer;
-      transition: background var(--transition);
-    }
-
-    .blog-row:last-child { border-bottom: none; }
-
-    .blog-row:hover {
-      background: var(--surface);
-    }
-
-    .blog-row:hover .blog-row-prompt { color: var(--accent2); }
-
-    .blog-row-prompt {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.8rem;
-      color: var(--accent);
-      font-weight: 700;
-    }
-
-    .blog-row-title {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.82rem;
-      color: var(--fg);
-      line-height: 1.4;
-    }
-
-    .blog-row-date {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--accent2);
-      white-space: nowrap;
-      letter-spacing: 0.03em;
-    }
-
-    .blog-row-tags {
-      grid-column: 2 / 4;
-      display: flex;
-      gap: 0.35rem;
-      flex-wrap: wrap;
-      margin-top: 0.25rem;
-    }
-
-    .blog-row-tag {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.6rem;
-      color: var(--muted);
-      border: 1px solid var(--border);
-      padding: 0.1rem 0.4rem;
-    }
-
-    /* ============================================
-       VIEW: ARTICLE
-    ============================================ */
-    .article-header {
-      padding: 2.5rem 0 2rem;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 2rem;
-    }
-
-    .article-meta-line {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--accent2);
-      margin-bottom: 0.75rem;
-      letter-spacing: 0.05em;
-    }
-
-    .article-title {
-      font-family: 'Space Mono', monospace;
-      font-size: clamp(1.3rem, 4vw, 1.9rem);
-      font-weight: 700;
-      color: var(--fg);
-      margin-bottom: 1rem;
-      line-height: 1.2;
-    }
-
-    .article-subtitle {
-      font-family: 'Lora', serif;
-      font-size: 1.05rem;
-      color: var(--muted);
-      font-style: italic;
-      margin-bottom: 1.25rem;
-    }
-
-    .article-tags { margin-bottom: 1rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
-
-    /* TOC */
-    .toc {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 1.25rem;
-      margin-bottom: 2.5rem;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.78rem;
-    }
-
-    .toc-title {
-      color: var(--accent);
-      font-weight: 700;
-      margin-bottom: 0.75rem;
-      font-size: 0.75rem;
-      letter-spacing: 0.05em;
-    }
-
-    .toc-item {
-      color: var(--muted);
-      line-height: 2;
-      cursor: pointer;
-      transition: color var(--transition);
-      display: block;
-    }
-
-    .toc-item:hover, .toc-item.toc-active {
-      color: var(--accent);
-    }
-
-    /* Article body */
-    .article-body {
-      font-family: 'Lora', serif;
-      font-size: 1rem;
-      line-height: 1.8;
-    }
-
-    .article-body h2 {
-      font-family: 'Space Mono', monospace;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--accent);
-      margin: 2.5rem 0 1rem;
-      letter-spacing: 0.02em;
-    }
-
-    .article-body h2::before {
-      content: '## ';
-      color: var(--muted);
-      font-weight: 400;
-    }
-
-    .article-body h3 {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--fg);
-      margin: 2rem 0 0.75rem;
-    }
-
-    .article-body h3::before {
-      content: '### ';
-      color: var(--muted);
-      font-weight: 400;
-    }
-
-    .article-body p {
-      color: var(--fg);
-      margin-bottom: 1.35rem;
-    }
-
-    /* BLOCKQUOTES */
-    .article-body blockquote {
-      background: var(--surface);
-      border-left: 3px solid var(--accent);
-      padding: 1.1rem 1.25rem;
-      margin: 2rem 0;
-    }
-
-    .article-body blockquote p {
-      font-family: 'Lora', serif;
-      font-style: italic;
-      font-size: 1.02rem;
-      color: var(--fg);
-      margin-bottom: 0.5rem;
-    }
-
-    .article-body blockquote cite {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--accent2);
-      letter-spacing: 0.05em;
-      display: block;
-    }
-
-    .article-body blockquote cite::before { content: '4 '; }
-
-    /* CODE BLOCKS */
-    .article-body pre {
-      background: #0A0A1A;
-      border: 1px solid var(--border);
-      overflow-x: auto;
-      margin: 1.75rem 0;
-      position: relative;
-    }
-
-    [data-theme="light"] .article-body pre {
-      background: #1A2432;
-    }
-
-    .code-lang-tab {
-      display: inline-block;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.65rem;
-      background: var(--accent);
-      color: #1C1C2E;
-      padding: 0.2rem 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-    }
-
-    .article-body pre code {
-      display: block;
-      font-family: 'Fira Code', monospace;
-      font-size: 0.82rem;
-      padding: 1rem 1.25rem;
-      line-height: 1.65;
-      color: #C8C8D0;
-    }
-
-    .code-kw { color: #00E5CC; }
-    .code-type { color: #FF6B6B; }
-    .code-str { color: #80F5E9; }
-    .code-cmt { color: #5A6A6A; font-style: italic; }
-    .code-prop { color: #B8D4FF; }
-    .code-num { color: #FF8C60; }
-
-    .article-body code:not(pre code) {
-      font-family: 'Fira Code', monospace;
-      font-size: 0.82em;
-      background: var(--surface);
-      color: var(--accent);
-      padding: 0.15em 0.35em;
-      border: 1px solid var(--border);
-    }
-
-    /* ============================================
-       VIEW: BOOKS
-    ============================================ */
-    .books-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.25rem;
-      padding-bottom: 2rem;
-    }
-
-    .book-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      position: relative;
-      transition: all var(--transition);
-      overflow: hidden;
-      cursor: pointer;
-    }
-
-    .book-card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 0 12px rgba(0, 229, 204, 0.15);
-    }
-
-    .book-card:hover::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.03) 0px,
-        rgba(0, 0, 0, 0.03) 1px,
-        transparent 1px,
-        transparent 3px
-      );
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .book-frontmatter {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      padding: 0.9rem 1rem;
-      border-bottom: 1px dashed var(--border);
-      background: rgba(0,0,0,0.1);
-      line-height: 1.9;
-    }
-
-    .fm-sep {
-      color: var(--muted);
-      letter-spacing: 0.05em;
-    }
-
-    .fm-key { color: var(--accent2); }
-    .fm-val { color: var(--fg); }
-    .fm-rating { color: var(--accent); }
-
-    .book-card-body {
-      padding: 1rem;
-    }
-
-    .book-excerpt {
-      font-family: 'Lora', serif;
-      font-size: 0.88rem;
-      color: var(--muted);
-      line-height: 1.65;
-      margin-bottom: 0.75rem;
-    }
-
-    .book-read-more {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.68rem;
-      color: var(--accent);
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 0;
-      letter-spacing: 0.03em;
-    }
-
-    .book-read-more::before { content: '> '; }
-
-    /* ============================================
-       VIEW: BOOK DETAIL
-    ============================================ */
-    .book-detail-header {
-      padding: 2.5rem 0 1.75rem;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 2rem;
-    }
-
-    .book-detail-meta {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--accent2);
-      margin-bottom: 0.5rem;
-      letter-spacing: 0.05em;
-    }
-
-    .book-detail-title {
-      font-family: 'Space Mono', monospace;
-      font-size: clamp(1.2rem, 4vw, 1.75rem);
-      font-weight: 700;
-      color: var(--fg);
-      margin-bottom: 0.4rem;
-    }
-
-    .book-detail-author {
-      font-family: 'Lora', serif;
-      font-size: 1rem;
-      color: var(--muted);
-      font-style: italic;
-      margin-bottom: 0.75rem;
-    }
-
-    .book-detail-rating {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.85rem;
-      color: var(--accent);
-    }
-
-    .book-detail-body {
-      font-family: 'Lora', serif;
-      font-size: 1rem;
-      line-height: 1.8;
-    }
-
-    .book-detail-body h2 {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--accent);
-      margin: 2.25rem 0 0.9rem;
-    }
-
-    .book-detail-body h2::before {
-      content: '## ';
-      color: var(--muted);
-      font-weight: 400;
-    }
-
-    .book-detail-body p {
-      color: var(--fg);
-      margin-bottom: 1.3rem;
-    }
-
-    .book-detail-body blockquote {
-      background: var(--surface);
-      border-left: 3px solid var(--accent);
-      padding: 1rem 1.25rem;
-      margin: 2rem 0;
-    }
-
-    .book-detail-body blockquote p {
-      font-style: italic;
-      font-size: 1rem;
-      margin-bottom: 0.4rem;
-    }
-
-    .book-detail-body blockquote cite {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.68rem;
-      color: var(--accent2);
-      display: block;
-    }
-
-    .book-detail-body blockquote cite::before { content: '4 '; }
-
-    .back-btn {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.72rem;
-      color: var(--muted);
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      letter-spacing: 0.03em;
-      margin-bottom: 0.75rem;
-      display: inline-block;
-      transition: color var(--transition);
-    }
-
-    .back-btn::before { content: '< '; color: var(--accent); }
-    .back-btn:hover { color: var(--fg); }
-
-    /* ============================================
-       VIEW: PROJECTS
-    ============================================ */
-    .project-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      margin-bottom: 1.25rem;
-      transition: all var(--transition);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .project-card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 0 12px rgba(0, 229, 204, 0.15);
-    }
-
-    .project-card:hover::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.03) 0px,
-        rgba(0, 0, 0, 0.03) 1px,
-        transparent 1px,
-        transparent 3px
-      );
-      pointer-events: none;
-    }
-
-    .project-cmd-block {
-      background: #0A0A1A;
-      padding: 1rem 1.25rem;
-      font-family: 'Fira Code', monospace;
-      font-size: 0.8rem;
-      line-height: 2;
-    }
-
-    [data-theme="light"] .project-cmd-block {
-      background: #1A2432;
-    }
-
-    .project-cmd-block .cmd-line-dollar {
-      color: var(--accent);
-    }
-
-    .project-cmd-block .cmd-line-cmd {
-      color: #C8C8D0;
-    }
-
-    .project-cmd-block .cmd-line-out::before {
-      content: '> ';
-      color: var(--accent2);
-    }
-
-    .project-cmd-block .cmd-line-out {
-      color: var(--accent2);
-    }
-
-    .project-body {
-      padding: 1.1rem 1.25rem;
-    }
-
-    .project-desc {
-      font-family: 'Lora', serif;
-      font-size: 0.92rem;
-      color: var(--muted);
-      line-height: 1.65;
-      margin-bottom: 0.85rem;
-    }
-
-    .project-tech-stack {
-      display: flex;
-      gap: 0.4rem;
-      flex-wrap: wrap;
-    }
-
-    .tech-badge {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.62rem;
-      padding: 0.2rem 0.5rem;
-      border: 1px solid var(--accent2);
-      color: var(--accent2);
-      letter-spacing: 0.03em;
-    }
-
-    .project-links {
-      margin-top: 0.9rem;
-      display: flex;
-      gap: 0.75rem;
-    }
-
-    .project-link {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.68rem;
-      color: var(--accent);
-      letter-spacing: 0.05em;
-    }
-
-    .project-link::before { content: '> '; }
-
-    /* ============================================
-       HOME - RECENT POSTS + FEATURED BOOKS
-    ============================================ */
-    .recent-posts-mini {
-      margin-bottom: 2.5rem;
-    }
-
-    .recent-posts-mini .blog-row {
-      border: 1px solid var(--border);
-      border-bottom: none;
-    }
-
-    .recent-posts-mini .blog-row:last-child {
-      border-bottom: 1px solid var(--border);
-    }
-
-    .featured-books-row {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-      margin-bottom: 3rem;
-    }
-
-    @media (min-width: 560px) {
-      .featured-books-row { grid-template-columns: repeat(4, 1fr); }
-    }
-
-    .mini-book-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 0.9rem 0.8rem;
-      transition: all var(--transition);
-      cursor: pointer;
-    }
-
-    .mini-book-card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 0 12px rgba(0, 229, 204, 0.15);
-    }
-
-    .mini-book-title {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--fg);
-      margin-bottom: 0.25rem;
-      line-height: 1.35;
-    }
-
-    .mini-book-author {
-      font-family: 'Lora', serif;
-      font-size: 0.75rem;
-      color: var(--muted);
-      font-style: italic;
-      margin-bottom: 0.35rem;
-    }
-
-    .mini-book-rating {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--accent);
-    }
-
-    /* ============================================
-       ABOUT / INTRO BIO
-    ============================================ */
-    .home-bio {
-      font-family: 'Lora', serif;
-      font-size: 0.97rem;
-      color: var(--muted);
-      line-height: 1.75;
-      margin-bottom: 2rem;
-      padding: 1.25rem;
-      background: var(--surface);
-      border-left: 3px solid var(--accent2);
-    }
-
-    /* ============================================
-       FOOTER / SYSTEM INFO
-    ============================================ */
-    .sys-info {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--muted);
-      padding: 1.5rem 0;
-      letter-spacing: 0.03em;
-      border-top: 1px solid var(--border);
-      margin-top: 1.5rem;
-    }
-
-    .sys-info span { color: var(--accent2); }
-
-    /* ============================================
-       UTILITY
-    ============================================ */
-    .hidden { display: none !important; }
-    .mt-1 { margin-top: 0.5rem; }
-    .mb-2 { margin-bottom: 1rem; }
-    .pb-4 { padding-bottom: 2rem; }
-
-    /* ============================================
-       RESPONSIVE
-    ============================================ */
-    @media (max-width: 480px) {
-      .container { padding: 0 1rem; }
-
-      .hero { padding: 2.5rem 0 2rem; }
-
-      .blog-row {
-        grid-template-columns: auto 1fr;
-        gap: 0.5rem;
+      :root {
+        --bg: #1c1c2e;
+        --fg: #c8c8d0;
+        --accent: #00e5cc;
+        --accent2: #ff6b6b;
+        --surface: #252538;
+        --muted: #8a8a9a;
+        --border: #323250;
+        --nav-h: 56px;
+        --bottom-nav-h: 52px;
+        --max-w: 760px;
+        --transition: 0.15s ease;
       }
 
-      .blog-row-date { display: none; }
+      [data-theme="light"] {
+        --bg: #f0f4f8;
+        --fg: #1c2832;
+        --accent: #00c4b0;
+        --accent2: #ff5757;
+        --surface: #e4ebf2;
+        --muted: #5a6a7a;
+        --border: #c8d4e0;
+      }
 
-      .books-grid { grid-template-columns: 1fr; }
+      /* ============================================
+       RESET & BASE
+    ============================================ */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-      .featured-books-row { grid-template-columns: repeat(2, 1fr); }
+      html {
+        scroll-behavior: smooth;
+      }
 
-      .bottom-nav-btn { font-size: 0.52rem; }
-    }
+      body {
+        font-family: "Lora", Georgia, serif;
+        background: var(--bg);
+        color: var(--fg);
+        font-size: 16px;
+        line-height: 1.7;
+        min-height: 100vh;
+        transition:
+          background var(--transition),
+          color var(--transition);
+        overflow-x: hidden;
+      }
 
-    @media (max-width: 320px) {
-      .bottom-nav-btn { font-size: 0.44rem; letter-spacing: 0; }
-      .hero-name { font-size: 1.6rem; }
-    }
+      /* CRT scanline overlay */
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 9998;
+        background: repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 0, 0, 0.015) 2px,
+          rgba(0, 0, 0, 0.015) 4px
+        );
+      }
 
-    /* ============================================
+      /* ============================================
+       TYPOGRAPHY
+    ============================================ */
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: "Space Mono", monospace;
+        line-height: 1.25;
+        letter-spacing: -0.02em;
+      }
+
+      p {
+        margin-bottom: 1.25rem;
+      }
+      p:last-child {
+        margin-bottom: 0;
+      }
+
+      a {
+        color: var(--accent);
+        text-decoration: none;
+        transition: opacity var(--transition);
+      }
+      a:hover {
+        opacity: 0.8;
+      }
+
+      strong {
+        font-weight: 600;
+      }
+      em {
+        font-style: italic;
+      }
+
+      /* ============================================
+       CURSOR BLINK
+    ============================================ */
+      .cursor::after {
+        content: "○";
+        animation: blink 1s step-end infinite;
+        color: var(--accent);
+      }
+
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+
+      /* ============================================
+       TOP NAV
+    ============================================ */
+      .top-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: var(--nav-h);
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1.5rem;
+        z-index: 100;
+        transition:
+          background var(--transition),
+          border-color var(--transition);
+      }
+
+      .nav-logo {
+        font-family: "Space Mono", monospace;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--fg);
+        letter-spacing: 0;
+      }
+
+      .nav-logo .prompt-at,
+      .nav-logo .prompt-colon,
+      .nav-logo .prompt-tilde,
+      .nav-logo .prompt-dollar {
+        color: var(--accent);
+      }
+
+      .nav-logo .prompt-host {
+        color: var(--accent2);
+      }
+
+      .theme-toggle {
+        font-family: "Space Mono", monospace;
+        font-size: 0.7rem;
+        font-weight: 700;
+        background: none;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        padding: 0.3rem 0.6rem;
+        cursor: pointer;
+        transition: all var(--transition);
+        letter-spacing: 0.05em;
+      }
+
+      .theme-toggle:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      /* ============================================
+       BOTTOM NAV
+    ============================================ */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: var(--bottom-nav-h);
+        background: var(--bg);
+        border-top: 1px solid var(--border);
+        display: flex;
+        align-items: stretch;
+        z-index: 100;
+        transition:
+          background var(--transition),
+          border-color var(--transition);
+      }
+
+      .bottom-nav-btn {
+        flex: 1;
+        font-family: "Space Mono", monospace;
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        background: none;
+        border: none;
+        border-right: 1px solid var(--border);
+        color: var(--muted);
+        cursor: pointer;
+        transition: all var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 0.25rem;
+      }
+
+      .bottom-nav-btn:last-child {
+        border-right: none;
+      }
+
+      .bottom-nav-btn:hover {
+        background: var(--surface);
+        color: var(--accent);
+      }
+
+      .bottom-nav-btn.active {
+        color: var(--accent);
+        background: var(--surface);
+        border-top: 2px solid var(--accent);
+      }
+
+      /* ============================================
+       MAIN CONTENT AREA
+    ============================================ */
+      .main {
+        padding-top: var(--nav-h);
+        padding-bottom: var(--bottom-nav-h);
+        min-height: 100vh;
+      }
+
+      .view {
+        display: none;
+        opacity: 0;
+        transition: opacity var(--transition);
+      }
+
+      .view.active {
+        display: block;
+        opacity: 1;
+      }
+
+      .container {
+        max-width: var(--max-w);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+      }
+
+      /* ============================================
+       PROGRESS BAR
+    ============================================ */
+      .progress-bar {
+        position: fixed;
+        top: var(--nav-h);
+        left: 0;
+        height: 2px;
+        background: var(--accent);
+        width: 0%;
+        z-index: 99;
+        transition: width 0.1s linear;
+      }
+
+      /* ============================================
+       VIEW: HOME
+    ============================================ */
+      .hero {
+        padding: 4rem 0 3rem;
+      }
+
+      .hero-prompt {
+        font-family: "Space Mono", monospace;
+        font-size: 0.85rem;
+        color: var(--accent2);
+        margin-bottom: 0.75rem;
+        letter-spacing: 0.02em;
+      }
+
+      .hero-prompt .prompt-dollar {
+        color: var(--accent);
+        margin-right: 0.5rem;
+      }
+
+      .hero-name {
+        font-family: "Space Mono", monospace;
+        font-size: clamp(2rem, 6vw, 3.5rem);
+        font-weight: 700;
+        color: var(--fg);
+        margin-bottom: 1rem;
+        letter-spacing: -0.03em;
+      }
+
+      .hero-tagline {
+        font-family: "Lora", serif;
+        font-size: 1.15rem;
+        color: var(--muted);
+        margin-bottom: 2rem;
+        max-width: 520px;
+        line-height: 1.65;
+        overflow: hidden;
+      }
+
+      .typewriter-text {
+        display: inline-block;
+        overflow: hidden;
+        border-right: none;
+        white-space: normal;
+        animation: typewriter 2.2s steps(60, end) 0.4s both;
+      }
+
+      @keyframes typewriter {
+        from {
+          max-height: 0;
+          opacity: 0;
+        }
+        to {
+          max-height: 100px;
+          opacity: 1;
+        }
+      }
+
+      .hero-links {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        font-family: "Space Mono", monospace;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        padding: 0.6rem 1.2rem;
+        border: 1px solid var(--border);
+        background: none;
+        color: var(--fg);
+        cursor: pointer;
+        transition: all var(--transition);
+      }
+
+      .btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        box-shadow: 0 0 12px rgba(0, 229, 204, 0.15);
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: #1c1c2e;
+        border-color: var(--accent);
+      }
+
+      .btn-primary:hover {
+        background: transparent;
+        color: var(--accent);
+      }
+
+      /* ============================================
+       SECTION HEADERS
+    ============================================ */
+      .section-header {
+        padding: 2.5rem 0 1.5rem;
+      }
+
+      .section-label {
+        font-family: "Space Mono", monospace;
+        font-size: 0.7rem;
+        color: var(--accent);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 0.4rem;
+      }
+
+      .section-label::before {
+        content: "// ";
+        color: var(--muted);
+      }
+
+      .section-title {
+        font-family: "Space Mono", monospace;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--fg);
+      }
+
+      /* ============================================
+       TERMINAL CARDS (ARTICLE CARDS)
+    ============================================ */
+      .terminal-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        margin-bottom: 1.25rem;
+        position: relative;
+        transition: all var(--transition);
+        overflow: hidden;
+      }
+
+      .terminal-card:hover {
+        border-color: var(--accent);
+        box-shadow: 0 0 12px rgba(0, 229, 204, 0.15);
+      }
+
+      .terminal-card:hover::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0.03) 0px,
+          rgba(0, 0, 0, 0.03) 1px,
+          transparent 1px,
+          transparent 3px
+        );
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .terminal-titlebar {
+        background: var(--border);
+        padding: 0.45rem 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+
+      .terminal-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+
+      .dot-red {
+        background: #ff5f57;
+      }
+      .dot-yellow {
+        background: #febc2e;
+      }
+      .dot-green {
+        background: #28c840;
+      }
+
+      .terminal-titlebar-label {
+        font-family: "Space Mono", monospace;
+        font-size: 0.65rem;
+        color: var(--muted);
+        margin-left: 0.5rem;
+        letter-spacing: 0.05em;
+      }
+
+      .terminal-card-body {
+        padding: 1.25rem;
+      }
+
+      .card-meta {
+        font-family: "Space Mono", monospace;
+        font-size: 0.7rem;
+        color: var(--accent2);
+        margin-bottom: 0.6rem;
+        letter-spacing: 0.05em;
+      }
+
+      .card-title {
+        font-family: "Space Mono", monospace;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--fg);
+        margin-bottom: 0.6rem;
+        line-height: 1.35;
+      }
+
+      .card-excerpt {
+        font-family: "Lora", serif;
+        font-size: 0.9rem;
+        color: var(--muted);
+        line-height: 1.6;
+        margin-bottom: 0.9rem;
+      }
+
+      .card-tags {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+      }
+
+      .tag {
+        font-family: "Space Mono", monospace;
+        font-size: 0.65rem;
+        padding: 0.2rem 0.5rem;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        letter-spacing: 0.03em;
+        cursor: pointer;
+        transition: all var(--transition);
+      }
+
+      .tag:hover,
+      .tag.active {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: rgba(0, 229, 204, 0.06);
+      }
+
+      .card-read-more {
+        font-family: "Space Mono", monospace;
+        font-size: 0.7rem;
+        color: var(--accent);
+        letter-spacing: 0.05em;
+        cursor: pointer;
+        background: none;
+        border: none;
+        padding: 0;
+      }
+
+      .card-read-more::before {
+        content: "> ";
+      }
+      .card-read-more:hover {
+        opacity: 0.75;
+      }
+
+      /* ============================================
+       VIEW: BLOG
+    ============================================ */
+      .blog-header {
+        padding: 2.5rem 0 1.5rem;
+      }
+
+      .blog-filter-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+        padding: 0.75rem;
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .filter-prefix {
+        font-family: "Space Mono", monospace;
+        font-size: 0.72rem;
+        color: var(--accent);
+        white-space: nowrap;
+        letter-spacing: 0.02em;
+      }
+
+      .blog-list {
+        border: 1px solid var(--border);
+      }
+
+      .blog-row {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 0.75rem;
+        align-items: baseline;
+        padding: 0.85rem 1rem;
+        border-bottom: 1px solid var(--border);
+        cursor: pointer;
+        transition: background var(--transition);
+      }
+
+      .blog-row:last-child {
+        border-bottom: none;
+      }
+
+      .blog-row:hover {
+        background: var(--surface);
+      }
+
+      .blog-row:hover .blog-row-prompt {
+        color: var(--accent2);
+      }
+
+      .blog-row-prompt {
+        font-family: "Space Mono", monospace;
+        font-size: 0.8rem;
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      .blog-row-title {
+        font-family: "Space Mono", monospace;
+        font-size: 0.82rem;
+        color: var(--fg);
+        line-height: 1.4;
+      }
+
+      .blog-row-date {
+        font-family: "Space Mono", monospace;
+        font-size: 0.65rem;
+        color: var(--accent2);
+        white-space: nowrap;
+        letter-spacing: 0.03em;
+      }
+
+      .blog-row-tags {
+        grid-column: 2 / 4;
+        display: flex;
+        gap: 0.35rem;
+        flex-wrap: wrap;
+        margin-top: 0.25rem;
+      }
+
+      .blog-row-tag {
+        font-family: "Space Mono", monospace;
+        font-size: 0.6rem;
+        color: var(--muted);
+        border: 1px solid var(--border);
+        padding: 0.1rem 0.4rem;
+      }
+
+      /* ============================================
+       VIEW: ARTICLE
+    ============================================ */
+      .article-header {
+        padding: 2.5rem 0 2rem;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 2rem;
+      }
+
+      .article-meta-line {
+        font-family: "Space Mono", monospace;
+        font-size: 0.7rem;
+        color: var(--accent2);
+        margin-bottom: 0.75rem;
+        letter-spacing: 0.05em;
+      }
+
+      .article-title {
+        font-family: "Space Mono", monospace;
+        font-size: clamp(1.3rem, 4vw, 1.9rem);
+        font-weight: 700;
+        color: var(--fg);
+        margin-bottom: 1rem;
+        line-height: 1.2;
+      }
+
+      .article-subtitle {
+        font-family: "Lora", serif;
+        font-size: 1.05rem;
+        color: var(--muted);
+        font-style: italic;
+        margin-bottom: 1.25rem;
+      }
+
+      .article-tags {
+        margin-bottom: 1rem;
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+      }
+
+      /* TOC */
+      .toc {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 1.25rem;
+        margin-bottom: 2.5rem;
+        font-family: "Space Mono", monospace;
+        font-size: 0.78rem;
+      }
+
+      .toc-title {
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+      }
+
+      .toc-item {
+        color: var(--muted);
+        line-height: 2;
+        cursor: pointer;
+        transition: color var(--transition);
+        display: block;
+      }
+
+      .toc-item:hover,
+      .toc-item.toc-active {
+        color: var(--accent);
+      }
+
+      /* Article body */
+      .article-body {
+        font-family: "Lora", serif;
+        font-size: 1rem;
+        line-height: 1.8;
+      }
+
+      .article-body h2 {
+        font-family: "Space Mono", monospace;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--accent);
+        margin: 2.5rem 0 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .article-body h2::before {
+        content: "## ";
+        color: var(--muted);
+        font-weight: 400;
+      }
+
+      .article-body h3 {
+        font-family: "Space Mono", monospace;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--fg);
+        margin: 2rem 0 0.75rem;
+      }
+
+      .article-body h3::before {
+        content: "### ";
+        color: var(--muted);
+        font-weight: 400;
+      }
+
+      .article-body p {
+        color: var(--fg);
+        margin-bottom: 1.35rem;
+      }
+
+      /* BLOCKQUOTES */
+      .article-body blockquote {
+        background: var(--surface);
+        border-left: 3px solid var(--accent);
+        padding: 1.1rem 1.25rem;
+        margin: 2rem 0;
+      }
+
+      .article-body blockquote p {
+        font-family: "Lora", serif;
+        font-style: italic;
+        font-size: 1.02rem;
+        color: var(--fg);
+        margin-bottom: 0.5rem;
+      }
+
+      .article-body blockquote cite {
+        font-family: "Space Mono", monospace;
+        font-size: 0.7rem;
+        color: var(--accent2);
+        letter-spacing: 0.05em;
+        display: block;
+      }
+
+      .article-body blockquote cite::before {
+        content: "4 ";
+      }
+
+      /* CODE BLOCKS */
+      .article-body pre {
+        background: #0a0a1a;
+        border: 1px solid var(--border);
+        overflow-x: auto;
+        margin: 1.75rem 0;
+        position: relative;
+      }
+
+      [data-theme="light"] .article-body pre {
+        background: #1a2432;
+      }
+
+      .code-lang-tab {
+        display: inline-block;
+        font-family: "Space Mono", monospace;
+        font-size: 0.65rem;
+        background: var(--accent);
+        color: #1c1c2e;
+        padding: 0.2rem 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+      }
+
+      .article-body pre code {
+        display: block;
+        font-family: "Fira Code", monospace;
+        font-size: 0.82rem;
+        padding: 1rem 1.25rem;
+        line-height: 1.65;
+        color: #c8c8d0;
+      }
+
+      .code-kw {
+        color: #00e5cc;
+      }
+      .code-type {
+        color: #ff6b6b;
+      }
+      .code-str {
+        color: #80f5e9;
+      }
+      .code-cmt {
+        color: #5a6a6a;
+        font-style: italic;
+      }
+      .code-prop {
+        color: #b8d4ff;
+      }
+      .code-num {
+        color: #ff8c60;
+      }
+
+      .article-body code:not(pre code) {
+        font-family: "Fira Code", monospace;
+        font-size: 0.82em;
+        background: var(--surface);
+        color: var(--accent);
+        padding: 0.15em 0.35em;
+        border: 1px solid var(--border);
+      }
+
+      /* ============================================
+       VIEW: BOOKS
+    ============================================ */
+      .books-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.25rem;
+        padding-bottom: 2rem;
+      }
+
+      .book-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        position: relative;
+        transition: all var(--transition);
+        overflow: hidden;
+        cursor: pointer;
+      }
+
+      .book-card:hover {
+        border-color: var(--accent);
+        box-shadow: 0 0 12px rgba(0, 229, 204, 0.15);
+      }
+
+      .book-card:hover::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0.03) 0px,
+          rgba(0, 0, 0, 0.03) 1px,
+          transparent 1px,
+          transparent 3px
+        );
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .book-frontmatter {
+        font-family: "Space Mono", monospace;
+        font-size: 0.7rem;
+        padding: 0.9rem 1rem;
+        border-bottom: 1px dashed var(--border);
+        background: rgba(0, 0, 0, 0.1);
+        line-height: 1.9;
+      }
+
+      .fm-sep {
+        color: var(--muted);
+        letter-spacing: 0.05em;
+      }
+
+      .fm-key {
+        color: var(--accent2);
+      }
+      .fm-val {
+        color: var(--fg);
+      }
+      .fm-rating {
+        color: var(--accent);
+      }
+
+      .book-card-body {
+        padding: 1rem;
+      }
+
+      .book-excerpt {
+        font-family: "Lora", serif;
+        font-size: 0.88rem;
+        color: var(--muted);
+        line-height: 1.65;
+        margin-bottom: 0.75rem;
+      }
+
+      .book-read-more {
+        font-family: "Space Mono", monospace;
+        font-size: 0.68rem;
+        color: var(--accent);
+        cursor: pointer;
+        background: none;
+        border: none;
+        padding: 0;
+        letter-spacing: 0.03em;
+      }
+
+      .book-read-more::before {
+        content: "> ";
+      }
+
+      /* ============================================
+       VIEW: BOOK DETAIL
+    ============================================ */
+      .book-detail-header {
+        padding: 2.5rem 0 1.75rem;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 2rem;
+      }
+
+      .book-detail-meta {
+        font-family: "Space Mono", monospace;
+        font-size: 0.7rem;
+        color: var(--accent2);
+        margin-bottom: 0.5rem;
+        letter-spacing: 0.05em;
+      }
+
+      .book-detail-title {
+        font-family: "Space Mono", monospace;
+        font-size: clamp(1.2rem, 4vw, 1.75rem);
+        font-weight: 700;
+        color: var(--fg);
+        margin-bottom: 0.4rem;
+      }
+
+      .book-detail-author {
+        font-family: "Lora", serif;
+        font-size: 1rem;
+        color: var(--muted);
+        font-style: italic;
+        margin-bottom: 0.75rem;
+      }
+
+      .book-detail-rating {
+        font-family: "Space Mono", monospace;
+        font-size: 0.85rem;
+        color: var(--accent);
+      }
+
+      .book-detail-body {
+        font-family: "Lora", serif;
+        font-size: 1rem;
+        line-height: 1.8;
+      }
+
+      .book-detail-body h2 {
+        font-family: "Space Mono", monospace;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--accent);
+        margin: 2.25rem 0 0.9rem;
+      }
+
+      .book-detail-body h2::before {
+        content: "## ";
+        color: var(--muted);
+        font-weight: 400;
+      }
+
+      .book-detail-body p {
+        color: var(--fg);
+        margin-bottom: 1.3rem;
+      }
+
+      .book-detail-body blockquote {
+        background: var(--surface);
+        border-left: 3px solid var(--accent);
+        padding: 1rem 1.25rem;
+        margin: 2rem 0;
+      }
+
+      .book-detail-body blockquote p {
+        font-style: italic;
+        font-size: 1rem;
+        margin-bottom: 0.4rem;
+      }
+
+      .book-detail-body blockquote cite {
+        font-family: "Space Mono", monospace;
+        font-size: 0.68rem;
+        color: var(--accent2);
+        display: block;
+      }
+
+      .book-detail-body blockquote cite::before {
+        content: "4 ";
+      }
+
+      .back-btn {
+        font-family: "Space Mono", monospace;
+        font-size: 0.72rem;
+        color: var(--muted);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        letter-spacing: 0.03em;
+        margin-bottom: 0.75rem;
+        display: inline-block;
+        transition: color var(--transition);
+      }
+
+      .back-btn::before {
+        content: "< ";
+        color: var(--accent);
+      }
+      .back-btn:hover {
+        color: var(--fg);
+      }
+
+      /* ============================================
+       VIEW: PROJECTS
+    ============================================ */
+      .project-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        margin-bottom: 1.25rem;
+        transition: all var(--transition);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .project-card:hover {
+        border-color: var(--accent);
+        box-shadow: 0 0 12px rgba(0, 229, 204, 0.15);
+      }
+
+      .project-card:hover::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0.03) 0px,
+          rgba(0, 0, 0, 0.03) 1px,
+          transparent 1px,
+          transparent 3px
+        );
+        pointer-events: none;
+      }
+
+      .project-cmd-block {
+        background: #0a0a1a;
+        padding: 1rem 1.25rem;
+        font-family: "Fira Code", monospace;
+        font-size: 0.8rem;
+        line-height: 2;
+      }
+
+      [data-theme="light"] .project-cmd-block {
+        background: #1a2432;
+      }
+
+      .project-cmd-block .cmd-line-dollar {
+        color: var(--accent);
+      }
+
+      .project-cmd-block .cmd-line-cmd {
+        color: #c8c8d0;
+      }
+
+      .project-cmd-block .cmd-line-out::before {
+        content: "> ";
+        color: var(--accent2);
+      }
+
+      .project-cmd-block .cmd-line-out {
+        color: var(--accent2);
+      }
+
+      .project-body {
+        padding: 1.1rem 1.25rem;
+      }
+
+      .project-desc {
+        font-family: "Lora", serif;
+        font-size: 0.92rem;
+        color: var(--muted);
+        line-height: 1.65;
+        margin-bottom: 0.85rem;
+      }
+
+      .project-tech-stack {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+      }
+
+      .tech-badge {
+        font-family: "Space Mono", monospace;
+        font-size: 0.62rem;
+        padding: 0.2rem 0.5rem;
+        border: 1px solid var(--accent2);
+        color: var(--accent2);
+        letter-spacing: 0.03em;
+      }
+
+      .project-links {
+        margin-top: 0.9rem;
+        display: flex;
+        gap: 0.75rem;
+      }
+
+      .project-link {
+        font-family: "Space Mono", monospace;
+        font-size: 0.68rem;
+        color: var(--accent);
+        letter-spacing: 0.05em;
+      }
+
+      .project-link::before {
+        content: "> ";
+      }
+
+      /* ============================================
+       HOME - RECENT POSTS + FEATURED BOOKS
+    ============================================ */
+      .recent-posts-mini {
+        margin-bottom: 2.5rem;
+      }
+
+      .recent-posts-mini .blog-row {
+        border: 1px solid var(--border);
+        border-bottom: none;
+      }
+
+      .recent-posts-mini .blog-row:last-child {
+        border-bottom: 1px solid var(--border);
+      }
+
+      .featured-books-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-bottom: 3rem;
+      }
+
+      @media (min-width: 560px) {
+        .featured-books-row {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+
+      .mini-book-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 0.9rem 0.8rem;
+        transition: all var(--transition);
+        cursor: pointer;
+      }
+
+      .mini-book-card:hover {
+        border-color: var(--accent);
+        box-shadow: 0 0 12px rgba(0, 229, 204, 0.15);
+      }
+
+      .mini-book-title {
+        font-family: "Space Mono", monospace;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--fg);
+        margin-bottom: 0.25rem;
+        line-height: 1.35;
+      }
+
+      .mini-book-author {
+        font-family: "Lora", serif;
+        font-size: 0.75rem;
+        color: var(--muted);
+        font-style: italic;
+        margin-bottom: 0.35rem;
+      }
+
+      .mini-book-rating {
+        font-family: "Space Mono", monospace;
+        font-size: 0.7rem;
+        color: var(--accent);
+      }
+
+      /* ============================================
+       ABOUT / INTRO BIO
+    ============================================ */
+      .home-bio {
+        font-family: "Lora", serif;
+        font-size: 0.97rem;
+        color: var(--muted);
+        line-height: 1.75;
+        margin-bottom: 2rem;
+        padding: 1.25rem;
+        background: var(--surface);
+        border-left: 3px solid var(--accent2);
+      }
+
+      /* ============================================
+       FOOTER / SYSTEM INFO
+    ============================================ */
+      .sys-info {
+        font-family: "Space Mono", monospace;
+        font-size: 0.65rem;
+        color: var(--muted);
+        padding: 1.5rem 0;
+        letter-spacing: 0.03em;
+        border-top: 1px solid var(--border);
+        margin-top: 1.5rem;
+      }
+
+      .sys-info span {
+        color: var(--accent2);
+      }
+
+      /* ============================================
+       UTILITY
+    ============================================ */
+      .hidden {
+        display: none !important;
+      }
+      .mt-1 {
+        margin-top: 0.5rem;
+      }
+      .mb-2 {
+        margin-bottom: 1rem;
+      }
+      .pb-4 {
+        padding-bottom: 2rem;
+      }
+
+      /* ============================================
+       RESPONSIVE
+    ============================================ */
+      @media (max-width: 480px) {
+        .container {
+          padding: 0 1rem;
+        }
+
+        .hero {
+          padding: 2.5rem 0 2rem;
+        }
+
+        .blog-row {
+          grid-template-columns: auto 1fr;
+          gap: 0.5rem;
+        }
+
+        .blog-row-date {
+          display: none;
+        }
+
+        .books-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .featured-books-row {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .bottom-nav-btn {
+          font-size: 0.52rem;
+        }
+      }
+
+      @media (max-width: 320px) {
+        .bottom-nav-btn {
+          font-size: 0.44rem;
+          letter-spacing: 0;
+        }
+        .hero-name {
+          font-size: 1.6rem;
+        }
+      }
+
+      /* ============================================
        SCROLL FADE-IN
     ============================================ */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(6px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
+      .fade-in {
+        opacity: 0;
+        transform: translateY(6px);
+        transition:
+          opacity 0.3s ease,
+          transform 0.3s ease;
+      }
 
-    .fade-in.visible {
-      opacity: 1;
-      transform: none;
-    }
-  </style>
-</head>
-<body>
+      .fade-in.visible {
+        opacity: 1;
+        transform: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
 
-  <!-- Progress Bar -->
-  <div class="progress-bar" id="progressBar"></div>
+    <!-- Top Nav -->
+    <nav class="top-nav">
+      <div class="nav-logo">
+        <span class="prompt-host">diego</span><span class="prompt-at">@</span
+        ><span class="prompt-host">blog</span><span class="prompt-colon">:</span
+        ><span class="prompt-tilde">~</span><span class="prompt-dollar">$</span>
+      </div>
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">&#9680; LIGHT</button>
+    </nav>
 
-  <!-- Top Nav -->
-  <nav class="top-nav">
-    <div class="nav-logo">
-      <span class="prompt-host">diego</span><span class="prompt-at">@</span><span class="prompt-host">blog</span><span class="prompt-colon">:</span><span class="prompt-tilde">~</span><span class="prompt-dollar">$</span>
-    </div>
-    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">&#9680; LIGHT</button>
-  </nav>
+    <!-- Main -->
+    <main class="main">
+      <!-- ==================== VIEW: HOME ==================== -->
+      <div class="view active" id="view-home">
+        <div class="container">
+          <section class="hero">
+            <div class="hero-prompt"><span class="prompt-dollar">$</span> whoami</div>
+            <h1 class="hero-name">DIEGO ROMERO</h1>
+            <p class="hero-tagline">
+              <span class="typewriter-text"
+                >Software engineer. I write about tech, productivity, and books.</span
+              ><span class="cursor"></span>
+            </p>
+            <div class="hero-links">
+              <button class="btn btn-primary" onclick="switchView('blog')">READ BLOG</button>
+              <button class="btn" onclick="switchView('books')">BOOKSHELF</button>
+              <button class="btn" onclick="switchView('projects')">PROJECTS</button>
+            </div>
+          </section>
 
-  <!-- Main -->
-  <main class="main">
-
-    <!-- ==================== VIEW: HOME ==================== -->
-    <div class="view active" id="view-home">
-      <div class="container">
-        <section class="hero">
-          <div class="hero-prompt">
-            <span class="prompt-dollar">$</span> whoami
+          <div class="home-bio fade-in">
+            I'm a software engineer based in Mexico City. On this blog I share my notes on deep
+            work, productivity systems, programming concepts, and the books that shape how I think.
+            Everything here is written in public, mostly for myself &mdash; but hopefully useful to
+            you too.
           </div>
-          <h1 class="hero-name">DIEGO ROMERO</h1>
-          <p class="hero-tagline">
-            <span class="typewriter-text">Software engineer. I write about tech, productivity, and books.</span><span class="cursor"></span>
-          </p>
-          <div class="hero-links">
-            <button class="btn btn-primary" onclick="switchView('blog')">READ BLOG</button>
-            <button class="btn" onclick="switchView('books')">BOOKSHELF</button>
-            <button class="btn" onclick="switchView('projects')">PROJECTS</button>
-          </div>
-        </section>
 
-        <div class="home-bio fade-in">
-          I'm a software engineer based in Mexico City. On this blog I share my notes on deep work, productivity systems, programming concepts, and the books that shape how I think. Everything here is written in public, mostly for myself &mdash; but hopefully useful to you too.
-        </div>
+          <section class="recent-posts-mini fade-in">
+            <div class="section-header" style="padding-top: 0">
+              <div class="section-label">recent writing</div>
+              <div class="section-title">Latest Posts</div>
+            </div>
+            <div class="blog-list">
+              <div class="blog-row" onclick="switchView('article')">
+                <span class="blog-row-prompt">$</span>
+                <span class="blog-row-title">Rewriting My Blog With Claude Code</span>
+                <span class="blog-row-date">2026-02-18</span>
+              </div>
+              <div class="blog-row" onclick="switchView('article')">
+                <span class="blog-row-prompt">&gt;</span>
+                <span class="blog-row-title">Types of Rendering in Next.js</span>
+                <span class="blog-row-date">2026-01-30</span>
+              </div>
+              <div class="blog-row" onclick="switchView('article')">
+                <span class="blog-row-prompt">&gt;</span>
+                <span class="blog-row-title">On Deep Work and Focused Programming</span>
+                <span class="blog-row-date">2026-01-14</span>
+              </div>
+              <div class="blog-row" onclick="switchView('article')">
+                <span class="blog-row-prompt">&gt;</span>
+                <span class="blog-row-title">Pomodoro as a Productivity Tool</span>
+                <span class="blog-row-date">2025-12-22</span>
+              </div>
+              <div class="blog-row" onclick="switchView('article')">
+                <span class="blog-row-prompt">&gt;</span>
+                <span class="blog-row-title">The Psychology of Money &mdash; My Notes</span>
+                <span class="blog-row-date">2025-12-05</span>
+              </div>
+            </div>
+          </section>
 
-        <section class="recent-posts-mini fade-in">
-          <div class="section-header" style="padding-top:0">
-            <div class="section-label">recent writing</div>
-            <div class="section-title">Latest Posts</div>
-          </div>
-          <div class="blog-list">
-            <div class="blog-row" onclick="switchView('article')">
-              <span class="blog-row-prompt">$</span>
-              <span class="blog-row-title">Rewriting My Blog With Claude Code</span>
-              <span class="blog-row-date">2026-02-18</span>
+          <section class="fade-in pb-4">
+            <div class="section-header">
+              <div class="section-label">reading</div>
+              <div class="section-title">Books I Recommend</div>
             </div>
-            <div class="blog-row" onclick="switchView('article')">
-              <span class="blog-row-prompt">&gt;</span>
-              <span class="blog-row-title">Types of Rendering in Next.js</span>
-              <span class="blog-row-date">2026-01-30</span>
+            <div class="featured-books-row">
+              <div class="mini-book-card" onclick="switchView('book-detail')">
+                <div class="mini-book-title">Deep Work</div>
+                <div class="mini-book-author">Cal Newport</div>
+                <div class="mini-book-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+              </div>
+              <div class="mini-book-card" onclick="switchView('book-detail')">
+                <div class="mini-book-title">The Psychology of Money</div>
+                <div class="mini-book-author">Morgan Housel</div>
+                <div class="mini-book-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+              </div>
+              <div class="mini-book-card" onclick="switchView('book-detail')">
+                <div class="mini-book-title">The Courage to Be Disliked</div>
+                <div class="mini-book-author">Kishimi &amp; Koga</div>
+                <div class="mini-book-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+              </div>
+              <div class="mini-book-card" onclick="switchView('book-detail')">
+                <div class="mini-book-title">Shoe Dog</div>
+                <div class="mini-book-author">Phil Knight</div>
+                <div class="mini-book-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+              </div>
             </div>
-            <div class="blog-row" onclick="switchView('article')">
-              <span class="blog-row-prompt">&gt;</span>
-              <span class="blog-row-title">On Deep Work and Focused Programming</span>
-              <span class="blog-row-date">2026-01-14</span>
-            </div>
-            <div class="blog-row" onclick="switchView('article')">
-              <span class="blog-row-prompt">&gt;</span>
-              <span class="blog-row-title">Pomodoro as a Productivity Tool</span>
-              <span class="blog-row-date">2025-12-22</span>
-            </div>
-            <div class="blog-row" onclick="switchView('article')">
-              <span class="blog-row-prompt">&gt;</span>
-              <span class="blog-row-title">The Psychology of Money &mdash; My Notes</span>
-              <span class="blog-row-date">2025-12-05</span>
-            </div>
-          </div>
-        </section>
+          </section>
 
-        <section class="fade-in pb-4">
-          <div class="section-header">
-            <div class="section-label">reading</div>
-            <div class="section-title">Books I Recommend</div>
+          <div class="sys-info">
+            <span>diegoromero.blog</span> &mdash; built with Next.js &amp; caffeine &mdash; last
+            commit <span>2026-02-18</span>
           </div>
-          <div class="featured-books-row">
-            <div class="mini-book-card" onclick="switchView('book-detail')">
-              <div class="mini-book-title">Deep Work</div>
-              <div class="mini-book-author">Cal Newport</div>
-              <div class="mini-book-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            </div>
-            <div class="mini-book-card" onclick="switchView('book-detail')">
-              <div class="mini-book-title">The Psychology of Money</div>
-              <div class="mini-book-author">Morgan Housel</div>
-              <div class="mini-book-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            </div>
-            <div class="mini-book-card" onclick="switchView('book-detail')">
-              <div class="mini-book-title">The Courage to Be Disliked</div>
-              <div class="mini-book-author">Kishimi &amp; Koga</div>
-              <div class="mini-book-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            </div>
-            <div class="mini-book-card" onclick="switchView('book-detail')">
-              <div class="mini-book-title">Shoe Dog</div>
-              <div class="mini-book-author">Phil Knight</div>
-              <div class="mini-book-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            </div>
-          </div>
-        </section>
-
-        <div class="sys-info">
-          <span>diegoromero.blog</span> &mdash; built with Next.js &amp; caffeine &mdash; last commit <span>2026-02-18</span>
         </div>
       </div>
-    </div>
 
-    <!-- ==================== VIEW: BLOG ==================== -->
-    <div class="view" id="view-blog">
-      <div class="container">
-        <div class="blog-header">
-          <div class="section-label">all posts</div>
-          <h1 class="section-title" style="font-size:1.5rem; margin-bottom:1.25rem;">Blog</h1>
+      <!-- ==================== VIEW: BLOG ==================== -->
+      <div class="view" id="view-blog">
+        <div class="container">
+          <div class="blog-header">
+            <div class="section-label">all posts</div>
+            <h1 class="section-title" style="font-size: 1.5rem; margin-bottom: 1.25rem">Blog</h1>
 
-          <div class="blog-filter-bar">
-            <span class="filter-prefix">&gt; filter:</span>
-            <button class="tag active" data-filter="all" onclick="filterBlog('all', this)">all</button>
-            <button class="tag" data-filter="tech" onclick="filterBlog('tech', this)">tech</button>
-            <button class="tag" data-filter="productivity" onclick="filterBlog('productivity', this)">productivity</button>
-            <button class="tag" data-filter="books" onclick="filterBlog('books', this)">books</button>
+            <div class="blog-filter-bar">
+              <span class="filter-prefix">&gt; filter:</span>
+              <button class="tag active" data-filter="all" onclick="filterBlog('all', this)">
+                all
+              </button>
+              <button class="tag" data-filter="tech" onclick="filterBlog('tech', this)">
+                tech
+              </button>
+              <button
+                class="tag"
+                data-filter="productivity"
+                onclick="filterBlog('productivity', this)"
+              >
+                productivity
+              </button>
+              <button class="tag" data-filter="books" onclick="filterBlog('books', this)">
+                books
+              </button>
+            </div>
+
+            <div class="blog-list" id="blogList">
+              <div class="blog-row" data-tags="tech" onclick="switchView('article')">
+                <span class="blog-row-prompt">$</span>
+                <div>
+                  <div class="blog-row-title">Rewriting My Blog With Claude Code</div>
+                  <div class="blog-row-tags">
+                    <span class="blog-row-tag">tech</span>
+                    <span class="blog-row-tag">ai</span>
+                  </div>
+                </div>
+                <span class="blog-row-date">2026-02-18</span>
+              </div>
+              <div class="blog-row" data-tags="tech" onclick="switchView('article')">
+                <span class="blog-row-prompt">&gt;</span>
+                <div>
+                  <div class="blog-row-title">Types of Rendering in Next.js</div>
+                  <div class="blog-row-tags">
+                    <span class="blog-row-tag">tech</span>
+                    <span class="blog-row-tag">next.js</span>
+                  </div>
+                </div>
+                <span class="blog-row-date">2026-01-30</span>
+              </div>
+              <div class="blog-row" data-tags="productivity" onclick="switchView('article')">
+                <span class="blog-row-prompt">&gt;</span>
+                <div>
+                  <div class="blog-row-title">On Deep Work and Focused Programming</div>
+                  <div class="blog-row-tags">
+                    <span class="blog-row-tag">productivity</span>
+                    <span class="blog-row-tag">focus</span>
+                  </div>
+                </div>
+                <span class="blog-row-date">2026-01-14</span>
+              </div>
+              <div class="blog-row" data-tags="productivity" onclick="switchView('article')">
+                <span class="blog-row-prompt">&gt;</span>
+                <div>
+                  <div class="blog-row-title">Pomodoro as a Productivity Tool</div>
+                  <div class="blog-row-tags">
+                    <span class="blog-row-tag">productivity</span>
+                  </div>
+                </div>
+                <span class="blog-row-date">2025-12-22</span>
+              </div>
+              <div class="blog-row" data-tags="books" onclick="switchView('article')">
+                <span class="blog-row-prompt">&gt;</span>
+                <div>
+                  <div class="blog-row-title">The Psychology of Money &mdash; My Notes</div>
+                  <div class="blog-row-tags">
+                    <span class="blog-row-tag">books</span>
+                    <span class="blog-row-tag">finance</span>
+                  </div>
+                </div>
+                <span class="blog-row-date">2025-12-05</span>
+              </div>
+            </div>
           </div>
 
-          <div class="blog-list" id="blogList">
-            <div class="blog-row" data-tags="tech" onclick="switchView('article')">
-              <span class="blog-row-prompt">$</span>
-              <div>
-                <div class="blog-row-title">Rewriting My Blog With Claude Code</div>
-                <div class="blog-row-tags">
-                  <span class="blog-row-tag">tech</span>
-                  <span class="blog-row-tag">ai</span>
-                </div>
-              </div>
-              <span class="blog-row-date">2026-02-18</span>
+          <div class="section-header">
+            <div class="section-label">featured</div>
+            <div class="section-title">Editor's Pick</div>
+          </div>
+
+          <div class="terminal-card" onclick="switchView('article')">
+            <div class="terminal-titlebar">
+              <div class="terminal-dot dot-red"></div>
+              <div class="terminal-dot dot-yellow"></div>
+              <div class="terminal-dot dot-green"></div>
+              <span class="terminal-titlebar-label">rewriting-my-blog.md</span>
             </div>
-            <div class="blog-row" data-tags="tech" onclick="switchView('article')">
-              <span class="blog-row-prompt">&gt;</span>
-              <div>
-                <div class="blog-row-title">Types of Rendering in Next.js</div>
-                <div class="blog-row-tags">
-                  <span class="blog-row-tag">tech</span>
-                  <span class="blog-row-tag">next.js</span>
-                </div>
+            <div class="terminal-card-body">
+              <div class="card-meta">2026-02-18 &nbsp;&middot;&nbsp; 8 min read</div>
+              <div class="card-title">Rewriting My Blog With Claude Code</div>
+              <div class="card-excerpt">
+                What happens when you hand an AI agent the keys to your codebase? I rebuilt this
+                entire blog using Claude Code &mdash; and it changed how I think about software
+                authorship.
               </div>
-              <span class="blog-row-date">2026-01-30</span>
-            </div>
-            <div class="blog-row" data-tags="productivity" onclick="switchView('article')">
-              <span class="blog-row-prompt">&gt;</span>
-              <div>
-                <div class="blog-row-title">On Deep Work and Focused Programming</div>
-                <div class="blog-row-tags">
-                  <span class="blog-row-tag">productivity</span>
-                  <span class="blog-row-tag">focus</span>
-                </div>
+              <div class="card-tags" style="margin-bottom: 0.75rem">
+                <span class="tag">tech</span>
+                <span class="tag">ai</span>
               </div>
-              <span class="blog-row-date">2026-01-14</span>
+              <button class="card-read-more">read article</button>
             </div>
-            <div class="blog-row" data-tags="productivity" onclick="switchView('article')">
-              <span class="blog-row-prompt">&gt;</span>
-              <div>
-                <div class="blog-row-title">Pomodoro as a Productivity Tool</div>
-                <div class="blog-row-tags">
-                  <span class="blog-row-tag">productivity</span>
-                </div>
-              </div>
-              <span class="blog-row-date">2025-12-22</span>
-            </div>
-            <div class="blog-row" data-tags="books" onclick="switchView('article')">
-              <span class="blog-row-prompt">&gt;</span>
-              <div>
-                <div class="blog-row-title">The Psychology of Money &mdash; My Notes</div>
-                <div class="blog-row-tags">
-                  <span class="blog-row-tag">books</span>
-                  <span class="blog-row-tag">finance</span>
-                </div>
-              </div>
-              <span class="blog-row-date">2025-12-05</span>
-            </div>
+          </div>
+
+          <div class="sys-info">
+            <span>5</span> posts &mdash; grep -r "" ./blog | wc -l &nbsp;<span>~12,400 words</span>
           </div>
         </div>
+      </div>
 
-        <div class="section-header">
-          <div class="section-label">featured</div>
-          <div class="section-title">Editor's Pick</div>
-        </div>
-
-        <div class="terminal-card" onclick="switchView('article')">
-          <div class="terminal-titlebar">
-            <div class="terminal-dot dot-red"></div>
-            <div class="terminal-dot dot-yellow"></div>
-            <div class="terminal-dot dot-green"></div>
-            <span class="terminal-titlebar-label">rewriting-my-blog.md</span>
+      <!-- ==================== VIEW: ARTICLE ==================== -->
+      <div class="view" id="view-article">
+        <div class="container">
+          <div style="padding-top: 2rem">
+            <button class="back-btn" onclick="switchView('blog')">back to blog</button>
           </div>
-          <div class="terminal-card-body">
-            <div class="card-meta">2026-02-18 &nbsp;&middot;&nbsp; 8 min read</div>
-            <div class="card-title">Rewriting My Blog With Claude Code</div>
-            <div class="card-excerpt">What happens when you hand an AI agent the keys to your codebase? I rebuilt this entire blog using Claude Code &mdash; and it changed how I think about software authorship.</div>
-            <div class="card-tags" style="margin-bottom:0.75rem;">
+
+          <div class="article-header">
+            <div class="article-meta-line">
+              2026-02-18 &nbsp;&middot;&nbsp; 8 min read &nbsp;&middot;&nbsp; tech / ai
+            </div>
+            <h1 class="article-title">Rewriting My Blog<br />With Claude Code</h1>
+            <p class="article-subtitle">
+              What happens when you hand an AI agent the keys to your codebase.
+            </p>
+            <div class="article-tags">
               <span class="tag">tech</span>
               <span class="tag">ai</span>
+              <span class="tag">next.js</span>
             </div>
-            <button class="card-read-more">read article</button>
           </div>
-        </div>
 
-        <div class="sys-info">
-          <span>5</span> posts &mdash; grep -r "" ./blog | wc -l &nbsp;<span>~12,400 words</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ==================== VIEW: ARTICLE ==================== -->
-    <div class="view" id="view-article">
-      <div class="container">
-        <div style="padding-top: 2rem;">
-          <button class="back-btn" onclick="switchView('blog')">back to blog</button>
-        </div>
-
-        <div class="article-header">
-          <div class="article-meta-line">2026-02-18 &nbsp;&middot;&nbsp; 8 min read &nbsp;&middot;&nbsp; tech / ai</div>
-          <h1 class="article-title">Rewriting My Blog<br>With Claude Code</h1>
-          <p class="article-subtitle">What happens when you hand an AI agent the keys to your codebase.</p>
-          <div class="article-tags">
-            <span class="tag">tech</span>
-            <span class="tag">ai</span>
-            <span class="tag">next.js</span>
+          <div class="toc">
+            <div class="toc-title">&#128196; contents</div>
+            <a class="toc-item" onclick="scrollToSection('s1')"
+              >&#9500;&#9472;&#9472; The Old Stack</a
+            >
+            <a class="toc-item" onclick="scrollToSection('s2')"
+              >&#9500;&#9472;&#9472; Enter Claude Code</a
+            >
+            <a class="toc-item" onclick="scrollToSection('s3')"
+              >&#9500;&#9472;&#9472; What I Built</a
+            >
+            <a class="toc-item" onclick="scrollToSection('s4')"
+              >&#9492;&#9472;&#9472; What Changed In How I Work</a
+            >
           </div>
-        </div>
 
-        <div class="toc">
-          <div class="toc-title">&#128196; contents</div>
-          <a class="toc-item" onclick="scrollToSection('s1')">&#9500;&#9472;&#9472; The Old Stack</a>
-          <a class="toc-item" onclick="scrollToSection('s2')">&#9500;&#9472;&#9472; Enter Claude Code</a>
-          <a class="toc-item" onclick="scrollToSection('s3')">&#9500;&#9472;&#9472; What I Built</a>
-          <a class="toc-item" onclick="scrollToSection('s4')">&#9492;&#9472;&#9472; What Changed In How I Work</a>
-        </div>
+          <div class="article-body">
+            <h2 id="s1">The Old Stack</h2>
+            <p>
+              My blog has lived in a few places over the years. First a static HTML file, then a
+              WordPress install I immediately regretted, then a Gatsby site that took four hours to
+              configure. The last version was a Next.js 13 project that worked perfectly well
+              &mdash; except I never shipped anything because I was always tinkering with it instead
+              of writing.
+            </p>
+            <p>
+              The codebase was a graveyard of half-implemented features: a dark mode toggle that
+              toggled nothing, a tag system with one tag, a reading progress bar that measured the
+              wrong element. Every time I sat down to write a post, I ended up refactoring the
+              <code>PostCard</code> component instead. Classic programmer trap.
+            </p>
+            <p>
+              The real problem wasn't the stack &mdash; it was that I was using code complexity as a
+              form of procrastination. The blog became the thing I worked on instead of the thing I
+              published to.
+            </p>
 
-        <div class="article-body">
-          <h2 id="s1">The Old Stack</h2>
-          <p>My blog has lived in a few places over the years. First a static HTML file, then a WordPress install I immediately regretted, then a Gatsby site that took four hours to configure. The last version was a Next.js 13 project that worked perfectly well &mdash; except I never shipped anything because I was always tinkering with it instead of writing.</p>
-          <p>The codebase was a graveyard of half-implemented features: a dark mode toggle that toggled nothing, a tag system with one tag, a reading progress bar that measured the wrong element. Every time I sat down to write a post, I ended up refactoring the <code>PostCard</code> component instead. Classic programmer trap.</p>
-          <p>The real problem wasn't the stack &mdash; it was that I was using code complexity as a form of procrastination. The blog became the thing I worked on instead of the thing I published to.</p>
+            <h2 id="s2">Enter Claude Code</h2>
+            <p>
+              I'd been using Claude for code review and rubber-ducking for months. Then Anthropic
+              released Claude Code &mdash; an agent that lives in your terminal and can read, write,
+              and modify files directly. My first reaction was "this will hallucinate my CSS into
+              oblivion." My second reaction was to try it anyway.
+            </p>
 
-          <h2 id="s2">Enter Claude Code</h2>
-          <p>I'd been using Claude for code review and rubber-ducking for months. Then Anthropic released Claude Code &mdash; an agent that lives in your terminal and can read, write, and modify files directly. My first reaction was "this will hallucinate my CSS into oblivion." My second reaction was to try it anyway.</p>
+            <blockquote>
+              <p>
+                The best way to understand a new tool is to use it on something you care about. I
+                cared about getting this blog out of my local environment and onto the internet.
+              </p>
+              <cite>My internal monologue, February 2026</cite>
+            </blockquote>
 
-          <blockquote>
-            <p>The best way to understand a new tool is to use it on something you care about. I cared about getting this blog out of my local environment and onto the internet.</p>
-            <cite>My internal monologue, February 2026</cite>
-          </blockquote>
+            <p>
+              The workflow is simple: you open a terminal session, point Claude Code at your
+              project, and describe what you want. It reads your files, proposes changes, and
+              executes them after you approve. The key insight is that it maintains context across a
+              session &mdash; it remembers that you told it to use TypeScript strict mode three
+              prompts ago.
+            </p>
+            <p>
+              I started with a prompt like: "This is a Next.js blog. I want a clean design with dark
+              mode, a reading list, and a projects section. Use Tailwind. Don't touch the MDX
+              setup." Within about forty minutes of back-and-forth, I had something that looked
+              better than what I'd built in six months of weekend sessions.
+            </p>
 
-          <p>The workflow is simple: you open a terminal session, point Claude Code at your project, and describe what you want. It reads your files, proposes changes, and executes them after you approve. The key insight is that it maintains context across a session &mdash; it remembers that you told it to use TypeScript strict mode three prompts ago.</p>
-          <p>I started with a prompt like: "This is a Next.js blog. I want a clean design with dark mode, a reading list, and a projects section. Use Tailwind. Don't touch the MDX setup." Within about forty minutes of back-and-forth, I had something that looked better than what I'd built in six months of weekend sessions.</p>
+            <h2 id="s3">What I Built</h2>
+            <p>
+              The new blog is still Next.js &mdash; App Router this time. The content is MDX files
+              with a clean frontmatter schema. Here's the type definition I landed on after a few
+              iterations with the agent:
+            </p>
 
-          <h2 id="s3">What I Built</h2>
-          <p>The new blog is still Next.js &mdash; App Router this time. The content is MDX files with a clean frontmatter schema. Here's the type definition I landed on after a few iterations with the agent:</p>
-
-          <pre><div class="code-lang-tab">TypeScript</div><code><span class="code-kw">interface</span> <span class="code-type">BlogPost</span> {
+            <pre><div class="code-lang-tab">TypeScript</div><code><span class="code-kw">interface</span> <span class="code-type">BlogPost</span> {
   <span class="code-prop">slug</span>: <span class="code-type">string</span>;
   <span class="code-prop">title</span>: <span class="code-type">string</span>;
   <span class="code-prop">date</span>: <span class="code-type">string</span>;
@@ -1467,449 +1664,679 @@
     .filter(p =&gt; p.<span class="code-prop">published</span>);
 }</code></pre>
 
-          <p>The <code>bookReview</code> optional field was Claude's suggestion. I'd mentioned I wanted to post book reviews alongside regular articles, and it quietly extended the type to support that without me explicitly asking. Small thing, but it showed the agent was reasoning about the larger picture.</p>
+            <p>
+              The <code>bookReview</code> optional field was Claude's suggestion. I'd mentioned I
+              wanted to post book reviews alongside regular articles, and it quietly extended the
+              type to support that without me explicitly asking. Small thing, but it showed the
+              agent was reasoning about the larger picture.
+            </p>
 
-          <h2 id="s4">What Changed In How I Work</h2>
-          <p>The biggest shift wasn't technical &mdash; it was psychological. When I know I can describe a feature in plain English and have a working implementation in minutes, the activation energy for shipping drops dramatically. The blog went from something I maintained to something I wrote on.</p>
+            <h2 id="s4">What Changed In How I Work</h2>
+            <p>
+              The biggest shift wasn't technical &mdash; it was psychological. When I know I can
+              describe a feature in plain English and have a working implementation in minutes, the
+              activation energy for shipping drops dramatically. The blog went from something I
+              maintained to something I wrote on.
+            </p>
 
-          <blockquote>
-            <p>Software authorship is changing. The question is no longer "can I build this?" &mdash; it's "do I understand what I built well enough to own it?"</p>
-            <cite>A thought I had at 11pm on a Tuesday</cite>
-          </blockquote>
+            <blockquote>
+              <p>
+                Software authorship is changing. The question is no longer "can I build this?"
+                &mdash; it's "do I understand what I built well enough to own it?"
+              </p>
+              <cite>A thought I had at 11pm on a Tuesday</cite>
+            </blockquote>
 
-          <p>I still review every change. I still understand the codebase. But I've stopped treating the implementation as the interesting part. The interesting part is what I'm trying to say &mdash; and now the code is just the medium for saying it.</p>
-          <p>Claude Code didn't write this post. But it did get out of the way so I could.</p>
-        </div>
+            <p>
+              I still review every change. I still understand the codebase. But I've stopped
+              treating the implementation as the interesting part. The interesting part is what I'm
+              trying to say &mdash; and now the code is just the medium for saying it.
+            </p>
+            <p>Claude Code didn't write this post. But it did get out of the way so I could.</p>
+          </div>
 
-        <div class="sys-info">
-          <span>Rewriting My Blog With Claude Code</span> &mdash; published 2026-02-18 &mdash; <span>~650 words</span>
+          <div class="sys-info">
+            <span>Rewriting My Blog With Claude Code</span> &mdash; published 2026-02-18 &mdash;
+            <span>~650 words</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- ==================== VIEW: BOOKS ==================== -->
-    <div class="view" id="view-books">
-      <div class="container">
-        <div class="blog-header">
-          <div class="section-label">reading list</div>
-          <h1 class="section-title" style="font-size:1.5rem; margin-bottom:0.5rem;">Bookshelf</h1>
-          <p style="font-family:'Lora',serif; font-size:0.9rem; color:var(--muted); margin-bottom:1.5rem;">Books I've read and actually thought about.</p>
-        </div>
+      <!-- ==================== VIEW: BOOKS ==================== -->
+      <div class="view" id="view-books">
+        <div class="container">
+          <div class="blog-header">
+            <div class="section-label">reading list</div>
+            <h1 class="section-title" style="font-size: 1.5rem; margin-bottom: 0.5rem">
+              Bookshelf
+            </h1>
+            <p
+              style="
+                font-family: &quot;Lora&quot;, serif;
+                font-size: 0.9rem;
+                color: var(--muted);
+                margin-bottom: 1.5rem;
+              "
+            >
+              Books I've read and actually thought about.
+            </p>
+          </div>
 
-        <div class="books-grid">
-
-          <div class="book-card" onclick="switchView('book-detail')">
-            <div class="book-frontmatter">
-              <div class="fm-sep">---</div>
-              <div><span class="fm-key">title:</span> <span class="fm-val">The Courage to Be Disliked</span></div>
-              <div><span class="fm-key">author:</span> <span class="fm-val">Kishimi &amp; Koga</span></div>
-              <div><span class="fm-key">rating:</span> <span class="fm-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
-              <div><span class="fm-key">genre:</span> <span class="fm-val">philosophy / psychology</span></div>
-              <div class="fm-sep">---</div>
+          <div class="books-grid">
+            <div class="book-card" onclick="switchView('book-detail')">
+              <div class="book-frontmatter">
+                <div class="fm-sep">---</div>
+                <div>
+                  <span class="fm-key">title:</span>
+                  <span class="fm-val">The Courage to Be Disliked</span>
+                </div>
+                <div>
+                  <span class="fm-key">author:</span> <span class="fm-val">Kishimi &amp; Koga</span>
+                </div>
+                <div>
+                  <span class="fm-key">rating:</span>
+                  <span class="fm-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                </div>
+                <div>
+                  <span class="fm-key">genre:</span>
+                  <span class="fm-val">philosophy / psychology</span>
+                </div>
+                <div class="fm-sep">---</div>
+              </div>
+              <div class="book-card-body">
+                <p class="book-excerpt">
+                  A Socratic dialogue that dismantles everything you thought about trauma, purpose,
+                  and other people's opinions &mdash; using Adlerian psychology as the lens.
+                </p>
+                <button
+                  class="book-read-more"
+                  onclick="event.stopPropagation(); switchView('book-detail')"
+                >
+                  read full review
+                </button>
+              </div>
             </div>
-            <div class="book-card-body">
-              <p class="book-excerpt">A Socratic dialogue that dismantles everything you thought about trauma, purpose, and other people's opinions &mdash; using Adlerian psychology as the lens.</p>
-              <button class="book-read-more" onclick="event.stopPropagation(); switchView('book-detail')">read full review</button>
+
+            <div class="book-card" onclick="switchView('book-detail')">
+              <div class="book-frontmatter">
+                <div class="fm-sep">---</div>
+                <div><span class="fm-key">title:</span> <span class="fm-val">Deep Work</span></div>
+                <div>
+                  <span class="fm-key">author:</span> <span class="fm-val">Cal Newport</span>
+                </div>
+                <div>
+                  <span class="fm-key">rating:</span>
+                  <span class="fm-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                </div>
+                <div>
+                  <span class="fm-key">genre:</span>
+                  <span class="fm-val">productivity / focus</span>
+                </div>
+                <div class="fm-sep">---</div>
+              </div>
+              <div class="book-card-body">
+                <p class="book-excerpt">
+                  The book that convinced me distraction is not a productivity problem &mdash; it's
+                  a depth problem. Required reading for any knowledge worker.
+                </p>
+                <button
+                  class="book-read-more"
+                  onclick="event.stopPropagation(); switchView('book-detail')"
+                >
+                  read full review
+                </button>
+              </div>
+            </div>
+
+            <div class="book-card" onclick="switchView('book-detail')">
+              <div class="book-frontmatter">
+                <div class="fm-sep">---</div>
+                <div>
+                  <span class="fm-key">title:</span>
+                  <span class="fm-val">The Psychology of Money</span>
+                </div>
+                <div>
+                  <span class="fm-key">author:</span> <span class="fm-val">Morgan Housel</span>
+                </div>
+                <div>
+                  <span class="fm-key">rating:</span>
+                  <span class="fm-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                </div>
+                <div>
+                  <span class="fm-key">genre:</span> <span class="fm-val">finance / behavior</span>
+                </div>
+                <div class="fm-sep">---</div>
+              </div>
+              <div class="book-card-body">
+                <p class="book-excerpt">
+                  Less about money, more about how humans behave irrationally around it. The chapter
+                  on "reasonable vs. rational" alone is worth the read.
+                </p>
+                <button
+                  class="book-read-more"
+                  onclick="event.stopPropagation(); switchView('book-detail')"
+                >
+                  read full review
+                </button>
+              </div>
+            </div>
+
+            <div class="book-card" onclick="switchView('book-detail')">
+              <div class="book-frontmatter">
+                <div class="fm-sep">---</div>
+                <div><span class="fm-key">title:</span> <span class="fm-val">Shoe Dog</span></div>
+                <div>
+                  <span class="fm-key">author:</span> <span class="fm-val">Phil Knight</span>
+                </div>
+                <div>
+                  <span class="fm-key">rating:</span>
+                  <span class="fm-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                </div>
+                <div>
+                  <span class="fm-key">genre:</span> <span class="fm-val">memoir / business</span>
+                </div>
+                <div class="fm-sep">---</div>
+              </div>
+              <div class="book-card-body">
+                <p class="book-excerpt">
+                  Nike's origin story, told with rare candor. Knight doesn't make it look easy
+                  &mdash; he makes it look terrifying. That's what makes it believable.
+                </p>
+                <button
+                  class="book-read-more"
+                  onclick="event.stopPropagation(); switchView('book-detail')"
+                >
+                  read full review
+                </button>
+              </div>
             </div>
           </div>
 
-          <div class="book-card" onclick="switchView('book-detail')">
-            <div class="book-frontmatter">
-              <div class="fm-sep">---</div>
-              <div><span class="fm-key">title:</span> <span class="fm-val">Deep Work</span></div>
-              <div><span class="fm-key">author:</span> <span class="fm-val">Cal Newport</span></div>
-              <div><span class="fm-key">rating:</span> <span class="fm-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
-              <div><span class="fm-key">genre:</span> <span class="fm-val">productivity / focus</span></div>
-              <div class="fm-sep">---</div>
-            </div>
-            <div class="book-card-body">
-              <p class="book-excerpt">The book that convinced me distraction is not a productivity problem &mdash; it's a depth problem. Required reading for any knowledge worker.</p>
-              <button class="book-read-more" onclick="event.stopPropagation(); switchView('book-detail')">read full review</button>
-            </div>
+          <div class="sys-info">
+            cat bookshelf.json | jq <span>'length'</span> &nbsp;=&gt;&nbsp; <span>4 books</span>
           </div>
-
-          <div class="book-card" onclick="switchView('book-detail')">
-            <div class="book-frontmatter">
-              <div class="fm-sep">---</div>
-              <div><span class="fm-key">title:</span> <span class="fm-val">The Psychology of Money</span></div>
-              <div><span class="fm-key">author:</span> <span class="fm-val">Morgan Housel</span></div>
-              <div><span class="fm-key">rating:</span> <span class="fm-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
-              <div><span class="fm-key">genre:</span> <span class="fm-val">finance / behavior</span></div>
-              <div class="fm-sep">---</div>
-            </div>
-            <div class="book-card-body">
-              <p class="book-excerpt">Less about money, more about how humans behave irrationally around it. The chapter on "reasonable vs. rational" alone is worth the read.</p>
-              <button class="book-read-more" onclick="event.stopPropagation(); switchView('book-detail')">read full review</button>
-            </div>
-          </div>
-
-          <div class="book-card" onclick="switchView('book-detail')">
-            <div class="book-frontmatter">
-              <div class="fm-sep">---</div>
-              <div><span class="fm-key">title:</span> <span class="fm-val">Shoe Dog</span></div>
-              <div><span class="fm-key">author:</span> <span class="fm-val">Phil Knight</span></div>
-              <div><span class="fm-key">rating:</span> <span class="fm-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
-              <div><span class="fm-key">genre:</span> <span class="fm-val">memoir / business</span></div>
-              <div class="fm-sep">---</div>
-            </div>
-            <div class="book-card-body">
-              <p class="book-excerpt">Nike's origin story, told with rare candor. Knight doesn't make it look easy &mdash; he makes it look terrifying. That's what makes it believable.</p>
-              <button class="book-read-more" onclick="event.stopPropagation(); switchView('book-detail')">read full review</button>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="sys-info">
-          cat bookshelf.json | jq <span>'length'</span> &nbsp;=&gt;&nbsp; <span>4 books</span>
         </div>
       </div>
-    </div>
 
-    <!-- ==================== VIEW: BOOK DETAIL ==================== -->
-    <div class="view" id="view-book-detail">
-      <div class="container">
-        <div style="padding-top: 2rem;">
-          <button class="back-btn" onclick="switchView('books')">back to bookshelf</button>
-        </div>
+      <!-- ==================== VIEW: BOOK DETAIL ==================== -->
+      <div class="view" id="view-book-detail">
+        <div class="container">
+          <div style="padding-top: 2rem">
+            <button class="back-btn" onclick="switchView('books')">back to bookshelf</button>
+          </div>
 
-        <div class="book-detail-header">
-          <div class="book-detail-meta">book review &nbsp;&middot;&nbsp; philosophy / psychology</div>
-          <h1 class="book-detail-title">The Courage to Be Disliked</h1>
-          <p class="book-detail-author">Ichiro Kishimi &amp; Fumitake Koga</p>
-          <div class="book-detail-rating">&#9733;&#9733;&#9733;&#9733;&#9733; &nbsp;&mdash;&nbsp; <span style="font-family:'Lora',serif; font-style:italic; color:var(--muted); font-size:0.85rem;">essential reading</span></div>
-        </div>
+          <div class="book-detail-header">
+            <div class="book-detail-meta">
+              book review &nbsp;&middot;&nbsp; philosophy / psychology
+            </div>
+            <h1 class="book-detail-title">The Courage to Be Disliked</h1>
+            <p class="book-detail-author">Ichiro Kishimi &amp; Fumitake Koga</p>
+            <div class="book-detail-rating">
+              &#9733;&#9733;&#9733;&#9733;&#9733; &nbsp;&mdash;&nbsp;
+              <span
+                style="
+                  font-family: &quot;Lora&quot;, serif;
+                  font-style: italic;
+                  color: var(--muted);
+                  font-size: 0.85rem;
+                "
+                >essential reading</span
+              >
+            </div>
+          </div>
 
-        <div class="toc">
-          <div class="toc-title">&#128196; contents</div>
-          <a class="toc-item" onclick="scrollToBookSection('b1')">&#9500;&#9472;&#9472; The Socratic Structure</a>
-          <a class="toc-item" onclick="scrollToBookSection('b2')">&#9500;&#9472;&#9472; Adlerian Psychology Explained</a>
-          <a class="toc-item" onclick="scrollToBookSection('b3')">&#9500;&#9472;&#9472; The Insight About Separation of Tasks</a>
-          <a class="toc-item" onclick="scrollToBookSection('b4')">&#9492;&#9472;&#9472; Who This Book Is For</a>
-        </div>
+          <div class="toc">
+            <div class="toc-title">&#128196; contents</div>
+            <a class="toc-item" onclick="scrollToBookSection('b1')"
+              >&#9500;&#9472;&#9472; The Socratic Structure</a
+            >
+            <a class="toc-item" onclick="scrollToBookSection('b2')"
+              >&#9500;&#9472;&#9472; Adlerian Psychology Explained</a
+            >
+            <a class="toc-item" onclick="scrollToBookSection('b3')"
+              >&#9500;&#9472;&#9472; The Insight About Separation of Tasks</a
+            >
+            <a class="toc-item" onclick="scrollToBookSection('b4')"
+              >&#9492;&#9472;&#9472; Who This Book Is For</a
+            >
+          </div>
 
-        <div class="book-detail-body">
-          <h2 id="b1">The Socratic Structure</h2>
-          <p>The book arrives as a five-night dialogue between a young man and a philosopher. The young man is angry, certain the world is unjust, and convinced that his past has determined his present. The philosopher listens, nods, and dismantles every argument so gently that you almost miss how radical the conclusions are.</p>
-          <p>This structure is not a gimmick. Kishimi and Koga chose the Socratic dialogue form deliberately &mdash; because the ideas they're presenting resist passive consumption. You need to argue against them. The young man in the book does that for you, and his objections are usually exactly what you're thinking. It reads less like a self-help book and more like sitting in on a philosophy seminar where the professor is infuriatingly calm.</p>
-          <p>The pacing is slow by design. Each of the five nights introduces a single, disorienting idea, and the nights that follow circle back to test whether you've really accepted it. By night three, I had underlined more passages than I had in any book in years.</p>
+          <div class="book-detail-body">
+            <h2 id="b1">The Socratic Structure</h2>
+            <p>
+              The book arrives as a five-night dialogue between a young man and a philosopher. The
+              young man is angry, certain the world is unjust, and convinced that his past has
+              determined his present. The philosopher listens, nods, and dismantles every argument
+              so gently that you almost miss how radical the conclusions are.
+            </p>
+            <p>
+              This structure is not a gimmick. Kishimi and Koga chose the Socratic dialogue form
+              deliberately &mdash; because the ideas they're presenting resist passive consumption.
+              You need to argue against them. The young man in the book does that for you, and his
+              objections are usually exactly what you're thinking. It reads less like a self-help
+              book and more like sitting in on a philosophy seminar where the professor is
+              infuriatingly calm.
+            </p>
+            <p>
+              The pacing is slow by design. Each of the five nights introduces a single,
+              disorienting idea, and the nights that follow circle back to test whether you've
+              really accepted it. By night three, I had underlined more passages than I had in any
+              book in years.
+            </p>
 
-          <h2 id="b2">Adlerian Psychology Explained</h2>
-          <p>Alfred Adler was Freud's contemporary and eventual critic. Where Freud believed the past causes the present &mdash; trauma shapes behavior &mdash; Adler argued the opposite: we use the past to serve present goals. We don't have a trauma-caused fear of social situations; we cultivate anxiety because it excuses us from risking failure.</p>
-          <p>This is, to put it mildly, an uncomfortable idea. The book doesn't soften it. The philosopher tells the young man, with genuine warmth, that his unhappiness is a choice &mdash; not because he's broken, but because it's currently the safest option available to him.</p>
+            <h2 id="b2">Adlerian Psychology Explained</h2>
+            <p>
+              Alfred Adler was Freud's contemporary and eventual critic. Where Freud believed the
+              past causes the present &mdash; trauma shapes behavior &mdash; Adler argued the
+              opposite: we use the past to serve present goals. We don't have a trauma-caused fear
+              of social situations; we cultivate anxiety because it excuses us from risking failure.
+            </p>
+            <p>
+              This is, to put it mildly, an uncomfortable idea. The book doesn't soften it. The
+              philosopher tells the young man, with genuine warmth, that his unhappiness is a choice
+              &mdash; not because he's broken, but because it's currently the safest option
+              available to him.
+            </p>
 
-          <blockquote>
-            <p>No matter what has occurred in your life up to this point, it should have no bearing at all on how you live from now on. You are not determined by your past &mdash; you determine your life in this moment.</p>
-            <cite>The Philosopher, Night One</cite>
-          </blockquote>
+            <blockquote>
+              <p>
+                No matter what has occurred in your life up to this point, it should have no bearing
+                at all on how you live from now on. You are not determined by your past &mdash; you
+                determine your life in this moment.
+              </p>
+              <cite>The Philosopher, Night One</cite>
+            </blockquote>
 
-          <p>I initially resisted this framing because it felt like it was dismissing real suffering. But Adler &mdash; as channeled by Kishimi and Koga &mdash; is not saying pain isn't real. He's saying that the story we build around pain is a construction, and constructions can be rebuilt. That distinction took me a few chapters to absorb.</p>
+            <p>
+              I initially resisted this framing because it felt like it was dismissing real
+              suffering. But Adler &mdash; as channeled by Kishimi and Koga &mdash; is not saying
+              pain isn't real. He's saying that the story we build around pain is a construction,
+              and constructions can be rebuilt. That distinction took me a few chapters to absorb.
+            </p>
 
-          <h2 id="b3">The Insight About Separation of Tasks</h2>
-          <p>The most practically useful concept in the book is what the authors call the "separation of tasks." The core idea: every problem in interpersonal relationships comes from intruding on someone else's tasks, or letting them intrude on yours.</p>
-          <p>Your task is how you behave. Someone else's task is how they respond to your behavior. You are responsible for the first; you have no business controlling the second. If you're kind to a colleague and they respond coldly, their coldness is their task &mdash; not yours to fix, not yours to be hurt by.</p>
-          <p>Applied consistently, this is liberating in a way that's hard to describe without making it sound trivial. The book isn't saying "don't care about others." It's saying that care expressed through control is not really care. Letting people own their own tasks is a form of respect.</p>
+            <h2 id="b3">The Insight About Separation of Tasks</h2>
+            <p>
+              The most practically useful concept in the book is what the authors call the
+              "separation of tasks." The core idea: every problem in interpersonal relationships
+              comes from intruding on someone else's tasks, or letting them intrude on yours.
+            </p>
+            <p>
+              Your task is how you behave. Someone else's task is how they respond to your behavior.
+              You are responsible for the first; you have no business controlling the second. If
+              you're kind to a colleague and they respond coldly, their coldness is their task
+              &mdash; not yours to fix, not yours to be hurt by.
+            </p>
+            <p>
+              Applied consistently, this is liberating in a way that's hard to describe without
+              making it sound trivial. The book isn't saying "don't care about others." It's saying
+              that care expressed through control is not really care. Letting people own their own
+              tasks is a form of respect.
+            </p>
 
-          <blockquote>
-            <p>All you can do with regard to your own life is choose the best path that you believe in. On the other hand, what judgment other people pass on that choice &mdash; that is the task of other people, and is not something you have any control over.</p>
-            <cite>The Philosopher, Night Three</cite>
-          </blockquote>
+            <blockquote>
+              <p>
+                All you can do with regard to your own life is choose the best path that you believe
+                in. On the other hand, what judgment other people pass on that choice &mdash; that
+                is the task of other people, and is not something you have any control over.
+              </p>
+              <cite>The Philosopher, Night Three</cite>
+            </blockquote>
 
-          <h2 id="b4">Who This Book Is For</h2>
-          <p>Honestly? Everyone. But especially anyone who has felt stuck in a story about themselves &mdash; the one where your childhood, your circumstances, your personality type explain why things aren't going the way you want. This book doesn't tell you those stories are wrong. It asks whether they're useful.</p>
-          <p>It's also an unusually good book for engineers and technical people, who tend to be precise about external systems but surprisingly imprecise about their own psychology. The clarity of the Adlerian framework &mdash; all behavior is purposive, all unhappiness is relational, freedom is achieved through contribution &mdash; maps well onto a systems-thinking mindset.</p>
-          <p>Read it slowly. Argue with it. By the time the young man concedes his final point on night five, you'll probably have conceded a few things yourself.</p>
-        </div>
+            <h2 id="b4">Who This Book Is For</h2>
+            <p>
+              Honestly? Everyone. But especially anyone who has felt stuck in a story about
+              themselves &mdash; the one where your childhood, your circumstances, your personality
+              type explain why things aren't going the way you want. This book doesn't tell you
+              those stories are wrong. It asks whether they're useful.
+            </p>
+            <p>
+              It's also an unusually good book for engineers and technical people, who tend to be
+              precise about external systems but surprisingly imprecise about their own psychology.
+              The clarity of the Adlerian framework &mdash; all behavior is purposive, all
+              unhappiness is relational, freedom is achieved through contribution &mdash; maps well
+              onto a systems-thinking mindset.
+            </p>
+            <p>
+              Read it slowly. Argue with it. By the time the young man concedes his final point on
+              night five, you'll probably have conceded a few things yourself.
+            </p>
+          </div>
 
-        <div class="sys-info">
-          <span>The Courage to Be Disliked</span> &mdash; reviewed 2025-11-10 &mdash; <span>~500 words</span>
+          <div class="sys-info">
+            <span>The Courage to Be Disliked</span> &mdash; reviewed 2025-11-10 &mdash;
+            <span>~500 words</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- ==================== VIEW: PROJECTS ==================== -->
-    <div class="view" id="view-projects">
-      <div class="container">
-        <div class="blog-header">
-          <div class="section-label">side projects</div>
-          <h1 class="section-title" style="font-size:1.5rem; margin-bottom:0.5rem;">Projects</h1>
-          <p style="font-family:'Lora',serif; font-size:0.9rem; color:var(--muted); margin-bottom:2rem;">Things I build when I should probably be sleeping.</p>
-        </div>
+      <!-- ==================== VIEW: PROJECTS ==================== -->
+      <div class="view" id="view-projects">
+        <div class="container">
+          <div class="blog-header">
+            <div class="section-label">side projects</div>
+            <h1 class="section-title" style="font-size: 1.5rem; margin-bottom: 0.5rem">Projects</h1>
+            <p
+              style="
+                font-family: &quot;Lora&quot;, serif;
+                font-size: 0.9rem;
+                color: var(--muted);
+                margin-bottom: 2rem;
+              "
+            >
+              Things I build when I should probably be sleeping.
+            </p>
+          </div>
 
-        <div class="project-card fade-in">
-          <div class="project-cmd-block">
-            <div><span class="cmd-line-dollar">$ </span><span class="cmd-line-cmd">deepflow --describe</span></div>
-            <div class="cmd-line-out">name: deepflow</div>
-            <div class="cmd-line-out">desc: focus timer web app for deep work sessions</div>
-            <div class="cmd-line-out">status: active</div>
-            <div class="cmd-line-out">url: deepflow.app</div>
-          </div>
-          <div class="project-body">
-            <p class="project-desc">A Pomodoro-inspired focus timer built for programmers. Tracks work sessions, integrates with your calendar to block time, and generates weekly deep work reports. No social features. No streaks. Just you and your work.</p>
-            <div class="project-tech-stack">
-              <span class="tech-badge">React</span>
-              <span class="tech-badge">TypeScript</span>
-              <span class="tech-badge">Next.js</span>
-              <span class="tech-badge">Firebase</span>
+          <div class="project-card fade-in">
+            <div class="project-cmd-block">
+              <div>
+                <span class="cmd-line-dollar">$ </span
+                ><span class="cmd-line-cmd">deepflow --describe</span>
+              </div>
+              <div class="cmd-line-out">name: deepflow</div>
+              <div class="cmd-line-out">desc: focus timer web app for deep work sessions</div>
+              <div class="cmd-line-out">status: active</div>
+              <div class="cmd-line-out">url: deepflow.app</div>
             </div>
-            <div class="project-links">
-              <a class="project-link" href="#">live site</a>
-              <a class="project-link" href="#">github</a>
+            <div class="project-body">
+              <p class="project-desc">
+                A Pomodoro-inspired focus timer built for programmers. Tracks work sessions,
+                integrates with your calendar to block time, and generates weekly deep work reports.
+                No social features. No streaks. Just you and your work.
+              </p>
+              <div class="project-tech-stack">
+                <span class="tech-badge">React</span>
+                <span class="tech-badge">TypeScript</span>
+                <span class="tech-badge">Next.js</span>
+                <span class="tech-badge">Firebase</span>
+              </div>
+              <div class="project-links">
+                <a class="project-link" href="#">live site</a>
+                <a class="project-link" href="#">github</a>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="project-card fade-in">
-          <div class="project-cmd-block">
-            <div><span class="cmd-line-dollar">$ </span><span class="cmd-line-cmd">listu --describe</span></div>
-            <div class="cmd-line-out">name: listu</div>
-            <div class="cmd-line-out">desc: ios habit tracker with a minimalist ui</div>
-            <div class="cmd-line-out">status: v1.2 on app store</div>
-            <div class="cmd-line-out">platform: ios</div>
-          </div>
-          <div class="project-body">
-            <p class="project-desc">An iOS habit tracker designed around the principle that tracking fewer habits leads to better results. Maximum five habits per day. No gamification. Clean, fast, and opinionated about what a habit tracker should be.</p>
-            <div class="project-tech-stack">
-              <span class="tech-badge">Swift</span>
-              <span class="tech-badge">SwiftUI</span>
-              <span class="tech-badge">CoreData</span>
+          <div class="project-card fade-in">
+            <div class="project-cmd-block">
+              <div>
+                <span class="cmd-line-dollar">$ </span
+                ><span class="cmd-line-cmd">listu --describe</span>
+              </div>
+              <div class="cmd-line-out">name: listu</div>
+              <div class="cmd-line-out">desc: ios habit tracker with a minimalist ui</div>
+              <div class="cmd-line-out">status: v1.2 on app store</div>
+              <div class="cmd-line-out">platform: ios</div>
             </div>
-            <div class="project-links">
-              <a class="project-link" href="#">app store</a>
-              <a class="project-link" href="#">github</a>
+            <div class="project-body">
+              <p class="project-desc">
+                An iOS habit tracker designed around the principle that tracking fewer habits leads
+                to better results. Maximum five habits per day. No gamification. Clean, fast, and
+                opinionated about what a habit tracker should be.
+              </p>
+              <div class="project-tech-stack">
+                <span class="tech-badge">Swift</span>
+                <span class="tech-badge">SwiftUI</span>
+                <span class="tech-badge">CoreData</span>
+              </div>
+              <div class="project-links">
+                <a class="project-link" href="#">app store</a>
+                <a class="project-link" href="#">github</a>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="project-card fade-in">
-          <div class="project-cmd-block">
-            <div><span class="cmd-line-dollar">$ </span><span class="cmd-line-cmd">kodr --describe</span></div>
-            <div class="cmd-line-out">name: kodr</div>
-            <div class="cmd-line-out">desc: cli tool for scaffolding personal projects</div>
-            <div class="cmd-line-out">status: beta / public</div>
-            <div class="cmd-line-out">install: npm install -g kodr</div>
-          </div>
-          <div class="project-body">
-            <p class="project-desc">A CLI tool that scaffolds personal projects with opinionated defaults &mdash; TypeScript, ESLint, Prettier, and a commit message convention. Saves me the first 45 minutes of every new project. Probably not useful to anyone else, but available anyway.</p>
-            <div class="project-tech-stack">
-              <span class="tech-badge">Node.js</span>
-              <span class="tech-badge">TypeScript</span>
-              <span class="tech-badge">Commander.js</span>
+          <div class="project-card fade-in">
+            <div class="project-cmd-block">
+              <div>
+                <span class="cmd-line-dollar">$ </span
+                ><span class="cmd-line-cmd">kodr --describe</span>
+              </div>
+              <div class="cmd-line-out">name: kodr</div>
+              <div class="cmd-line-out">desc: cli tool for scaffolding personal projects</div>
+              <div class="cmd-line-out">status: beta / public</div>
+              <div class="cmd-line-out">install: npm install -g kodr</div>
             </div>
-            <div class="project-links">
-              <a class="project-link" href="#">npm</a>
-              <a class="project-link" href="#">github</a>
+            <div class="project-body">
+              <p class="project-desc">
+                A CLI tool that scaffolds personal projects with opinionated defaults &mdash;
+                TypeScript, ESLint, Prettier, and a commit message convention. Saves me the first 45
+                minutes of every new project. Probably not useful to anyone else, but available
+                anyway.
+              </p>
+              <div class="project-tech-stack">
+                <span class="tech-badge">Node.js</span>
+                <span class="tech-badge">TypeScript</span>
+                <span class="tech-badge">Commander.js</span>
+              </div>
+              <div class="project-links">
+                <a class="project-link" href="#">npm</a>
+                <a class="project-link" href="#">github</a>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="sys-info">
-          ls ./projects | wc -l &nbsp;=&gt;&nbsp; <span>3 active projects</span>
+          <div class="sys-info">
+            ls ./projects | wc -l &nbsp;=&gt;&nbsp; <span>3 active projects</span>
+          </div>
         </div>
       </div>
-    </div>
+    </main>
 
-  </main>
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+      <button class="bottom-nav-btn active" id="btn-home" onclick="switchView('home')">HOME</button>
+      <button class="bottom-nav-btn" id="btn-blog" onclick="switchView('blog')">BLOG</button>
+      <button class="bottom-nav-btn" id="btn-article" onclick="switchView('article')">
+        ARTICLE
+      </button>
+      <button class="bottom-nav-btn" id="btn-books" onclick="switchView('books')">BOOKS</button>
+      <button class="bottom-nav-btn" id="btn-book-detail" onclick="switchView('book-detail')">
+        BOOK
+      </button>
+      <button class="bottom-nav-btn" id="btn-projects" onclick="switchView('projects')">
+        PROJECTS
+      </button>
+    </nav>
 
-  <!-- Bottom Nav -->
-  <nav class="bottom-nav">
-    <button class="bottom-nav-btn active" id="btn-home" onclick="switchView('home')">HOME</button>
-    <button class="bottom-nav-btn" id="btn-blog" onclick="switchView('blog')">BLOG</button>
-    <button class="bottom-nav-btn" id="btn-article" onclick="switchView('article')">ARTICLE</button>
-    <button class="bottom-nav-btn" id="btn-books" onclick="switchView('books')">BOOKS</button>
-    <button class="bottom-nav-btn" id="btn-book-detail" onclick="switchView('book-detail')">BOOK</button>
-    <button class="bottom-nav-btn" id="btn-projects" onclick="switchView('projects')">PROJECTS</button>
-  </nav>
+    <script>
+      // ============================================
+      // VIEW SWITCHING
+      // ============================================
+      const views = ["home", "blog", "article", "books", "book-detail", "projects"]
 
-  <script>
-    // ============================================
-    // VIEW SWITCHING
-    // ============================================
-    const views = ['home', 'blog', 'article', 'books', 'book-detail', 'projects'];
+      function switchView(name) {
+        views.forEach((v) => {
+          const el = document.getElementById("view-" + v)
+          const btn = document.getElementById("btn-" + v)
+          if (el) {
+            el.classList.remove("active")
+            el.style.opacity = "0"
+          }
+          if (btn) btn.classList.remove("active")
+        })
 
-    function switchView(name) {
-      views.forEach(v => {
-        const el = document.getElementById('view-' + v);
-        const btn = document.getElementById('btn-' + v);
-        if (el) {
-          el.classList.remove('active');
-          el.style.opacity = '0';
-        }
-        if (btn) btn.classList.remove('active');
-      });
+        const target = document.getElementById("view-" + name)
+        const targetBtn = document.getElementById("btn-" + name)
 
-      const target = document.getElementById('view-' + name);
-      const targetBtn = document.getElementById('btn-' + name);
-
-      if (target) {
-        target.classList.add('active');
-        requestAnimationFrame(() => {
+        if (target) {
+          target.classList.add("active")
           requestAnimationFrame(() => {
-            target.style.opacity = '1';
-          });
-        });
-        target.scrollIntoView ? window.scrollTo(0, 0) : null;
-      }
+            requestAnimationFrame(() => {
+              target.style.opacity = "1"
+            })
+          })
+          target.scrollIntoView ? window.scrollTo(0, 0) : null
+        }
 
-      if (targetBtn) targetBtn.classList.add('active');
+        if (targetBtn) targetBtn.classList.add("active")
 
-      // Show/hide progress bar for article and book-detail
-      const progressBar = document.getElementById('progressBar');
-      if (name === 'article' || name === 'book-detail') {
-        progressBar.style.display = 'block';
-        updateProgress();
-      } else {
-        progressBar.style.display = 'none';
-        progressBar.style.width = '0%';
-      }
-    }
-
-    // ============================================
-    // DARK / LIGHT MODE TOGGLE
-    // ============================================
-    function toggleTheme() {
-      const html = document.documentElement;
-      const btn = document.getElementById('themeToggle');
-      const current = html.getAttribute('data-theme');
-      if (current === 'dark') {
-        html.setAttribute('data-theme', 'light');
-        btn.innerHTML = '&#9681; DARK';
-      } else {
-        html.setAttribute('data-theme', 'dark');
-        btn.innerHTML = '&#9680; LIGHT';
-      }
-    }
-
-    // ============================================
-    // READING PROGRESS BAR
-    // ============================================
-    function updateProgress() {
-      const progressBar = document.getElementById('progressBar');
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      progressBar.style.width = Math.min(progress, 100) + '%';
-    }
-
-    window.addEventListener('scroll', updateProgress, { passive: true });
-
-    // ============================================
-    // BLOG TAG FILTER
-    // ============================================
-    function filterBlog(filter, btnEl) {
-      // Update active button
-      document.querySelectorAll('.blog-filter-bar .tag').forEach(b => b.classList.remove('active'));
-      btnEl.classList.add('active');
-
-      // Filter rows
-      const rows = document.querySelectorAll('#blogList .blog-row');
-      rows.forEach(row => {
-        if (filter === 'all') {
-          row.style.display = '';
+        // Show/hide progress bar for article and book-detail
+        const progressBar = document.getElementById("progressBar")
+        if (name === "article" || name === "book-detail") {
+          progressBar.style.display = "block"
+          updateProgress()
         } else {
-          const tags = row.getAttribute('data-tags') || '';
-          row.style.display = tags.includes(filter) ? '' : 'none';
-        }
-      });
-    }
-
-    // ============================================
-    // TOC SCROLL SPY
-    // ============================================
-    function scrollToSection(id) {
-      const el = document.getElementById(id);
-      if (el) {
-        const offset = 72; // nav height + small buffer
-        const top = el.getBoundingClientRect().top + window.scrollY - offset;
-        window.scrollTo({ top, behavior: 'smooth' });
-      }
-    }
-
-    function scrollToBookSection(id) {
-      scrollToSection(id);
-    }
-
-    function initTocSpy() {
-      const sections = document.querySelectorAll('#view-article .article-body h2[id], #view-book-detail .book-detail-body h2[id]');
-      const tocLinks = document.querySelectorAll('.toc-item');
-
-      if (!sections.length || !tocLinks.length) return;
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            tocLinks.forEach(link => link.classList.remove('toc-active'));
-            const id = entry.target.getAttribute('id');
-            const activeLink = document.querySelector('.toc-item[onclick*="' + id + '"]');
-            if (activeLink) activeLink.classList.add('toc-active');
-          }
-        });
-      }, { rootMargin: '-20% 0px -70% 0px' });
-
-      sections.forEach(s => observer.observe(s));
-    }
-
-    // ============================================
-    // FADE-IN ON SCROLL
-    // ============================================
-    function initFadeIn() {
-      const fadeEls = document.querySelectorAll('.fade-in');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1 });
-
-      fadeEls.forEach(el => observer.observe(el));
-    }
-
-    // ============================================
-    // HERO TYPING ANIMATION (JS ENHANCEMENT)
-    // ============================================
-    function initTypingAnimation() {
-      const el = document.querySelector('.typewriter-text');
-      if (!el) return;
-
-      const text = el.textContent;
-      el.textContent = '';
-      el.style.animation = 'none';
-      el.style.maxHeight = 'none';
-      el.style.opacity = '1';
-
-      let i = 0;
-      const speed = 28;
-
-      function type() {
-        if (i < text.length) {
-          el.textContent += text.charAt(i);
-          i++;
-          setTimeout(type, speed);
+          progressBar.style.display = "none"
+          progressBar.style.width = "0%"
         }
       }
 
-      // Slight delay for page load feel
-      setTimeout(type, 500);
-    }
+      // ============================================
+      // DARK / LIGHT MODE TOGGLE
+      // ============================================
+      function toggleTheme() {
+        const html = document.documentElement
+        const btn = document.getElementById("themeToggle")
+        const current = html.getAttribute("data-theme")
+        if (current === "dark") {
+          html.setAttribute("data-theme", "light")
+          btn.innerHTML = "&#9681; DARK"
+        } else {
+          html.setAttribute("data-theme", "dark")
+          btn.innerHTML = "&#9680; LIGHT"
+        }
+      }
 
-    // ============================================
-    // INIT
-    // ============================================
-    document.addEventListener('DOMContentLoaded', () => {
-      // Set initial view
-      switchView('home');
+      // ============================================
+      // READING PROGRESS BAR
+      // ============================================
+      function updateProgress() {
+        const progressBar = document.getElementById("progressBar")
+        const scrollTop = window.scrollY || document.documentElement.scrollTop
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight
+        const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0
+        progressBar.style.width = Math.min(progress, 100) + "%"
+      }
 
-      // Start animations
-      initFadeIn();
-      initTocSpy();
-      initTypingAnimation();
+      window.addEventListener("scroll", updateProgress, { passive: true })
 
-      // Hide progress bar on initial load
-      document.getElementById('progressBar').style.display = 'none';
-    });
-  </script>
+      // ============================================
+      // BLOG TAG FILTER
+      // ============================================
+      function filterBlog(filter, btnEl) {
+        // Update active button
+        document
+          .querySelectorAll(".blog-filter-bar .tag")
+          .forEach((b) => b.classList.remove("active"))
+        btnEl.classList.add("active")
 
-</body>
+        // Filter rows
+        const rows = document.querySelectorAll("#blogList .blog-row")
+        rows.forEach((row) => {
+          if (filter === "all") {
+            row.style.display = ""
+          } else {
+            const tags = row.getAttribute("data-tags") || ""
+            row.style.display = tags.includes(filter) ? "" : "none"
+          }
+        })
+      }
+
+      // ============================================
+      // TOC SCROLL SPY
+      // ============================================
+      function scrollToSection(id) {
+        const el = document.getElementById(id)
+        if (el) {
+          const offset = 72 // nav height + small buffer
+          const top = el.getBoundingClientRect().top + window.scrollY - offset
+          window.scrollTo({ top, behavior: "smooth" })
+        }
+      }
+
+      function scrollToBookSection(id) {
+        scrollToSection(id)
+      }
+
+      function initTocSpy() {
+        const sections = document.querySelectorAll(
+          "#view-article .article-body h2[id], #view-book-detail .book-detail-body h2[id]"
+        )
+        const tocLinks = document.querySelectorAll(".toc-item")
+
+        if (!sections.length || !tocLinks.length) return
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                tocLinks.forEach((link) => link.classList.remove("toc-active"))
+                const id = entry.target.getAttribute("id")
+                const activeLink = document.querySelector('.toc-item[onclick*="' + id + '"]')
+                if (activeLink) activeLink.classList.add("toc-active")
+              }
+            })
+          },
+          { rootMargin: "-20% 0px -70% 0px" }
+        )
+
+        sections.forEach((s) => observer.observe(s))
+      }
+
+      // ============================================
+      // FADE-IN ON SCROLL
+      // ============================================
+      function initFadeIn() {
+        const fadeEls = document.querySelectorAll(".fade-in")
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("visible")
+                observer.unobserve(entry.target)
+              }
+            })
+          },
+          { threshold: 0.1 }
+        )
+
+        fadeEls.forEach((el) => observer.observe(el))
+      }
+
+      // ============================================
+      // HERO TYPING ANIMATION (JS ENHANCEMENT)
+      // ============================================
+      function initTypingAnimation() {
+        const el = document.querySelector(".typewriter-text")
+        if (!el) return
+
+        const text = el.textContent
+        el.textContent = ""
+        el.style.animation = "none"
+        el.style.maxHeight = "none"
+        el.style.opacity = "1"
+
+        let i = 0
+        const speed = 28
+
+        function type() {
+          if (i < text.length) {
+            el.textContent += text.charAt(i)
+            i++
+            setTimeout(type, speed)
+          }
+        }
+
+        // Slight delay for page load feel
+        setTimeout(type, 500)
+      }
+
+      // ============================================
+      // INIT
+      // ============================================
+      document.addEventListener("DOMContentLoaded", () => {
+        // Set initial view
+        switchView("home")
+
+        // Start animations
+        initFadeIn()
+        initTocSpy()
+        initTypingAnimation()
+
+        // Hide progress bar on initial load
+        document.getElementById("progressBar").style.display = "none"
+      })
+    </script>
+  </body>
 </html>

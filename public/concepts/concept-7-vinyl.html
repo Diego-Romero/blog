@@ -1,1243 +1,1535 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vinyl &amp; Ink — diegoromero.blog</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-/* ============================================================
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vinyl &amp; Ink — diegoromero.blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ============================================================
    TOKENS & RESET
    ============================================================ */
-:root {
-  --bg: #F5F0E8;
-  --fg: #0D0D0D;
-  --accent: #FF1493;
-  --accent2: #FFD700;
-  --surface: #EDE8DC;
-  --muted: #6B6056;
-  --border: #0D0D0D;
-  --radius: 2px;
-  --nav-h: 52px;
-  --bottom-h: 56px;
-  --font-display: 'Archivo Black', sans-serif;
-  --font-body: 'Literata', Georgia, serif;
-  --font-mono: 'IBM Plex Mono', monospace;
-}
-[data-theme="dark"] {
-  --bg: #0D0B0A;
-  --fg: #F5F0E8;
-  --accent: #FF1493;
-  --accent2: #FFD700;
-  --surface: #1A1714;
-  --muted: #9B9087;
-  --border: #F5F0E8;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--font-body);
-  font-size: 17px;
-  line-height: 1.7;
-  min-height: 100vh;
-  padding-top: var(--nav-h);
-  padding-bottom: var(--bottom-h);
-  transition: background 0.25s, color 0.25s;
-  overflow-x: hidden;
-}
+      :root {
+        --bg: #f5f0e8;
+        --fg: #0d0d0d;
+        --accent: #ff1493;
+        --accent2: #ffd700;
+        --surface: #ede8dc;
+        --muted: #6b6056;
+        --border: #0d0d0d;
+        --radius: 2px;
+        --nav-h: 52px;
+        --bottom-h: 56px;
+        --font-display: "Archivo Black", sans-serif;
+        --font-body: "Literata", Georgia, serif;
+        --font-mono: "IBM Plex Mono", monospace;
+      }
+      [data-theme="dark"] {
+        --bg: #0d0b0a;
+        --fg: #f5f0e8;
+        --accent: #ff1493;
+        --accent2: #ffd700;
+        --surface: #1a1714;
+        --muted: #9b9087;
+        --border: #f5f0e8;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--bg);
+        color: var(--fg);
+        font-family: var(--font-body);
+        font-size: 17px;
+        line-height: 1.7;
+        min-height: 100vh;
+        padding-top: var(--nav-h);
+        padding-bottom: var(--bottom-h);
+        transition:
+          background 0.25s,
+          color 0.25s;
+        overflow-x: hidden;
+      }
 
-/* Noise / grain overlay */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 300px 300px;
-}
+      /* Noise / grain overlay */
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 9999;
+        opacity: 0.035;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+        background-repeat: repeat;
+        background-size: 300px 300px;
+      }
 
-/* ============================================================
+      /* ============================================================
    TOP NAV
    ============================================================ */
-.top-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: var(--nav-h);
-  background: var(--bg);
-  border-bottom: 2px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  z-index: 1000;
-}
-.nav-logo {
-  font-family: var(--font-display);
-  font-size: 22px;
-  letter-spacing: -1px;
-  cursor: pointer;
-  color: var(--fg);
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.nav-logo span.dot {
-  color: var(--accent);
-}
-.nav-tagline {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  display: none;
-}
-@media (min-width: 480px) { .nav-tagline { display: block; } }
-.theme-toggle {
-  background: none;
-  border: 2px solid var(--border);
-  color: var(--fg);
-  font-size: 16px;
-  width: 36px;
-  height: 36px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius);
-  transition: background 0.15s;
-}
-.theme-toggle:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+      .top-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: var(--nav-h);
+        background: var(--bg);
+        border-bottom: 2px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        z-index: 1000;
+      }
+      .nav-logo {
+        font-family: var(--font-display);
+        font-size: 22px;
+        letter-spacing: -1px;
+        cursor: pointer;
+        color: var(--fg);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .nav-logo span.dot {
+        color: var(--accent);
+      }
+      .nav-tagline {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        display: none;
+      }
+      @media (min-width: 480px) {
+        .nav-tagline {
+          display: block;
+        }
+      }
+      .theme-toggle {
+        background: none;
+        border: 2px solid var(--border);
+        color: var(--fg);
+        font-size: 16px;
+        width: 36px;
+        height: 36px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius);
+        transition: background 0.15s;
+      }
+      .theme-toggle:hover {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+      }
 
-/* ============================================================
+      /* ============================================================
    BOTTOM NAV
    ============================================================ */
-.bottom-nav {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  height: var(--bottom-h);
-  background: var(--fg);
-  display: flex;
-  z-index: 1000;
-  border-top: 2px solid var(--border);
-}
-.bottom-nav button {
-  flex: 1;
-  background: none;
-  border: none;
-  border-right: 1px solid rgba(255,255,255,0.1);
-  color: var(--bg);
-  font-family: var(--font-mono);
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-  padding: 4px 2px;
-}
-[data-theme="dark"] .bottom-nav button { color: var(--fg); }
-.bottom-nav button:last-child { border-right: none; }
-.bottom-nav button:hover,
-.bottom-nav button.active {
-  background: var(--accent);
-  color: #fff;
-}
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: var(--bottom-h);
+        background: var(--fg);
+        display: flex;
+        z-index: 1000;
+        border-top: 2px solid var(--border);
+      }
+      .bottom-nav button {
+        flex: 1;
+        background: none;
+        border: none;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--bg);
+        font-family: var(--font-mono);
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        cursor: pointer;
+        transition:
+          background 0.15s,
+          color 0.15s;
+        padding: 4px 2px;
+      }
+      [data-theme="dark"] .bottom-nav button {
+        color: var(--fg);
+      }
+      .bottom-nav button:last-child {
+        border-right: none;
+      }
+      .bottom-nav button:hover,
+      .bottom-nav button.active {
+        background: var(--accent);
+        color: #fff;
+      }
 
-/* ============================================================
+      /* ============================================================
    VIEWS
    ============================================================ */
-.view { display: none; min-height: calc(100vh - var(--nav-h) - var(--bottom-h)); }
-.view.active { display: block; }
+      .view {
+        display: none;
+        min-height: calc(100vh - var(--nav-h) - var(--bottom-h));
+      }
+      .view.active {
+        display: block;
+      }
 
-/* ============================================================
+      /* ============================================================
    MARQUEE TICKER
    ============================================================ */
-.ticker-wrap {
-  background: var(--accent);
-  color: #fff;
-  overflow: hidden;
-  white-space: nowrap;
-  padding: 8px 0;
-  border-bottom: 2px solid var(--border);
-}
-.ticker-inner {
-  display: inline-block;
-  animation: ticker-scroll 22s linear infinite;
-}
-.ticker-inner span {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding-right: 60px;
-}
-@keyframes ticker-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
+      .ticker-wrap {
+        background: var(--accent);
+        color: #fff;
+        overflow: hidden;
+        white-space: nowrap;
+        padding: 8px 0;
+        border-bottom: 2px solid var(--border);
+      }
+      .ticker-inner {
+        display: inline-block;
+        animation: ticker-scroll 22s linear infinite;
+      }
+      .ticker-inner span {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        padding-right: 60px;
+      }
+      @keyframes ticker-scroll {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
 
-/* ============================================================
+      /* ============================================================
    HOME VIEW
    ============================================================ */
-.home-hero {
-  padding: 48px 20px 40px;
-  max-width: 900px;
-  margin: 0 auto;
-  position: relative;
-}
-.hero-overline {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.hero-overline::before {
-  content: '';
-  display: inline-block;
-  width: 28px;
-  height: 2px;
-  background: var(--accent);
-}
-.hero-name {
-  font-family: var(--font-display);
-  font-size: clamp(64px, 12vw, 140px);
-  line-height: 0.9;
-  letter-spacing: -3px;
-  color: var(--fg);
-  position: relative;
-  display: inline-block;
-}
-.hero-name .underline-accent {
-  display: block;
-  height: 6px;
-  background: var(--accent);
-  margin-top: 6px;
-  width: 70%;
-}
-.hero-sub {
-  font-family: var(--font-display);
-  font-size: clamp(24px, 4vw, 42px);
-  line-height: 1.1;
-  color: var(--muted);
-  margin-top: 16px;
-  letter-spacing: -1px;
-}
-.hero-desc {
-  font-family: var(--font-body);
-  font-size: 16px;
-  color: var(--muted);
-  margin-top: 20px;
-  max-width: 480px;
-  line-height: 1.65;
-}
+      .home-hero {
+        padding: 48px 20px 40px;
+        max-width: 900px;
+        margin: 0 auto;
+        position: relative;
+      }
+      .hero-overline {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .hero-overline::before {
+        content: "";
+        display: inline-block;
+        width: 28px;
+        height: 2px;
+        background: var(--accent);
+      }
+      .hero-name {
+        font-family: var(--font-display);
+        font-size: clamp(64px, 12vw, 140px);
+        line-height: 0.9;
+        letter-spacing: -3px;
+        color: var(--fg);
+        position: relative;
+        display: inline-block;
+      }
+      .hero-name .underline-accent {
+        display: block;
+        height: 6px;
+        background: var(--accent);
+        margin-top: 6px;
+        width: 70%;
+      }
+      .hero-sub {
+        font-family: var(--font-display);
+        font-size: clamp(24px, 4vw, 42px);
+        line-height: 1.1;
+        color: var(--muted);
+        margin-top: 16px;
+        letter-spacing: -1px;
+      }
+      .hero-desc {
+        font-family: var(--font-body);
+        font-size: 16px;
+        color: var(--muted);
+        margin-top: 20px;
+        max-width: 480px;
+        line-height: 1.65;
+      }
 
-/* Rotated accent bar */
-.accent-bar {
-  position: absolute;
-  right: 20px;
-  top: 40px;
-  width: 6px;
-  height: 120px;
-  background: var(--accent2);
-  transform: rotate(8deg);
-  display: none;
-}
-@media (min-width: 600px) { .accent-bar { display: block; } }
+      /* Rotated accent bar */
+      .accent-bar {
+        position: absolute;
+        right: 20px;
+        top: 40px;
+        width: 6px;
+        height: 120px;
+        background: var(--accent2);
+        transform: rotate(8deg);
+        display: none;
+      }
+      @media (min-width: 600px) {
+        .accent-bar {
+          display: block;
+        }
+      }
 
-/* Featured article card */
-.featured-section {
-  padding: 0 20px 40px;
-  max-width: 900px;
-  margin: 0 auto;
-}
-.section-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.section-label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border);
-  opacity: 0.3;
-}
-.featured-card {
-  position: relative;
-  background: var(--surface);
-  border: 2px solid var(--border);
-  padding: 28px;
-  clip-path: polygon(0 0, 100% 0, 100% 88%, 97% 92%, 94% 88%, 91% 93%, 88% 88%, 85% 92%, 82% 88%, 79% 93%, 76% 88%, 73% 92%, 70% 88%, 67% 93%, 64% 88%, 61% 92%, 58% 88%, 55% 93%, 52% 88%, 49% 92%, 46% 88%, 43% 93%, 40% 88%, 37% 92%, 34% 88%, 31% 93%, 28% 88%, 25% 92%, 22% 88%, 19% 93%, 16% 88%, 13% 92%, 10% 88%, 7% 93%, 4% 88%, 1% 92%, 0 88%);
-  padding-bottom: 48px;
-  margin-bottom: 8px;
-}
-.stamp {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: var(--accent);
-  color: #fff;
-  font-family: var(--font-display);
-  font-size: 11px;
-  padding: 6px 10px;
-  transform: rotate(4deg);
-  letter-spacing: 0.05em;
-}
-.featured-card h2 {
-  font-family: var(--font-display);
-  font-size: clamp(22px, 4vw, 32px);
-  line-height: 1.1;
-  letter-spacing: -0.5px;
-  margin-bottom: 12px;
-  max-width: 480px;
-}
-.featured-card .meta {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 14px;
-}
-.featured-card p {
-  font-size: 15px;
-  color: var(--muted);
-  max-width: 520px;
-}
-.read-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 16px;
-  font-family: var(--font-display);
-  font-size: 13px;
-  color: var(--accent);
-  text-decoration: none;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  cursor: pointer;
-  border-bottom: 2px solid var(--accent);
-  padding-bottom: 1px;
-}
-.read-link:hover { color: var(--fg); border-color: var(--fg); }
+      /* Featured article card */
+      .featured-section {
+        padding: 0 20px 40px;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .section-label {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .section-label::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+        opacity: 0.3;
+      }
+      .featured-card {
+        position: relative;
+        background: var(--surface);
+        border: 2px solid var(--border);
+        padding: 28px;
+        clip-path: polygon(
+          0 0,
+          100% 0,
+          100% 88%,
+          97% 92%,
+          94% 88%,
+          91% 93%,
+          88% 88%,
+          85% 92%,
+          82% 88%,
+          79% 93%,
+          76% 88%,
+          73% 92%,
+          70% 88%,
+          67% 93%,
+          64% 88%,
+          61% 92%,
+          58% 88%,
+          55% 93%,
+          52% 88%,
+          49% 92%,
+          46% 88%,
+          43% 93%,
+          40% 88%,
+          37% 92%,
+          34% 88%,
+          31% 93%,
+          28% 88%,
+          25% 92%,
+          22% 88%,
+          19% 93%,
+          16% 88%,
+          13% 92%,
+          10% 88%,
+          7% 93%,
+          4% 88%,
+          1% 92%,
+          0 88%
+        );
+        padding-bottom: 48px;
+        margin-bottom: 8px;
+      }
+      .stamp {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: var(--accent);
+        color: #fff;
+        font-family: var(--font-display);
+        font-size: 11px;
+        padding: 6px 10px;
+        transform: rotate(4deg);
+        letter-spacing: 0.05em;
+      }
+      .featured-card h2 {
+        font-family: var(--font-display);
+        font-size: clamp(22px, 4vw, 32px);
+        line-height: 1.1;
+        letter-spacing: -0.5px;
+        margin-bottom: 12px;
+        max-width: 480px;
+      }
+      .featured-card .meta {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+      }
+      .featured-card p {
+        font-size: 15px;
+        color: var(--muted);
+        max-width: 520px;
+      }
+      .read-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 16px;
+        font-family: var(--font-display);
+        font-size: 13px;
+        color: var(--accent);
+        text-decoration: none;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-bottom: 2px solid var(--accent);
+        padding-bottom: 1px;
+      }
+      .read-link:hover {
+        color: var(--fg);
+        border-color: var(--fg);
+      }
 
-/* Home grid — recent posts */
-.home-grid {
-  padding: 0 20px 40px;
-  max-width: 900px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0;
-}
-@media (min-width: 640px) {
-  .home-grid { grid-template-columns: 1fr 1fr; }
-}
-.home-post-row {
-  display: flex;
-  flex-direction: column;
-  padding: 18px 0;
-  border-bottom: 1px solid var(--border);
-  position: relative;
-  padding-left: 0;
-  transition: padding-left 0.15s;
-  cursor: pointer;
-}
-.home-post-row::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 0;
-  background: var(--accent);
-  transition: width 0.15s;
-}
-.home-post-row:hover::before { width: 4px; }
-.home-post-row:hover { padding-left: 12px; }
-.home-post-row .post-tag {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 4px;
-}
-.home-post-row h3 {
-  font-family: var(--font-display);
-  font-size: 16px;
-  line-height: 1.2;
-  letter-spacing: -0.3px;
-}
-.home-post-row .post-date {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--muted);
-  margin-top: 4px;
-}
+      /* Home grid — recent posts */
+      .home-grid {
+        padding: 0 20px 40px;
+        max-width: 900px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      @media (min-width: 640px) {
+        .home-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .home-post-row {
+        display: flex;
+        flex-direction: column;
+        padding: 18px 0;
+        border-bottom: 1px solid var(--border);
+        position: relative;
+        padding-left: 0;
+        transition: padding-left 0.15s;
+        cursor: pointer;
+      }
+      .home-post-row::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 0;
+        background: var(--accent);
+        transition: width 0.15s;
+      }
+      .home-post-row:hover::before {
+        width: 4px;
+      }
+      .home-post-row:hover {
+        padding-left: 12px;
+      }
+      .home-post-row .post-tag {
+        font-family: var(--font-mono);
+        font-size: 9px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 4px;
+      }
+      .home-post-row h3 {
+        font-family: var(--font-display);
+        font-size: 16px;
+        line-height: 1.2;
+        letter-spacing: -0.3px;
+      }
+      .home-post-row .post-date {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
 
-/* ============================================================
+      /* ============================================================
    BLOG VIEW
    ============================================================ */
-.blog-header {
-  padding: 40px 20px 28px;
-  max-width: 760px;
-  margin: 0 auto;
-  border-bottom: 2px solid var(--border);
-}
-.blog-title {
-  font-family: var(--font-display);
-  font-size: clamp(36px, 7vw, 72px);
-  line-height: 0.95;
-  letter-spacing: -2px;
-  margin-bottom: 16px;
-}
-.tag-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 16px;
-}
-.tag-btn {
-  background: none;
-  border: 1.5px solid var(--border);
-  color: var(--fg);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  cursor: pointer;
-  border-radius: var(--radius);
-  transition: background 0.15s, color 0.15s;
-}
-.tag-btn:hover, .tag-btn.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
-}
-.blog-list {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-.blog-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: start;
-  gap: 12px;
-  padding: 20px 0;
-  border-bottom: 1px solid var(--border);
-  cursor: pointer;
-  position: relative;
-  padding-left: 0;
-  transition: padding-left 0.15s;
-}
-.blog-row::before {
-  content: '';
-  position: absolute;
-  left: -20px; top: 0; bottom: 0;
-  width: 0;
-  background: var(--accent);
-  transition: width 0.15s;
-}
-.blog-row:hover::before { width: 4px; }
-.blog-row:hover { padding-left: 8px; }
-.blog-row-tag {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 4px;
-}
-.blog-row h2 {
-  font-family: var(--font-display);
-  font-size: clamp(18px, 3vw, 22px);
-  line-height: 1.15;
-  letter-spacing: -0.3px;
-}
-.blog-row p {
-  font-size: 14px;
-  color: var(--muted);
-  margin-top: 6px;
-  line-height: 1.5;
-}
-.blog-row-date {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--muted);
-  white-space: nowrap;
-  padding-top: 4px;
-}
+      .blog-header {
+        padding: 40px 20px 28px;
+        max-width: 760px;
+        margin: 0 auto;
+        border-bottom: 2px solid var(--border);
+      }
+      .blog-title {
+        font-family: var(--font-display);
+        font-size: clamp(36px, 7vw, 72px);
+        line-height: 0.95;
+        letter-spacing: -2px;
+        margin-bottom: 16px;
+      }
+      .tag-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      .tag-btn {
+        background: none;
+        border: 1.5px solid var(--border);
+        color: var(--fg);
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 4px 10px;
+        cursor: pointer;
+        border-radius: var(--radius);
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+      .tag-btn:hover,
+      .tag-btn.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+      }
+      .blog-list {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      .blog-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: start;
+        gap: 12px;
+        padding: 20px 0;
+        border-bottom: 1px solid var(--border);
+        cursor: pointer;
+        position: relative;
+        padding-left: 0;
+        transition: padding-left 0.15s;
+      }
+      .blog-row::before {
+        content: "";
+        position: absolute;
+        left: -20px;
+        top: 0;
+        bottom: 0;
+        width: 0;
+        background: var(--accent);
+        transition: width 0.15s;
+      }
+      .blog-row:hover::before {
+        width: 4px;
+      }
+      .blog-row:hover {
+        padding-left: 8px;
+      }
+      .blog-row-tag {
+        font-family: var(--font-mono);
+        font-size: 9px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 4px;
+      }
+      .blog-row h2 {
+        font-family: var(--font-display);
+        font-size: clamp(18px, 3vw, 22px);
+        line-height: 1.15;
+        letter-spacing: -0.3px;
+      }
+      .blog-row p {
+        font-size: 14px;
+        color: var(--muted);
+        margin-top: 6px;
+        line-height: 1.5;
+      }
+      .blog-row-date {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        color: var(--muted);
+        white-space: nowrap;
+        padding-top: 4px;
+      }
 
-/* ============================================================
+      /* ============================================================
    ARTICLE VIEW
    ============================================================ */
-.article-wrap {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 20px;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 32px;
-}
-@media (min-width: 800px) {
-  .article-wrap { grid-template-columns: 220px 1fr; padding: 0 24px; }
-}
-.article-toc {
-  padding-top: 32px;
-}
-@media (min-width: 800px) {
-  .article-toc { position: sticky; top: calc(var(--nav-h) + 20px); align-self: start; }
-}
-.toc-title {
-  font-family: var(--font-display);
-  font-size: 11px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 12px;
-  border-bottom: 2px solid var(--border);
-  padding-bottom: 6px;
-}
-.toc-list {
-  list-style: none;
-}
-.toc-item {
-  display: flex;
-  gap: 8px;
-  align-items: baseline;
-  padding: 6px 0;
-  border-bottom: 1px solid var(--border);
-  opacity: 0.65;
-  cursor: pointer;
-  transition: opacity 0.15s;
-}
-.toc-item:hover, .toc-item.active { opacity: 1; }
-.toc-item.active .toc-num { color: var(--accent); }
-.toc-num {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--muted);
-  letter-spacing: 0.1em;
-  min-width: 24px;
-}
-.toc-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  line-height: 1.4;
-}
-.article-main { padding: 32px 0; }
-.article-header { margin-bottom: 32px; }
-.article-tag {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 10px;
-}
-.article-title {
-  font-family: var(--font-display);
-  font-size: clamp(30px, 6vw, 56px);
-  line-height: 0.97;
-  letter-spacing: -1.5px;
-  margin-bottom: 16px;
-}
-.article-meta {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: 0.08em;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-.article-meta span { display: flex; align-items: center; gap: 4px; }
-.article-divider {
-  border: none;
-  border-top: 2px solid var(--border);
-  margin: 24px 0;
-}
-.article-body h2 {
-  font-family: var(--font-display);
-  font-size: clamp(22px, 3.5vw, 28px);
-  letter-spacing: -0.5px;
-  margin: 36px 0 14px;
-  line-height: 1.1;
-  scroll-margin-top: calc(var(--nav-h) + 12px);
-}
-.article-body p {
-  margin-bottom: 18px;
-  font-size: 17px;
-  line-height: 1.75;
-}
-.article-body ul, .article-body ol {
-  margin: 0 0 18px 24px;
-}
-.article-body li { margin-bottom: 6px; line-height: 1.65; }
+      .article-wrap {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      @media (min-width: 800px) {
+        .article-wrap {
+          grid-template-columns: 220px 1fr;
+          padding: 0 24px;
+        }
+      }
+      .article-toc {
+        padding-top: 32px;
+      }
+      @media (min-width: 800px) {
+        .article-toc {
+          position: sticky;
+          top: calc(var(--nav-h) + 20px);
+          align-self: start;
+        }
+      }
+      .toc-title {
+        font-family: var(--font-display);
+        font-size: 11px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 12px;
+        border-bottom: 2px solid var(--border);
+        padding-bottom: 6px;
+      }
+      .toc-list {
+        list-style: none;
+      }
+      .toc-item {
+        display: flex;
+        gap: 8px;
+        align-items: baseline;
+        padding: 6px 0;
+        border-bottom: 1px solid var(--border);
+        opacity: 0.65;
+        cursor: pointer;
+        transition: opacity 0.15s;
+      }
+      .toc-item:hover,
+      .toc-item.active {
+        opacity: 1;
+      }
+      .toc-item.active .toc-num {
+        color: var(--accent);
+      }
+      .toc-num {
+        font-family: var(--font-mono);
+        font-size: 9px;
+        color: var(--muted);
+        letter-spacing: 0.1em;
+        min-width: 24px;
+      }
+      .toc-label {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        line-height: 1.4;
+      }
+      .article-main {
+        padding: 32px 0;
+      }
+      .article-header {
+        margin-bottom: 32px;
+      }
+      .article-tag {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 10px;
+      }
+      .article-title {
+        font-family: var(--font-display);
+        font-size: clamp(30px, 6vw, 56px);
+        line-height: 0.97;
+        letter-spacing: -1.5px;
+        margin-bottom: 16px;
+      }
+      .article-meta {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .article-meta span {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .article-divider {
+        border: none;
+        border-top: 2px solid var(--border);
+        margin: 24px 0;
+      }
+      .article-body h2 {
+        font-family: var(--font-display);
+        font-size: clamp(22px, 3.5vw, 28px);
+        letter-spacing: -0.5px;
+        margin: 36px 0 14px;
+        line-height: 1.1;
+        scroll-margin-top: calc(var(--nav-h) + 12px);
+      }
+      .article-body p {
+        margin-bottom: 18px;
+        font-size: 17px;
+        line-height: 1.75;
+      }
+      .article-body ul,
+      .article-body ol {
+        margin: 0 0 18px 24px;
+      }
+      .article-body li {
+        margin-bottom: 6px;
+        line-height: 1.65;
+      }
 
-/* Zine-style blockquote */
-.article-body blockquote {
-  position: relative;
-  margin: 32px 0;
-  padding: 20px 24px 16px;
-  border-top: 3px solid var(--accent);
-  border-bottom: 3px solid var(--accent);
-}
-.article-body blockquote::before {
-  content: '\201C';
-  font-family: var(--font-display);
-  font-size: 80px;
-  color: var(--accent);
-  line-height: 0.8;
-  display: block;
-  margin-bottom: 8px;
-  opacity: 0.6;
-}
-.article-body blockquote p {
-  font-size: 19px;
-  font-style: italic;
-  color: var(--fg);
-  margin-bottom: 8px;
-  line-height: 1.5;
-}
-.article-body blockquote cite {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-style: normal;
-}
+      /* Zine-style blockquote */
+      .article-body blockquote {
+        position: relative;
+        margin: 32px 0;
+        padding: 20px 24px 16px;
+        border-top: 3px solid var(--accent);
+        border-bottom: 3px solid var(--accent);
+      }
+      .article-body blockquote::before {
+        content: "\201C";
+        font-family: var(--font-display);
+        font-size: 80px;
+        color: var(--accent);
+        line-height: 0.8;
+        display: block;
+        margin-bottom: 8px;
+        opacity: 0.6;
+      }
+      .article-body blockquote p {
+        font-size: 19px;
+        font-style: italic;
+        color: var(--fg);
+        margin-bottom: 8px;
+        line-height: 1.5;
+      }
+      .article-body blockquote cite {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-style: normal;
+      }
 
-/* Code block */
-.article-body pre {
-  background: var(--fg);
-  color: var(--bg);
-  border-radius: var(--radius);
-  padding: 20px;
-  overflow-x: auto;
-  margin: 24px 0;
-  border: 2px solid var(--border);
-  font-family: var(--font-mono);
-  font-size: 13px;
-  line-height: 1.6;
-}
-.article-body code:not(pre code) {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 1px 5px;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  border-radius: 2px;
-}
-.code-lang {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--accent);
-  color: #fff;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 6px 12px;
-  border: 2px solid var(--border);
-  border-bottom: none;
-  margin-bottom: 0;
-}
-.code-wrap { margin: 24px 0; }
-.code-wrap pre { margin: 0; border-top: none; }
+      /* Code block */
+      .article-body pre {
+        background: var(--fg);
+        color: var(--bg);
+        border-radius: var(--radius);
+        padding: 20px;
+        overflow-x: auto;
+        margin: 24px 0;
+        border: 2px solid var(--border);
+        font-family: var(--font-mono);
+        font-size: 13px;
+        line-height: 1.6;
+      }
+      .article-body code:not(pre code) {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 1px 5px;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        border-radius: 2px;
+      }
+      .code-lang {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--accent);
+        color: #fff;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 6px 12px;
+        border: 2px solid var(--border);
+        border-bottom: none;
+        margin-bottom: 0;
+      }
+      .code-wrap {
+        margin: 24px 0;
+      }
+      .code-wrap pre {
+        margin: 0;
+        border-top: none;
+      }
 
-/* ============================================================
+      /* ============================================================
    BOOKS VIEW
    ============================================================ */
-.books-header {
-  padding: 40px 20px 28px;
-  max-width: 900px;
-  margin: 0 auto;
-  border-bottom: 2px solid var(--border);
-}
-.books-title {
-  font-family: var(--font-display);
-  font-size: clamp(36px, 7vw, 72px);
-  line-height: 0.95;
-  letter-spacing: -2px;
-}
-.books-subtitle {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.books-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2px;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
-}
-@media (min-width: 540px) { .books-grid { grid-template-columns: 1fr 1fr; } }
-@media (min-width: 800px) { .books-grid { grid-template-columns: 1fr 1fr 1fr 1fr; } }
-.book-card {
-  background: var(--surface);
-  border: 2px solid var(--border);
-  padding: 20px 16px;
-  cursor: pointer;
-  position: relative;
-  transition: transform 0.15s;
-  display: flex;
-  flex-direction: column;
-}
-.book-card:hover { transform: translateY(-3px); }
+      .books-header {
+        padding: 40px 20px 28px;
+        max-width: 900px;
+        margin: 0 auto;
+        border-bottom: 2px solid var(--border);
+      }
+      .books-title {
+        font-family: var(--font-display);
+        font-size: clamp(36px, 7vw, 72px);
+        line-height: 0.95;
+        letter-spacing: -2px;
+      }
+      .books-subtitle {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 10px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      .books-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2px;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      @media (min-width: 540px) {
+        .books-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (min-width: 800px) {
+        .books-grid {
+          grid-template-columns: 1fr 1fr 1fr 1fr;
+        }
+      }
+      .book-card {
+        background: var(--surface);
+        border: 2px solid var(--border);
+        padding: 20px 16px;
+        cursor: pointer;
+        position: relative;
+        transition: transform 0.15s;
+        display: flex;
+        flex-direction: column;
+      }
+      .book-card:hover {
+        transform: translateY(-3px);
+      }
 
-/* Vinyl-inspired circular badge */
-.vinyl-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--fg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 3px solid var(--accent);
-  box-shadow: 0 0 0 1px var(--fg);
-}
-.vinyl-badge::before {
-  content: '';
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--bg);
-  border: 1.5px solid var(--accent);
-}
-.book-card .book-rating {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--accent2);
-  margin-bottom: 8px;
-  letter-spacing: 2px;
-}
-.book-card h3 {
-  font-family: var(--font-display);
-  font-size: 16px;
-  line-height: 1.15;
-  letter-spacing: -0.3px;
-  margin-bottom: 4px;
-}
-.book-card .book-author {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-.book-card p {
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.5;
-  flex: 1;
-}
-.book-card-footer {
-  margin-top: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.book-label {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--accent);
-  border: 1px solid var(--accent);
-  padding: 2px 6px;
-}
+      /* Vinyl-inspired circular badge */
+      .vinyl-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--fg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 3px solid var(--accent);
+        box-shadow: 0 0 0 1px var(--fg);
+      }
+      .vinyl-badge::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--bg);
+        border: 1.5px solid var(--accent);
+      }
+      .book-card .book-rating {
+        font-family: var(--font-mono);
+        font-size: 13px;
+        color: var(--accent2);
+        margin-bottom: 8px;
+        letter-spacing: 2px;
+      }
+      .book-card h3 {
+        font-family: var(--font-display);
+        font-size: 16px;
+        line-height: 1.15;
+        letter-spacing: -0.3px;
+        margin-bottom: 4px;
+      }
+      .book-card .book-author {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+      }
+      .book-card p {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.5;
+        flex: 1;
+      }
+      .book-card-footer {
+        margin-top: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .book-label {
+        font-family: var(--font-mono);
+        font-size: 9px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--accent);
+        border: 1px solid var(--accent);
+        padding: 2px 6px;
+      }
 
-/* ============================================================
+      /* ============================================================
    BOOK DETAIL VIEW
    ============================================================ */
-.book-detail-wrap {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 32px 20px 48px;
-}
-.book-detail-header {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 32px;
-  padding-bottom: 24px;
-  border-bottom: 2px solid var(--border);
-}
-@media (min-width: 600px) {
-  .book-detail-header { flex-direction: row; align-items: flex-start; gap: 28px; }
-}
-.book-cover-mock {
-  min-width: 110px;
-  width: 110px;
-  height: 154px;
-  background: var(--fg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  flex-shrink: 0;
-  border: 2px solid var(--border);
-}
-.book-cover-mock .cover-title {
-  font-family: var(--font-display);
-  font-size: 11px;
-  color: var(--bg);
-  text-align: center;
-  padding: 8px;
-  line-height: 1.2;
-}
-.book-cover-vinyl {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--accent);
-  border: 2px solid var(--bg);
-}
-.book-detail-info h1 {
-  font-family: var(--font-display);
-  font-size: clamp(26px, 5vw, 40px);
-  line-height: 1.0;
-  letter-spacing: -1px;
-  margin-bottom: 6px;
-}
-.book-detail-author {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--muted);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-.book-detail-rating {
-  font-size: 20px;
-  color: var(--accent2);
-  letter-spacing: 3px;
-  margin-bottom: 10px;
-}
-.book-detail-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.book-tag {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 3px 8px;
-  color: var(--muted);
-}
-.book-detail-body h2 {
-  font-family: var(--font-display);
-  font-size: clamp(20px, 3vw, 26px);
-  letter-spacing: -0.5px;
-  margin: 28px 0 12px;
-}
-.book-detail-body p {
-  font-size: 17px;
-  line-height: 1.75;
-  margin-bottom: 16px;
-}
-.book-detail-body ul {
-  margin: 0 0 16px 24px;
-}
-.book-detail-body li { margin-bottom: 6px; line-height: 1.65; }
-.book-detail-body blockquote {
-  position: relative;
-  margin: 28px 0;
-  padding: 18px 24px 14px;
-  border-top: 3px solid var(--accent);
-  border-bottom: 3px solid var(--accent);
-}
-.book-detail-body blockquote::before {
-  content: '\201C';
-  font-family: var(--font-display);
-  font-size: 64px;
-  color: var(--accent);
-  line-height: 0.8;
-  display: block;
-  margin-bottom: 6px;
-  opacity: 0.6;
-}
-.book-detail-body blockquote p {
-  font-size: 18px;
-  font-style: italic;
-  margin-bottom: 6px;
-}
-.book-detail-body blockquote cite {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-style: normal;
-}
-.back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-  cursor: pointer;
-  margin-bottom: 24px;
-  background: none;
-  border: none;
-  padding: 0;
-}
-.back-btn:hover { color: var(--accent); }
+      .book-detail-wrap {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 32px 20px 48px;
+      }
+      .book-detail-header {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin-bottom: 32px;
+        padding-bottom: 24px;
+        border-bottom: 2px solid var(--border);
+      }
+      @media (min-width: 600px) {
+        .book-detail-header {
+          flex-direction: row;
+          align-items: flex-start;
+          gap: 28px;
+        }
+      }
+      .book-cover-mock {
+        min-width: 110px;
+        width: 110px;
+        height: 154px;
+        background: var(--fg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        flex-shrink: 0;
+        border: 2px solid var(--border);
+      }
+      .book-cover-mock .cover-title {
+        font-family: var(--font-display);
+        font-size: 11px;
+        color: var(--bg);
+        text-align: center;
+        padding: 8px;
+        line-height: 1.2;
+      }
+      .book-cover-vinyl {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--accent);
+        border: 2px solid var(--bg);
+      }
+      .book-detail-info h1 {
+        font-family: var(--font-display);
+        font-size: clamp(26px, 5vw, 40px);
+        line-height: 1;
+        letter-spacing: -1px;
+        margin-bottom: 6px;
+      }
+      .book-detail-author {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--muted);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+      }
+      .book-detail-rating {
+        font-size: 20px;
+        color: var(--accent2);
+        letter-spacing: 3px;
+        margin-bottom: 10px;
+      }
+      .book-detail-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .book-tag {
+        font-family: var(--font-mono);
+        font-size: 9px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 3px 8px;
+        color: var(--muted);
+      }
+      .book-detail-body h2 {
+        font-family: var(--font-display);
+        font-size: clamp(20px, 3vw, 26px);
+        letter-spacing: -0.5px;
+        margin: 28px 0 12px;
+      }
+      .book-detail-body p {
+        font-size: 17px;
+        line-height: 1.75;
+        margin-bottom: 16px;
+      }
+      .book-detail-body ul {
+        margin: 0 0 16px 24px;
+      }
+      .book-detail-body li {
+        margin-bottom: 6px;
+        line-height: 1.65;
+      }
+      .book-detail-body blockquote {
+        position: relative;
+        margin: 28px 0;
+        padding: 18px 24px 14px;
+        border-top: 3px solid var(--accent);
+        border-bottom: 3px solid var(--accent);
+      }
+      .book-detail-body blockquote::before {
+        content: "\201C";
+        font-family: var(--font-display);
+        font-size: 64px;
+        color: var(--accent);
+        line-height: 0.8;
+        display: block;
+        margin-bottom: 6px;
+        opacity: 0.6;
+      }
+      .book-detail-body blockquote p {
+        font-size: 18px;
+        font-style: italic;
+        margin-bottom: 6px;
+      }
+      .book-detail-body blockquote cite {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-style: normal;
+      }
+      .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        cursor: pointer;
+        margin-bottom: 24px;
+        background: none;
+        border: none;
+        padding: 0;
+      }
+      .back-btn:hover {
+        color: var(--accent);
+      }
 
-/* ============================================================
+      /* ============================================================
    PROJECTS VIEW
    ============================================================ */
-.projects-header {
-  padding: 40px 20px 28px;
-  max-width: 760px;
-  margin: 0 auto;
-  border-bottom: 2px solid var(--border);
-}
-.projects-title {
-  font-family: var(--font-display);
-  font-size: clamp(36px, 7vw, 72px);
-  line-height: 0.95;
-  letter-spacing: -2px;
-  margin-bottom: 8px;
-}
-.setlist {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 0 20px 48px;
-}
-.setlist-item {
-  display: grid;
-  grid-template-columns: 64px 1fr;
-  gap: 0;
-  padding: 24px 0;
-  border-bottom: 1px solid var(--border);
-  align-items: start;
-}
-.setlist-num {
-  font-family: var(--font-display);
-  font-size: clamp(36px, 5vw, 52px);
-  line-height: 1;
-  color: var(--accent);
-  letter-spacing: -2px;
-  opacity: 0.5;
-  padding-top: 4px;
-}
-.setlist-content h2 {
-  font-family: var(--font-display);
-  font-size: clamp(22px, 4vw, 32px);
-  line-height: 1.05;
-  letter-spacing: -0.8px;
-  margin-bottom: 6px;
-}
-.setlist-desc {
-  font-size: 15px;
-  color: var(--muted);
-  line-height: 1.6;
-  margin-bottom: 12px;
-}
-.tech-stack {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.tech-tag {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  background: var(--fg);
-  color: var(--bg);
-  padding: 3px 8px;
-  border-radius: 2px;
-}
-.project-links {
-  display: flex;
-  gap: 12px;
-  margin-top: 12px;
-}
-.project-link {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--accent);
-  text-decoration: none;
-  border-bottom: 1px solid var(--accent);
-  padding-bottom: 1px;
-}
-.project-link:hover { color: var(--fg); border-color: var(--fg); }
+      .projects-header {
+        padding: 40px 20px 28px;
+        max-width: 760px;
+        margin: 0 auto;
+        border-bottom: 2px solid var(--border);
+      }
+      .projects-title {
+        font-family: var(--font-display);
+        font-size: clamp(36px, 7vw, 72px);
+        line-height: 0.95;
+        letter-spacing: -2px;
+        margin-bottom: 8px;
+      }
+      .setlist {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 0 20px 48px;
+      }
+      .setlist-item {
+        display: grid;
+        grid-template-columns: 64px 1fr;
+        gap: 0;
+        padding: 24px 0;
+        border-bottom: 1px solid var(--border);
+        align-items: start;
+      }
+      .setlist-num {
+        font-family: var(--font-display);
+        font-size: clamp(36px, 5vw, 52px);
+        line-height: 1;
+        color: var(--accent);
+        letter-spacing: -2px;
+        opacity: 0.5;
+        padding-top: 4px;
+      }
+      .setlist-content h2 {
+        font-family: var(--font-display);
+        font-size: clamp(22px, 4vw, 32px);
+        line-height: 1.05;
+        letter-spacing: -0.8px;
+        margin-bottom: 6px;
+      }
+      .setlist-desc {
+        font-size: 15px;
+        color: var(--muted);
+        line-height: 1.6;
+        margin-bottom: 12px;
+      }
+      .tech-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .tech-tag {
+        font-family: var(--font-mono);
+        font-size: 9px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        background: var(--fg);
+        color: var(--bg);
+        padding: 3px 8px;
+        border-radius: 2px;
+      }
+      .project-links {
+        display: flex;
+        gap: 12px;
+        margin-top: 12px;
+      }
+      .project-link {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent);
+        text-decoration: none;
+        border-bottom: 1px solid var(--accent);
+        padding-bottom: 1px;
+      }
+      .project-link:hover {
+        color: var(--fg);
+        border-color: var(--fg);
+      }
 
-/* ============================================================
+      /* ============================================================
    UTILITY
    ============================================================ */
-.hidden { display: none !important; }
-.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
-</style>
-</head>
-<body>
+      .hidden {
+        display: none !important;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- TOP NAV -->
+    <nav class="top-nav" role="navigation">
+      <a class="nav-logo" onclick="switchView('home')" href="#" aria-label="Home"
+        >DR<span class="dot">.</span></a
+      >
+      <span class="nav-tagline">diegoromero.blog</span>
+      <button
+        class="theme-toggle"
+        id="themeToggle"
+        aria-label="Toggle theme"
+        title="Toggle dark/light mode"
+      >
+        ☀
+      </button>
+    </nav>
 
-<!-- TOP NAV -->
-<nav class="top-nav" role="navigation">
-  <a class="nav-logo" onclick="switchView('home')" href="#" aria-label="Home">DR<span class="dot">.</span></a>
-  <span class="nav-tagline">diegoromero.blog</span>
-  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle dark/light mode">☀</button>
-</nav>
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav" role="navigation" aria-label="Primary">
+      <button onclick="switchView('home')" id="nav-home" class="active">HOME</button>
+      <button onclick="switchView('blog')" id="nav-blog">BLOG</button>
+      <button onclick="switchView('article')" id="nav-article">ARTICLE</button>
+      <button onclick="switchView('books')" id="nav-books">BOOKS</button>
+      <button onclick="switchView('book-detail')" id="nav-book-detail">BOOK</button>
+      <button onclick="switchView('projects')" id="nav-projects">PROJECTS</button>
+    </nav>
 
-<!-- BOTTOM NAV -->
-<nav class="bottom-nav" role="navigation" aria-label="Primary">
-  <button onclick="switchView('home')" id="nav-home" class="active">HOME</button>
-  <button onclick="switchView('blog')" id="nav-blog">BLOG</button>
-  <button onclick="switchView('article')" id="nav-article">ARTICLE</button>
-  <button onclick="switchView('books')" id="nav-books">BOOKS</button>
-  <button onclick="switchView('book-detail')" id="nav-book-detail">BOOK</button>
-  <button onclick="switchView('projects')" id="nav-projects">PROJECTS</button>
-</nav>
-
-<!-- ============================================================
+    <!-- ============================================================
      VIEW: HOME
      ============================================================ -->
-<main class="view active" id="view-home" aria-label="Home">
+    <main class="view active" id="view-home" aria-label="Home">
+      <!-- Ticker -->
+      <div class="ticker-wrap" aria-hidden="true">
+        <div class="ticker-inner">
+          <span
+            >DEEP WORK ★ PSYCHOLOGY OF MONEY ★ DEEPFLOW ★ LISTU ★ KODR ★ POMODORO ★ NEXT.JS ★
+            TYPESCRIPT ★ FOCUS ★ SHIP IT ★</span
+          >
+          <span
+            >DEEP WORK ★ PSYCHOLOGY OF MONEY ★ DEEPFLOW ★ LISTU ★ KODR ★ POMODORO ★ NEXT.JS ★
+            TYPESCRIPT ★ FOCUS ★ SHIP IT ★</span
+          >
+        </div>
+      </div>
 
-  <!-- Ticker -->
-  <div class="ticker-wrap" aria-hidden="true">
-    <div class="ticker-inner">
-      <span>DEEP WORK ★ PSYCHOLOGY OF MONEY ★ DEEPFLOW ★ LISTU ★ KODR ★ POMODORO ★ NEXT.JS ★ TYPESCRIPT ★ FOCUS ★ SHIP IT ★</span>
-      <span>DEEP WORK ★ PSYCHOLOGY OF MONEY ★ DEEPFLOW ★ LISTU ★ KODR ★ POMODORO ★ NEXT.JS ★ TYPESCRIPT ★ FOCUS ★ SHIP IT ★</span>
-    </div>
-  </div>
+      <!-- Hero -->
+      <section class="home-hero" aria-labelledby="hero-name">
+        <div class="accent-bar" aria-hidden="true"></div>
+        <p class="hero-overline">Software engineer &amp; writer</p>
+        <h1 class="hero-name" id="hero-name">
+          DIEGO<br />ROMERO
+          <span class="underline-accent" aria-hidden="true"></span>
+        </h1>
+        <p class="hero-sub">Tech. Books.<br />Productivity.</p>
+        <p class="hero-desc">
+          I build software by day and write about the ideas that shape how I think. Notes on focused
+          work, systems that scale, and books worth re-reading.
+        </p>
+      </section>
 
-  <!-- Hero -->
-  <section class="home-hero" aria-labelledby="hero-name">
-    <div class="accent-bar" aria-hidden="true"></div>
-    <p class="hero-overline">Software engineer &amp; writer</p>
-    <h1 class="hero-name" id="hero-name">
-      DIEGO<br>ROMERO
-      <span class="underline-accent" aria-hidden="true"></span>
-    </h1>
-    <p class="hero-sub">Tech. Books.<br>Productivity.</p>
-    <p class="hero-desc">I build software by day and write about the ideas that shape how I think. Notes on focused work, systems that scale, and books worth re-reading.</p>
-  </section>
+      <!-- Featured post -->
+      <section class="featured-section" aria-labelledby="featured-label">
+        <div class="section-label" id="featured-label">Featured Post</div>
+        <div class="featured-card" role="article">
+          <div class="stamp" aria-label="New post">★ NEW POST</div>
+          <div class="meta">TECHNOLOGY &nbsp;·&nbsp; JAN 2025 &nbsp;·&nbsp; 8 MIN READ</div>
+          <h2>On Deep Work and Focused Programming</h2>
+          <p>
+            How Cal Newport's framework transformed my coding sessions — and the TypeScript stack I
+            built around it.
+          </p>
+          <span class="read-link" onclick="switchView('article')" role="button" tabindex="0"
+            >Read Article →</span
+          >
+        </div>
+      </section>
 
-  <!-- Featured post -->
-  <section class="featured-section" aria-labelledby="featured-label">
-    <div class="section-label" id="featured-label">Featured Post</div>
-    <div class="featured-card" role="article">
-      <div class="stamp" aria-label="New post">★ NEW POST</div>
-      <div class="meta">TECHNOLOGY &nbsp;·&nbsp; JAN 2025 &nbsp;·&nbsp; 8 MIN READ</div>
-      <h2>On Deep Work and Focused Programming</h2>
-      <p>How Cal Newport's framework transformed my coding sessions — and the TypeScript stack I built around it.</p>
-      <span class="read-link" onclick="switchView('article')" role="button" tabindex="0">Read Article →</span>
-    </div>
-  </section>
+      <!-- Recent posts -->
+      <section
+        aria-labelledby="recent-label"
+        style="max-width: 900px; margin: 0 auto; padding: 0 20px 12px"
+      >
+        <div class="section-label" id="recent-label">Recent Posts</div>
+      </section>
+      <div class="home-grid" role="list">
+        <article class="home-post-row" role="listitem" onclick="switchView('article')">
+          <span class="post-tag">Productivity</span>
+          <h3>Pomodoro as a Productivity Tool</h3>
+          <span class="post-date">Dec 2024</span>
+        </article>
+        <article class="home-post-row" role="listitem" onclick="switchView('article')">
+          <span class="post-tag">Technology</span>
+          <h3>Types of Rendering in Next.js</h3>
+          <span class="post-date">Nov 2024</span>
+        </article>
+        <article class="home-post-row" role="listitem" onclick="switchView('article')">
+          <span class="post-tag">Books</span>
+          <h3>The Psychology of Money — My Notes</h3>
+          <span class="post-date">Oct 2024</span>
+        </article>
+        <article class="home-post-row" role="listitem" onclick="switchView('article')">
+          <span class="post-tag">Technology</span>
+          <h3>Rewriting My Blog With Claude Code</h3>
+          <span class="post-date">Sep 2024</span>
+        </article>
+      </div>
+    </main>
 
-  <!-- Recent posts -->
-  <section aria-labelledby="recent-label" style="max-width:900px;margin:0 auto;padding:0 20px 12px;">
-    <div class="section-label" id="recent-label">Recent Posts</div>
-  </section>
-  <div class="home-grid" role="list">
-    <article class="home-post-row" role="listitem" onclick="switchView('article')">
-      <span class="post-tag">Productivity</span>
-      <h3>Pomodoro as a Productivity Tool</h3>
-      <span class="post-date">Dec 2024</span>
-    </article>
-    <article class="home-post-row" role="listitem" onclick="switchView('article')">
-      <span class="post-tag">Technology</span>
-      <h3>Types of Rendering in Next.js</h3>
-      <span class="post-date">Nov 2024</span>
-    </article>
-    <article class="home-post-row" role="listitem" onclick="switchView('article')">
-      <span class="post-tag">Books</span>
-      <h3>The Psychology of Money — My Notes</h3>
-      <span class="post-date">Oct 2024</span>
-    </article>
-    <article class="home-post-row" role="listitem" onclick="switchView('article')">
-      <span class="post-tag">Technology</span>
-      <h3>Rewriting My Blog With Claude Code</h3>
-      <span class="post-date">Sep 2024</span>
-    </article>
-  </div>
-</main>
-
-<!-- ============================================================
+    <!-- ============================================================
      VIEW: BLOG
      ============================================================ -->
-<main class="view" id="view-blog" aria-label="Blog">
-  <header class="blog-header">
-    <h1 class="blog-title">ALL<br>POSTS.</h1>
-    <div class="tag-filters" role="group" aria-label="Filter by tag">
-      <button class="tag-btn active" data-tag="all">All</button>
-      <button class="tag-btn" data-tag="technology">Technology</button>
-      <button class="tag-btn" data-tag="productivity">Productivity</button>
-      <button class="tag-btn" data-tag="books">Books</button>
-    </div>
-  </header>
-
-  <div class="blog-list" role="list">
-    <article class="blog-row" role="listitem" data-tag="technology" onclick="switchView('article')">
-      <div>
-        <div class="blog-row-tag">Technology</div>
-        <h2>On Deep Work and Focused Programming</h2>
-        <p>How Newport's framework transformed my coding sessions and the TypeScript stack I built around it.</p>
-      </div>
-      <div class="blog-row-date">Jan 2025</div>
-    </article>
-    <article class="blog-row" role="listitem" data-tag="productivity" onclick="switchView('article')">
-      <div>
-        <div class="blog-row-tag">Productivity</div>
-        <h2>Pomodoro as a Productivity Tool</h2>
-        <p>The simple 25-minute method that dramatically changed how I structure my workday.</p>
-      </div>
-      <div class="blog-row-date">Dec 2024</div>
-    </article>
-    <article class="blog-row" role="listitem" data-tag="technology" onclick="switchView('article')">
-      <div>
-        <div class="blog-row-tag">Technology</div>
-        <h2>Types of Rendering in Next.js</h2>
-        <p>A practical breakdown of SSR, SSG, ISR and when to actually use each one.</p>
-      </div>
-      <div class="blog-row-date">Nov 2024</div>
-    </article>
-    <article class="blog-row" role="listitem" data-tag="books" onclick="switchView('article')">
-      <div>
-        <div class="blog-row-tag">Books</div>
-        <h2>The Psychology of Money — My Notes</h2>
-        <p>Key ideas from Morgan Housel's landmark book on wealth, greed and long-term thinking.</p>
-      </div>
-      <div class="blog-row-date">Oct 2024</div>
-    </article>
-    <article class="blog-row" role="listitem" data-tag="technology" onclick="switchView('article')">
-      <div>
-        <div class="blog-row-tag">Technology</div>
-        <h2>Rewriting My Blog With Claude Code</h2>
-        <p>A fully AI-assisted redesign from scratch — what worked, what surprised me, and what I'd do differently.</p>
-      </div>
-      <div class="blog-row-date">Sep 2024</div>
-    </article>
-  </div>
-</main>
-
-<!-- ============================================================
-     VIEW: ARTICLE
-     ============================================================ -->
-<main class="view" id="view-article" aria-label="Article">
-  <div class="article-wrap">
-    <!-- TOC / Tracklist -->
-    <aside class="article-toc" aria-label="Table of contents">
-      <div class="toc-title">Tracklist</div>
-      <ol class="toc-list" role="list">
-        <li class="toc-item active" data-target="s1" onclick="scrollToSection('s1')" role="listitem">
-          <span class="toc-num">01</span>
-          <span class="toc-label">The Myth of Multitasking</span>
-        </li>
-        <li class="toc-item" data-target="s2" onclick="scrollToSection('s2')" role="listitem">
-          <span class="toc-num">02</span>
-          <span class="toc-label">Newport's Framework</span>
-        </li>
-        <li class="toc-item" data-target="s3" onclick="scrollToSection('s3')" role="listitem">
-          <span class="toc-num">03</span>
-          <span class="toc-label">What I Changed</span>
-        </li>
-        <li class="toc-item" data-target="s4" onclick="scrollToSection('s4')" role="listitem">
-          <span class="toc-num">04</span>
-          <span class="toc-label">The Stack That Helps</span>
-        </li>
-      </ol>
-    </aside>
-
-    <!-- Article body -->
-    <article class="article-main">
-      <header class="article-header">
-        <div class="article-tag">Technology</div>
-        <h1 class="article-title">On Deep Work and Focused Programming</h1>
-        <div class="article-meta">
-          <span>Diego Romero</span>
-          <span>January 2025</span>
-          <span>8 min read</span>
+    <main class="view" id="view-blog" aria-label="Blog">
+      <header class="blog-header">
+        <h1 class="blog-title">ALL<br />POSTS.</h1>
+        <div class="tag-filters" role="group" aria-label="Filter by tag">
+          <button class="tag-btn active" data-tag="all">All</button>
+          <button class="tag-btn" data-tag="technology">Technology</button>
+          <button class="tag-btn" data-tag="productivity">Productivity</button>
+          <button class="tag-btn" data-tag="books">Books</button>
         </div>
-        <hr class="article-divider">
       </header>
 
-      <div class="article-body">
-        <p>There is a moment every programmer knows: the zone. Everything else dissolves. The problem becomes the only thing. An hour passes, maybe two. Then your phone buzzes, or Slack pings, or a calendar reminder fires — and the thread is broken. You sit staring at the screen wondering where you were, what you were thinking, how you had held all those moving pieces in your head at once. It takes another fifteen minutes to get back. But often you never quite do.</p>
+      <div class="blog-list" role="list">
+        <article
+          class="blog-row"
+          role="listitem"
+          data-tag="technology"
+          onclick="switchView('article')"
+        >
+          <div>
+            <div class="blog-row-tag">Technology</div>
+            <h2>On Deep Work and Focused Programming</h2>
+            <p>
+              How Newport's framework transformed my coding sessions and the TypeScript stack I
+              built around it.
+            </p>
+          </div>
+          <div class="blog-row-date">Jan 2025</div>
+        </article>
+        <article
+          class="blog-row"
+          role="listitem"
+          data-tag="productivity"
+          onclick="switchView('article')"
+        >
+          <div>
+            <div class="blog-row-tag">Productivity</div>
+            <h2>Pomodoro as a Productivity Tool</h2>
+            <p>The simple 25-minute method that dramatically changed how I structure my workday.</p>
+          </div>
+          <div class="blog-row-date">Dec 2024</div>
+        </article>
+        <article
+          class="blog-row"
+          role="listitem"
+          data-tag="technology"
+          onclick="switchView('article')"
+        >
+          <div>
+            <div class="blog-row-tag">Technology</div>
+            <h2>Types of Rendering in Next.js</h2>
+            <p>A practical breakdown of SSR, SSG, ISR and when to actually use each one.</p>
+          </div>
+          <div class="blog-row-date">Nov 2024</div>
+        </article>
+        <article class="blog-row" role="listitem" data-tag="books" onclick="switchView('article')">
+          <div>
+            <div class="blog-row-tag">Books</div>
+            <h2>The Psychology of Money — My Notes</h2>
+            <p>
+              Key ideas from Morgan Housel's landmark book on wealth, greed and long-term thinking.
+            </p>
+          </div>
+          <div class="blog-row-date">Oct 2024</div>
+        </article>
+        <article
+          class="blog-row"
+          role="listitem"
+          data-tag="technology"
+          onclick="switchView('article')"
+        >
+          <div>
+            <div class="blog-row-tag">Technology</div>
+            <h2>Rewriting My Blog With Claude Code</h2>
+            <p>
+              A fully AI-assisted redesign from scratch — what worked, what surprised me, and what
+              I'd do differently.
+            </p>
+          </div>
+          <div class="blog-row-date">Sep 2024</div>
+        </article>
+      </div>
+    </main>
 
-        <h2 id="s1">The Myth of Multitasking</h2>
-        <p>We have sold ourselves a story about the modern knowledge worker: efficient, parallel, always-on. The story is false. Neuroscience has consistently shown that what we call multitasking is simply rapid context-switching — and every switch carries a cost. Gloria Mark at UC Irvine found it takes an average of 23 minutes to fully return to a task after being interrupted. Twenty-three minutes. If you field six interruptions in a workday, you have potentially lost more than two hours to re-entry overhead alone — before accounting for the quality degradation of the work itself.</p>
+    <!-- ============================================================
+     VIEW: ARTICLE
+     ============================================================ -->
+    <main class="view" id="view-article" aria-label="Article">
+      <div class="article-wrap">
+        <!-- TOC / Tracklist -->
+        <aside class="article-toc" aria-label="Table of contents">
+          <div class="toc-title">Tracklist</div>
+          <ol class="toc-list" role="list">
+            <li
+              class="toc-item active"
+              data-target="s1"
+              onclick="scrollToSection('s1')"
+              role="listitem"
+            >
+              <span class="toc-num">01</span>
+              <span class="toc-label">The Myth of Multitasking</span>
+            </li>
+            <li class="toc-item" data-target="s2" onclick="scrollToSection('s2')" role="listitem">
+              <span class="toc-num">02</span>
+              <span class="toc-label">Newport's Framework</span>
+            </li>
+            <li class="toc-item" data-target="s3" onclick="scrollToSection('s3')" role="listitem">
+              <span class="toc-num">03</span>
+              <span class="toc-label">What I Changed</span>
+            </li>
+            <li class="toc-item" data-target="s4" onclick="scrollToSection('s4')" role="listitem">
+              <span class="toc-num">04</span>
+              <span class="toc-label">The Stack That Helps</span>
+            </li>
+          </ol>
+        </aside>
 
-        <p>Software engineering is particularly vulnerable to this dynamic. Writing code is not like writing email. It requires holding a mental model of a system — data flowing through layers, state transforming across components, edge cases lurking in business logic — and that model collapses the moment attention is diverted. The cost is not just time. It is also correctness. Bugs cluster in code written in distracted states.</p>
+        <!-- Article body -->
+        <article class="article-main">
+          <header class="article-header">
+            <div class="article-tag">Technology</div>
+            <h1 class="article-title">On Deep Work and Focused Programming</h1>
+            <div class="article-meta">
+              <span>Diego Romero</span>
+              <span>January 2025</span>
+              <span>8 min read</span>
+            </div>
+            <hr class="article-divider" />
+          </header>
 
-        <blockquote>
-          <p>Efforts to deepen your focus will struggle if you don't simultaneously wean yourself from a dependence on distraction.</p>
-          <cite>— Cal Newport, Deep Work</cite>
-        </blockquote>
+          <div class="article-body">
+            <p>
+              There is a moment every programmer knows: the zone. Everything else dissolves. The
+              problem becomes the only thing. An hour passes, maybe two. Then your phone buzzes, or
+              Slack pings, or a calendar reminder fires — and the thread is broken. You sit staring
+              at the screen wondering where you were, what you were thinking, how you had held all
+              those moving pieces in your head at once. It takes another fifteen minutes to get
+              back. But often you never quite do.
+            </p>
 
-        <h2 id="s2">Newport's Framework</h2>
-        <p>Cal Newport's core argument in Deep Work is deceptively simple: the ability to focus without distraction on a cognitively demanding task is becoming simultaneously rarer and more valuable. The people who cultivate this ability will thrive; those who don't will fall behind. Newport is not moralising about laziness. He is describing a structural shift in what creates economic value in an age where shallow tasks can increasingly be automated or outsourced.</p>
+            <h2 id="s1">The Myth of Multitasking</h2>
+            <p>
+              We have sold ourselves a story about the modern knowledge worker: efficient, parallel,
+              always-on. The story is false. Neuroscience has consistently shown that what we call
+              multitasking is simply rapid context-switching — and every switch carries a cost.
+              Gloria Mark at UC Irvine found it takes an average of 23 minutes to fully return to a
+              task after being interrupted. Twenty-three minutes. If you field six interruptions in
+              a workday, you have potentially lost more than two hours to re-entry overhead alone —
+              before accounting for the quality degradation of the work itself.
+            </p>
 
-        <p>His framework has two main pillars. First, you must schedule deep work like a professional commitment — not something you do when you happen to find spare time, because spare time never comes. Second, you must embrace boredom. Newport argues that the capacity to resist distraction is a trained skill, and you train it by tolerating the discomfort of not reaching for your phone every idle moment. This was the insight that struck me hardest. I had treated distraction as a failure of willpower. Newport reframes it as a failure of practice.</p>
+            <p>
+              Software engineering is particularly vulnerable to this dynamic. Writing code is not
+              like writing email. It requires holding a mental model of a system — data flowing
+              through layers, state transforming across components, edge cases lurking in business
+              logic — and that model collapses the moment attention is diverted. The cost is not
+              just time. It is also correctness. Bugs cluster in code written in distracted states.
+            </p>
 
-        <p>He also distinguishes between different scheduling philosophies: the monastic approach (eliminate almost all shallow obligations permanently), the bimodal approach (alternate between deep and shallow seasons), the rhythmic approach (make a daily ritual of deep work), and the journalistic approach (seize deep work windows wherever they appear). For most software engineers working in organisations, the rhythmic approach is the most realistic.</p>
+            <blockquote>
+              <p>
+                Efforts to deepen your focus will struggle if you don't simultaneously wean yourself
+                from a dependence on distraction.
+              </p>
+              <cite>— Cal Newport, Deep Work</cite>
+            </blockquote>
 
-        <blockquote>
-          <p>A deep life is a good life, any way you look at it.</p>
-          <cite>— Cal Newport, Deep Work</cite>
-        </blockquote>
+            <h2 id="s2">Newport's Framework</h2>
+            <p>
+              Cal Newport's core argument in Deep Work is deceptively simple: the ability to focus
+              without distraction on a cognitively demanding task is becoming simultaneously rarer
+              and more valuable. The people who cultivate this ability will thrive; those who don't
+              will fall behind. Newport is not moralising about laziness. He is describing a
+              structural shift in what creates economic value in an age where shallow tasks can
+              increasingly be automated or outsourced.
+            </p>
 
-        <h2 id="s3">What I Changed</h2>
-        <p>I made three concrete changes. First, I blocked 7–10am as a protected coding window. No meetings, no Slack, no email. The calendar entry is called "Studio Time" and I treat it as sacred as a client call. Second, I turned off all notification badges on my laptop — permanently, not just during focus sessions. The ambient awareness that notifications might exist was enough to pull me toward checking. Removing the badges removed the pull.</p>
+            <p>
+              His framework has two main pillars. First, you must schedule deep work like a
+              professional commitment — not something you do when you happen to find spare time,
+              because spare time never comes. Second, you must embrace boredom. Newport argues that
+              the capacity to resist distraction is a trained skill, and you train it by tolerating
+              the discomfort of not reaching for your phone every idle moment. This was the insight
+              that struck me hardest. I had treated distraction as a failure of willpower. Newport
+              reframes it as a failure of practice.
+            </p>
 
-        <p>Third — and this is the one that made the biggest difference — I started using a Pomodoro-style timer, but with one modification: I extended the work interval to 52 minutes and the break to 17 minutes, based on research from the Draugiem Group suggesting this ratio corresponds to the highest-productivity patterns among knowledge workers. I built a small timer into my workflow and stopped second-guessing whether I was being productive enough. The timer became the arbiter. When it ran, I worked. When it stopped, I rested. The decision-making overhead vanished.</p>
+            <p>
+              He also distinguishes between different scheduling philosophies: the monastic approach
+              (eliminate almost all shallow obligations permanently), the bimodal approach
+              (alternate between deep and shallow seasons), the rhythmic approach (make a daily
+              ritual of deep work), and the journalistic approach (seize deep work windows wherever
+              they appear). For most software engineers working in organisations, the rhythmic
+              approach is the most realistic.
+            </p>
 
-        <h2 id="s4">The Stack That Helps</h2>
-        <p>I will not pretend tools matter as much as habits. They don't. But the right tools reduce friction, and reduced friction compounds over time. Here is what I actually use: a 13-inch laptop with an external monitor for the secondary browser, a mechanical keyboard (the tactile feedback helps me stay anchored in the physical present), and a set of noise-cancelling headphones playing brown noise — not music, which competes with the verbal parts of thinking.</p>
+            <blockquote>
+              <p>A deep life is a good life, any way you look at it.</p>
+              <cite>— Cal Newport, Deep Work</cite>
+            </blockquote>
 
-        <p>On the software side, I wrote a small Pomodoro timer in TypeScript that lives in my menu bar. It does nothing except count down and log session data to a local JSON file. Over weeks, that data told me which hours I completed sessions most consistently, which types of tasks broke my focus fastest, and which days of the week I was most likely to skip deep work entirely. Data, as it turns out, is motivating.</p>
+            <h2 id="s3">What I Changed</h2>
+            <p>
+              I made three concrete changes. First, I blocked 7–10am as a protected coding window.
+              No meetings, no Slack, no email. The calendar entry is called "Studio Time" and I
+              treat it as sacred as a client call. Second, I turned off all notification badges on
+              my laptop — permanently, not just during focus sessions. The ambient awareness that
+              notifications might exist was enough to pull me toward checking. Removing the badges
+              removed the pull.
+            </p>
 
-        <div class="code-wrap">
-          <div class="code-lang"><span>TypeScript</span><span>pomodoro.ts</span></div>
-<pre><code>type Session = {
+            <p>
+              Third — and this is the one that made the biggest difference — I started using a
+              Pomodoro-style timer, but with one modification: I extended the work interval to 52
+              minutes and the break to 17 minutes, based on research from the Draugiem Group
+              suggesting this ratio corresponds to the highest-productivity patterns among knowledge
+              workers. I built a small timer into my workflow and stopped second-guessing whether I
+              was being productive enough. The timer became the arbiter. When it ran, I worked. When
+              it stopped, I rested. The decision-making overhead vanished.
+            </p>
+
+            <h2 id="s4">The Stack That Helps</h2>
+            <p>
+              I will not pretend tools matter as much as habits. They don't. But the right tools
+              reduce friction, and reduced friction compounds over time. Here is what I actually
+              use: a 13-inch laptop with an external monitor for the secondary browser, a mechanical
+              keyboard (the tactile feedback helps me stay anchored in the physical present), and a
+              set of noise-cancelling headphones playing brown noise — not music, which competes
+              with the verbal parts of thinking.
+            </p>
+
+            <p>
+              On the software side, I wrote a small Pomodoro timer in TypeScript that lives in my
+              menu bar. It does nothing except count down and log session data to a local JSON file.
+              Over weeks, that data told me which hours I completed sessions most consistently,
+              which types of tasks broke my focus fastest, and which days of the week I was most
+              likely to skip deep work entirely. Data, as it turns out, is motivating.
+            </p>
+
+            <div class="code-wrap">
+              <div class="code-lang"><span>TypeScript</span><span>pomodoro.ts</span></div>
+              <pre><code>type Session = {
   id: string;
   startedAt: Date;
   duration: number; // minutes
@@ -1299,300 +1591,404 @@ function logSession(session: Session): void {
 const timer = createPomodoro(52);
 timer.start("Refactor auth module");
 console.log(timer.getTimeRemaining()); // "52:00"</code></pre>
-        </div>
+            </div>
 
-        <p>The code above is the core of Deepflow, the focus timer I eventually open-sourced. It is deliberately simple. It does not integrate with your calendar, it does not surface analytics dashboards, it does not have a social layer. It counts down. It logs. That is the entire surface area. Complexity is the enemy of consistency, and consistency is the only thing that matters.</p>
+            <p>
+              The code above is the core of Deepflow, the focus timer I eventually open-sourced. It
+              is deliberately simple. It does not integrate with your calendar, it does not surface
+              analytics dashboards, it does not have a social layer. It counts down. It logs. That
+              is the entire surface area. Complexity is the enemy of consistency, and consistency is
+              the only thing that matters.
+            </p>
 
-        <p>Deep work is not a productivity hack. It is a reorientation toward what you actually value. When you build the habit, you discover not only that you produce more — but that the work feels more like work worth doing. That feedback loop is self-sustaining in a way that no notification blocker, no app, no morning routine ever is on its own.</p>
+            <p>
+              Deep work is not a productivity hack. It is a reorientation toward what you actually
+              value. When you build the habit, you discover not only that you produce more — but
+              that the work feels more like work worth doing. That feedback loop is self-sustaining
+              in a way that no notification blocker, no app, no morning routine ever is on its own.
+            </p>
+          </div>
+        </article>
       </div>
-    </article>
-  </div>
-</main>
+    </main>
 
-<!-- ============================================================
+    <!-- ============================================================
      VIEW: BOOKS
      ============================================================ -->
-<main class="view" id="view-books" aria-label="Book shelf">
-  <header class="books-header">
-    <h1 class="books-title">READING<br>LIST.</h1>
-    <p class="books-subtitle">Books that shaped how I think &amp; work</p>
-  </header>
+    <main class="view" id="view-books" aria-label="Book shelf">
+      <header class="books-header">
+        <h1 class="books-title">READING<br />LIST.</h1>
+        <p class="books-subtitle">Books that shaped how I think &amp; work</p>
+      </header>
 
-  <div class="books-grid" role="list">
-    <article class="book-card" role="listitem" onclick="switchView('book-detail')">
-      <div class="vinyl-badge" aria-hidden="true"></div>
-      <div class="book-rating" aria-label="5 stars">★★★★★</div>
-      <h3>Deep Work</h3>
-      <div class="book-author">Cal Newport</div>
-      <p>The defining text on focused work in a distracted age. Required reading for anyone who writes code for a living.</p>
-      <div class="book-card-footer">
-        <span class="book-label">Technology</span>
+      <div class="books-grid" role="list">
+        <article class="book-card" role="listitem" onclick="switchView('book-detail')">
+          <div class="vinyl-badge" aria-hidden="true"></div>
+          <div class="book-rating" aria-label="5 stars">★★★★★</div>
+          <h3>Deep Work</h3>
+          <div class="book-author">Cal Newport</div>
+          <p>
+            The defining text on focused work in a distracted age. Required reading for anyone who
+            writes code for a living.
+          </p>
+          <div class="book-card-footer">
+            <span class="book-label">Technology</span>
+          </div>
+        </article>
+
+        <article class="book-card" role="listitem" onclick="switchView('book-detail')">
+          <div class="vinyl-badge" aria-hidden="true"></div>
+          <div class="book-rating" aria-label="5 stars">★★★★★</div>
+          <h3>The Psychology of Money</h3>
+          <div class="book-author">Morgan Housel</div>
+          <p>
+            Timeless lessons on wealth, greed, and happiness told through stories rather than
+            formulas.
+          </p>
+          <div class="book-card-footer">
+            <span class="book-label">Finance</span>
+          </div>
+        </article>
+
+        <article class="book-card" role="listitem" onclick="switchView('book-detail')">
+          <div class="vinyl-badge" aria-hidden="true"></div>
+          <div class="book-rating" aria-label="5 stars">★★★★★</div>
+          <h3>The Courage to Be Disliked</h3>
+          <div class="book-author">Kishimi &amp; Koga</div>
+          <p>
+            Adlerian philosophy in dialogue form. A genuinely life-altering book on freedom and
+            responsibility.
+          </p>
+          <div class="book-card-footer">
+            <span class="book-label">Philosophy</span>
+          </div>
+        </article>
+
+        <article class="book-card" role="listitem" onclick="switchView('book-detail')">
+          <div class="vinyl-badge" aria-hidden="true"></div>
+          <div class="book-rating" aria-label="5 stars">★★★★★</div>
+          <h3>Shoe Dog</h3>
+          <div class="book-author">Phil Knight</div>
+          <p>
+            Nike's origin story in full, brutal detail. A memoir about obsession, partnership, and
+            improbable persistence.
+          </p>
+          <div class="book-card-footer">
+            <span class="book-label">Business</span>
+          </div>
+        </article>
       </div>
-    </article>
+    </main>
 
-    <article class="book-card" role="listitem" onclick="switchView('book-detail')">
-      <div class="vinyl-badge" aria-hidden="true"></div>
-      <div class="book-rating" aria-label="5 stars">★★★★★</div>
-      <h3>The Psychology of Money</h3>
-      <div class="book-author">Morgan Housel</div>
-      <p>Timeless lessons on wealth, greed, and happiness told through stories rather than formulas.</p>
-      <div class="book-card-footer">
-        <span class="book-label">Finance</span>
-      </div>
-    </article>
-
-    <article class="book-card" role="listitem" onclick="switchView('book-detail')">
-      <div class="vinyl-badge" aria-hidden="true"></div>
-      <div class="book-rating" aria-label="5 stars">★★★★★</div>
-      <h3>The Courage to Be Disliked</h3>
-      <div class="book-author">Kishimi &amp; Koga</div>
-      <p>Adlerian philosophy in dialogue form. A genuinely life-altering book on freedom and responsibility.</p>
-      <div class="book-card-footer">
-        <span class="book-label">Philosophy</span>
-      </div>
-    </article>
-
-    <article class="book-card" role="listitem" onclick="switchView('book-detail')">
-      <div class="vinyl-badge" aria-hidden="true"></div>
-      <div class="book-rating" aria-label="5 stars">★★★★★</div>
-      <h3>Shoe Dog</h3>
-      <div class="book-author">Phil Knight</div>
-      <p>Nike's origin story in full, brutal detail. A memoir about obsession, partnership, and improbable persistence.</p>
-      <div class="book-card-footer">
-        <span class="book-label">Business</span>
-      </div>
-    </article>
-  </div>
-</main>
-
-<!-- ============================================================
+    <!-- ============================================================
      VIEW: BOOK DETAIL
      ============================================================ -->
-<main class="view" id="view-book-detail" aria-label="Book detail">
-  <div class="book-detail-wrap">
-    <button class="back-btn" onclick="switchView('books')" aria-label="Back to books">← Back to shelf</button>
+    <main class="view" id="view-book-detail" aria-label="Book detail">
+      <div class="book-detail-wrap">
+        <button class="back-btn" onclick="switchView('books')" aria-label="Back to books">
+          ← Back to shelf
+        </button>
 
-    <header class="book-detail-header">
-      <div class="book-cover-mock" aria-hidden="true">
-        <span class="book-cover-vinyl"></span>
-        <span class="cover-title">THE PSYCHOLOGY OF MONEY</span>
-      </div>
-      <div class="book-detail-info">
-        <h1>The Psychology of Money</h1>
-        <div class="book-detail-author">Morgan Housel</div>
-        <div class="book-detail-rating" aria-label="5 stars">★★★★★</div>
-        <div class="book-detail-tags">
-          <span class="book-tag">Finance</span>
-          <span class="book-tag">Behaviour</span>
-          <span class="book-tag">Long-Term Thinking</span>
+        <header class="book-detail-header">
+          <div class="book-cover-mock" aria-hidden="true">
+            <span class="book-cover-vinyl"></span>
+            <span class="cover-title">THE PSYCHOLOGY OF MONEY</span>
+          </div>
+          <div class="book-detail-info">
+            <h1>The Psychology of Money</h1>
+            <div class="book-detail-author">Morgan Housel</div>
+            <div class="book-detail-rating" aria-label="5 stars">★★★★★</div>
+            <div class="book-detail-tags">
+              <span class="book-tag">Finance</span>
+              <span class="book-tag">Behaviour</span>
+              <span class="book-tag">Long-Term Thinking</span>
+            </div>
+          </div>
+        </header>
+
+        <div class="book-detail-body">
+          <h2>What The Book Is About</h2>
+          <p>
+            The Psychology of Money is not a book about how to pick stocks or optimise a portfolio.
+            Morgan Housel — a partner at the Collaborative Fund and former columnist at the Wall
+            Street Journal — is interested in something more fundamental: why smart, educated people
+            make terrible financial decisions, and why ordinary people with no finance background
+            sometimes accumulate remarkable wealth. His answer, developed across 19 interconnected
+            essays, is that financial outcomes are determined less by spreadsheet intelligence and
+            more by behaviour. Specifically, by the stories we tell ourselves about money, risk,
+            time, and luck.
+          </p>
+
+          <p>
+            The book arrived in 2020, in the middle of a pandemic that scrambled every economic
+            assumption, and it felt immediately essential. It was not giving advice calibrated to a
+            bull market or a particular macroeconomic regime. It was talking about human nature —
+            which is the one constant the market always prices in last.
+          </p>
+
+          <h2>The Insight That Stuck</h2>
+          <p>
+            Of all Housel's ideas, the one I return to most is his distinction between being wealthy
+            and being rich. Being rich means having a high income or visible assets — the car, the
+            watch, the house in the right postcode. Being wealthy means having unspent financial
+            assets: options, time, choices. Wealth is invisible by definition. We cannot see it. And
+            because we cannot see it, we systematically undervalue it and overvalue the performance
+            of richness.
+          </p>
+
+          <blockquote>
+            <p>
+              Wealth is what you don't see. It's the cars not purchased, the diamonds not bought,
+              the renovations postponed, the clothes forgone and the first-class upgrade declined.
+              It's assets in the bank that haven't yet been converted into the stuff you see.
+            </p>
+            <cite>— Morgan Housel, The Psychology of Money</cite>
+          </blockquote>
+
+          <p>
+            This hit me harder than I expected. I had spent years thinking about financial
+            independence in terms of income milestones — if I earn this much, then I will be fine.
+            Housel reframes the equation entirely: it is not about what you earn but about the gap
+            between what you earn and what you spend, maintained consistently over time. Compounding
+            does the rest.
+          </p>
+
+          <h2>Key Ideas</h2>
+          <ul>
+            <li>
+              <strong>Luck and risk are siblings.</strong> Every outcome has a component that was
+              never in your control. Acknowledging this makes you more generous toward others'
+              failures and less arrogant about your own successes.
+            </li>
+            <li>
+              <strong>Enough is underrated.</strong> The inability to stop goal-posts moving is one
+              of the most dangerous financial traits. Knowing when you have enough requires genuine
+              self-knowledge, not just a higher number.
+            </li>
+            <li>
+              <strong>Tail events drive everything.</strong> A small number of outcomes account for
+              the majority of results in investing, careers, and business. Getting comfortable with
+              long periods of mediocrity in order to be present for the rare exceptional moment is a
+              skill.
+            </li>
+            <li>
+              <strong>You are not a spreadsheet.</strong> Saving money in a way that causes you
+              daily anxiety is not a rational strategy even if the numbers say it is. The best
+              financial plan is the one you can stick to.
+            </li>
+            <li>
+              <strong>The price of admission.</strong> Volatility is not a bug in markets — it is
+              the fee for long-term returns. Reframing it as a cost rather than a punishment changes
+              how you endure downturns.
+            </li>
+          </ul>
+
+          <blockquote>
+            <p>
+              The highest form of wealth is the ability to wake up every morning and say, "I can do
+              whatever I want today."
+            </p>
+            <cite>— Morgan Housel, The Psychology of Money</cite>
+          </blockquote>
+
+          <h2>Who Should Read This</h2>
+          <p>
+            Everyone, without qualification — but especially software engineers and others in
+            high-income, high-volatility careers who are prone to lifestyle inflation and
+            scope-creep in ambition. The book is short, deliberately readable, and does not require
+            any prior knowledge of finance. Housel writes in plain English about complex human
+            dynamics, and that combination is genuinely rare. I have recommended it to a family
+            member who has never invested a penny and to a colleague who manages a venture fund.
+            Both found it valuable in completely different ways. That is the mark of a book that has
+            genuinely found something true.
+          </p>
         </div>
       </div>
-    </header>
+    </main>
 
-    <div class="book-detail-body">
-      <h2>What The Book Is About</h2>
-      <p>The Psychology of Money is not a book about how to pick stocks or optimise a portfolio. Morgan Housel — a partner at the Collaborative Fund and former columnist at the Wall Street Journal — is interested in something more fundamental: why smart, educated people make terrible financial decisions, and why ordinary people with no finance background sometimes accumulate remarkable wealth. His answer, developed across 19 interconnected essays, is that financial outcomes are determined less by spreadsheet intelligence and more by behaviour. Specifically, by the stories we tell ourselves about money, risk, time, and luck.</p>
-
-      <p>The book arrived in 2020, in the middle of a pandemic that scrambled every economic assumption, and it felt immediately essential. It was not giving advice calibrated to a bull market or a particular macroeconomic regime. It was talking about human nature — which is the one constant the market always prices in last.</p>
-
-      <h2>The Insight That Stuck</h2>
-      <p>Of all Housel's ideas, the one I return to most is his distinction between being wealthy and being rich. Being rich means having a high income or visible assets — the car, the watch, the house in the right postcode. Being wealthy means having unspent financial assets: options, time, choices. Wealth is invisible by definition. We cannot see it. And because we cannot see it, we systematically undervalue it and overvalue the performance of richness.</p>
-
-      <blockquote>
-        <p>Wealth is what you don't see. It's the cars not purchased, the diamonds not bought, the renovations postponed, the clothes forgone and the first-class upgrade declined. It's assets in the bank that haven't yet been converted into the stuff you see.</p>
-        <cite>— Morgan Housel, The Psychology of Money</cite>
-      </blockquote>
-
-      <p>This hit me harder than I expected. I had spent years thinking about financial independence in terms of income milestones — if I earn this much, then I will be fine. Housel reframes the equation entirely: it is not about what you earn but about the gap between what you earn and what you spend, maintained consistently over time. Compounding does the rest.</p>
-
-      <h2>Key Ideas</h2>
-      <ul>
-        <li><strong>Luck and risk are siblings.</strong> Every outcome has a component that was never in your control. Acknowledging this makes you more generous toward others' failures and less arrogant about your own successes.</li>
-        <li><strong>Enough is underrated.</strong> The inability to stop goal-posts moving is one of the most dangerous financial traits. Knowing when you have enough requires genuine self-knowledge, not just a higher number.</li>
-        <li><strong>Tail events drive everything.</strong> A small number of outcomes account for the majority of results in investing, careers, and business. Getting comfortable with long periods of mediocrity in order to be present for the rare exceptional moment is a skill.</li>
-        <li><strong>You are not a spreadsheet.</strong> Saving money in a way that causes you daily anxiety is not a rational strategy even if the numbers say it is. The best financial plan is the one you can stick to.</li>
-        <li><strong>The price of admission.</strong> Volatility is not a bug in markets — it is the fee for long-term returns. Reframing it as a cost rather than a punishment changes how you endure downturns.</li>
-      </ul>
-
-      <blockquote>
-        <p>The highest form of wealth is the ability to wake up every morning and say, "I can do whatever I want today."</p>
-        <cite>— Morgan Housel, The Psychology of Money</cite>
-      </blockquote>
-
-      <h2>Who Should Read This</h2>
-      <p>Everyone, without qualification — but especially software engineers and others in high-income, high-volatility careers who are prone to lifestyle inflation and scope-creep in ambition. The book is short, deliberately readable, and does not require any prior knowledge of finance. Housel writes in plain English about complex human dynamics, and that combination is genuinely rare. I have recommended it to a family member who has never invested a penny and to a colleague who manages a venture fund. Both found it valuable in completely different ways. That is the mark of a book that has genuinely found something true.</p>
-    </div>
-  </div>
-</main>
-
-<!-- ============================================================
+    <!-- ============================================================
      VIEW: PROJECTS
      ============================================================ -->
-<main class="view" id="view-projects" aria-label="Projects">
-  <header class="projects-header">
-    <h1 class="projects-title">PROJECTS.</h1>
-    <p class="books-subtitle" style="margin-top:8px;">Things I built and shipped</p>
-  </header>
+    <main class="view" id="view-projects" aria-label="Projects">
+      <header class="projects-header">
+        <h1 class="projects-title">PROJECTS.</h1>
+        <p class="books-subtitle" style="margin-top: 8px">Things I built and shipped</p>
+      </header>
 
-  <div class="setlist" role="list">
-    <article class="setlist-item" role="listitem">
-      <div class="setlist-num" aria-hidden="true">01</div>
-      <div class="setlist-content">
-        <h2>Deepflow</h2>
-        <p class="setlist-desc">A focus timer built around the science of deep work. Tracks Pomodoro-style sessions, logs productivity data to a local JSON store, and surfaces weekly patterns to help you understand when you actually do your best work. No accounts, no cloud — your data stays on your machine.</p>
-        <div class="tech-stack" aria-label="Technologies">
-          <span class="tech-tag">React</span>
-          <span class="tech-tag">TypeScript</span>
-          <span class="tech-tag">Next.js</span>
-          <span class="tech-tag">Firebase</span>
-        </div>
-        <div class="project-links">
-          <a class="project-link" href="#" aria-label="View Deepflow on GitHub">GitHub</a>
-          <a class="project-link" href="#" aria-label="View Deepflow live">Live</a>
-        </div>
+      <div class="setlist" role="list">
+        <article class="setlist-item" role="listitem">
+          <div class="setlist-num" aria-hidden="true">01</div>
+          <div class="setlist-content">
+            <h2>Deepflow</h2>
+            <p class="setlist-desc">
+              A focus timer built around the science of deep work. Tracks Pomodoro-style sessions,
+              logs productivity data to a local JSON store, and surfaces weekly patterns to help you
+              understand when you actually do your best work. No accounts, no cloud — your data
+              stays on your machine.
+            </p>
+            <div class="tech-stack" aria-label="Technologies">
+              <span class="tech-tag">React</span>
+              <span class="tech-tag">TypeScript</span>
+              <span class="tech-tag">Next.js</span>
+              <span class="tech-tag">Firebase</span>
+            </div>
+            <div class="project-links">
+              <a class="project-link" href="#" aria-label="View Deepflow on GitHub">GitHub</a>
+              <a class="project-link" href="#" aria-label="View Deepflow live">Live</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="setlist-item" role="listitem">
+          <div class="setlist-num" aria-hidden="true">02</div>
+          <div class="setlist-content">
+            <h2>Listu</h2>
+            <p class="setlist-desc">
+              An iOS habit tracker designed for simplicity over analytics. One screen, one list, one
+              tap to log. Built with SwiftUI and designed around the insight that tracking friction
+              is the primary reason people abandon habit systems. The fewer taps between you and
+              logging a habit, the more likely the habit sticks.
+            </p>
+            <div class="tech-stack" aria-label="Technologies">
+              <span class="tech-tag">Swift</span>
+              <span class="tech-tag">SwiftUI</span>
+              <span class="tech-tag">iOS</span>
+            </div>
+            <div class="project-links">
+              <a class="project-link" href="#" aria-label="View Listu on GitHub">GitHub</a>
+              <a class="project-link" href="#" aria-label="View Listu on App Store">App Store</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="setlist-item" role="listitem">
+          <div class="setlist-num" aria-hidden="true">03</div>
+          <div class="setlist-content">
+            <h2>KODR</h2>
+            <p class="setlist-desc">
+              A CLI tool that scaffolds new TypeScript projects with opinionated defaults: ESLint,
+              Prettier, Vitest, and a structured src/ layout. Born from the tedium of setting up the
+              same configuration on every new project. One command to go from blank directory to a
+              setup you can actually code in.
+            </p>
+            <div class="tech-stack" aria-label="Technologies">
+              <span class="tech-tag">Node.js</span>
+              <span class="tech-tag">TypeScript</span>
+              <span class="tech-tag">CLI</span>
+            </div>
+            <div class="project-links">
+              <a class="project-link" href="#" aria-label="View KODR on GitHub">GitHub</a>
+              <a class="project-link" href="#" aria-label="View KODR on npm">npm</a>
+            </div>
+          </div>
+        </article>
       </div>
-    </article>
+    </main>
 
-    <article class="setlist-item" role="listitem">
-      <div class="setlist-num" aria-hidden="true">02</div>
-      <div class="setlist-content">
-        <h2>Listu</h2>
-        <p class="setlist-desc">An iOS habit tracker designed for simplicity over analytics. One screen, one list, one tap to log. Built with SwiftUI and designed around the insight that tracking friction is the primary reason people abandon habit systems. The fewer taps between you and logging a habit, the more likely the habit sticks.</p>
-        <div class="tech-stack" aria-label="Technologies">
-          <span class="tech-tag">Swift</span>
-          <span class="tech-tag">SwiftUI</span>
-          <span class="tech-tag">iOS</span>
-        </div>
-        <div class="project-links">
-          <a class="project-link" href="#" aria-label="View Listu on GitHub">GitHub</a>
-          <a class="project-link" href="#" aria-label="View Listu on App Store">App Store</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="setlist-item" role="listitem">
-      <div class="setlist-num" aria-hidden="true">03</div>
-      <div class="setlist-content">
-        <h2>KODR</h2>
-        <p class="setlist-desc">A CLI tool that scaffolds new TypeScript projects with opinionated defaults: ESLint, Prettier, Vitest, and a structured src/ layout. Born from the tedium of setting up the same configuration on every new project. One command to go from blank directory to a setup you can actually code in.</p>
-        <div class="tech-stack" aria-label="Technologies">
-          <span class="tech-tag">Node.js</span>
-          <span class="tech-tag">TypeScript</span>
-          <span class="tech-tag">CLI</span>
-        </div>
-        <div class="project-links">
-          <a class="project-link" href="#" aria-label="View KODR on GitHub">GitHub</a>
-          <a class="project-link" href="#" aria-label="View KODR on npm">npm</a>
-        </div>
-      </div>
-    </article>
-  </div>
-</main>
-
-<script>
-/* ============================================================
+    <script>
+      /* ============================================================
    VIEW SWITCHER
    ============================================================ */
-const views = ['home', 'blog', 'article', 'books', 'book-detail', 'projects'];
+      const views = ["home", "blog", "article", "books", "book-detail", "projects"]
 
-function switchView(name) {
-  views.forEach(v => {
-    const el = document.getElementById('view-' + v);
-    const btn = document.getElementById('nav-' + v);
-    if (el) el.classList.toggle('active', v === name);
-    if (btn) btn.classList.toggle('active', v === name);
-  });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+      function switchView(name) {
+        views.forEach((v) => {
+          const el = document.getElementById("view-" + v)
+          const btn = document.getElementById("nav-" + v)
+          if (el) el.classList.toggle("active", v === name)
+          if (btn) btn.classList.toggle("active", v === name)
+        })
+        window.scrollTo({ top: 0, behavior: "smooth" })
+      }
 
-/* ============================================================
+      /* ============================================================
    DARK MODE
    ============================================================ */
-const toggleBtn = document.getElementById('themeToggle');
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+      const toggleBtn = document.getElementById("themeToggle")
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)")
 
-function applyTheme(dark) {
-  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-  toggleBtn.textContent = dark ? '✦' : '☀';
-  toggleBtn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
-}
+      function applyTheme(dark) {
+        document.documentElement.setAttribute("data-theme", dark ? "dark" : "light")
+        toggleBtn.textContent = dark ? "✦" : "☀"
+        toggleBtn.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode")
+      }
 
-// Initialise from localStorage or system preference
-const saved = localStorage.getItem('theme');
-applyTheme(saved ? saved === 'dark' : prefersDark.matches);
+      // Initialise from localStorage or system preference
+      const saved = localStorage.getItem("theme")
+      applyTheme(saved ? saved === "dark" : prefersDark.matches)
 
-toggleBtn.addEventListener('click', () => {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  const next = !isDark;
-  applyTheme(next);
-  localStorage.setItem('theme', next ? 'dark' : 'light');
-});
+      toggleBtn.addEventListener("click", () => {
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark"
+        const next = !isDark
+        applyTheme(next)
+        localStorage.setItem("theme", next ? "dark" : "light")
+      })
 
-/* ============================================================
+      /* ============================================================
    TAG FILTER (BLOG VIEW)
    ============================================================ */
-document.querySelectorAll('.tag-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const tag = btn.dataset.tag;
+      document.querySelectorAll(".tag-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const tag = btn.dataset.tag
 
-    // Update active state
-    document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+          // Update active state
+          document.querySelectorAll(".tag-btn").forEach((b) => b.classList.remove("active"))
+          btn.classList.add("active")
 
-    // Show/hide rows
-    document.querySelectorAll('.blog-row').forEach(row => {
-      const rowTag = row.dataset.tag;
-      if (tag === 'all' || rowTag === tag) {
-        row.style.display = '';
-      } else {
-        row.style.display = 'none';
-      }
-    });
-  });
-});
+          // Show/hide rows
+          document.querySelectorAll(".blog-row").forEach((row) => {
+            const rowTag = row.dataset.tag
+            if (tag === "all" || rowTag === tag) {
+              row.style.display = ""
+            } else {
+              row.style.display = "none"
+            }
+          })
+        })
+      })
 
-/* ============================================================
+      /* ============================================================
    TOC SCROLL SPY
    ============================================================ */
-function scrollToSection(id) {
-  const target = document.getElementById(id);
-  if (target) {
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-}
-
-function initScrollSpy() {
-  const articleView = document.getElementById('view-article');
-  if (!articleView) return;
-
-  const sections = ['s1', 's2', 's3', 's4'];
-  const tocItems = document.querySelectorAll('.toc-item');
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          tocItems.forEach(item => {
-            item.classList.toggle('active', item.dataset.target === id);
-          });
+      function scrollToSection(id) {
+        const target = document.getElementById(id)
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "start" })
         }
-      });
-    },
-    {
-      root: null,
-      rootMargin: '-20% 0px -60% 0px',
-      threshold: 0
-    }
-  );
+      }
 
-  sections.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) observer.observe(el);
-  });
-}
+      function initScrollSpy() {
+        const articleView = document.getElementById("view-article")
+        if (!articleView) return
 
-initScrollSpy();
-</script>
-</body>
+        const sections = ["s1", "s2", "s3", "s4"]
+        const tocItems = document.querySelectorAll(".toc-item")
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const id = entry.target.id
+                tocItems.forEach((item) => {
+                  item.classList.toggle("active", item.dataset.target === id)
+                })
+              }
+            })
+          },
+          {
+            root: null,
+            rootMargin: "-20% 0px -60% 0px",
+            threshold: 0,
+          }
+        )
+
+        sections.forEach((id) => {
+          const el = document.getElementById(id)
+          if (el) observer.observe(el)
+        })
+      }
+
+      initScrollSpy()
+    </script>
+  </body>
 </html>

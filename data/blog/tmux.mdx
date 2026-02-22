@@ -119,8 +119,7 @@ bind-key C-a send-prefix
 set -g mouse on
 ```
 
-> A general recommendation is to change your caps lock to  be the control key in the keyboard, as you will use it far more, typically the ctrl key is in an awkward position to reach.
-> 
+> A general recommendation is to change your caps lock to be the control key in the keyboard, as you will use it far more, typically the ctrl key is in an awkward position to reach.
 
 Now lets exit and re-enter your tmux session so your configuration is loaded:
 
@@ -134,7 +133,7 @@ And enter tmux again:
 tmux
 ```
 
-You should be able to split the pane by doing `prefix  + %` , as well  as reload your configuration by doing `prefix + r` .
+You should be able to split the pane by doing `prefix  + %` , as well as reload your configuration by doing `prefix + r` .
 
 ## Working with panes
 
@@ -142,7 +141,7 @@ Working with panes with tmux is probably the thing you will be doing the most, s
 
 ```bash
 # split panes using | and -, as they are more intuitive
-unbind 
+unbind
 bind | split-window -h
 
 unbind '"'
@@ -175,7 +174,6 @@ Now you will be able to split windows and resize in a far more intuitive way (mo
 To enable smooth scrolling and navigation in your new tmux terminal, it is important to understand what copy mode is.
 
 > Copy mode in tmux allows users to scroll through the terminal effortlessly, select and copy text using vim keybindings, and enhance their ability to navigate and manipulate text within tmux.
-> 
 
 First lets add this to our configuration file:
 
@@ -199,7 +197,6 @@ Now we will be able to enter copy mode by either:
 - Pressing `prefix + [` .
 
 > You will notice that you are in copy mode by seeing a box in the upper right corner of your terminal, displaying the line you are currently in and the number of lines you can scroll through. For example, [0/114].
-> 
 
 Now you can navigate using vim commands, select and copy text, and use the mouse as you normally would. In order to exit copy mode just press `q` or scrolling to the bottom with your mouse.
 
@@ -208,7 +205,6 @@ Now you can navigate using vim commands, select and copy text, and use the mouse
 ### Using a plugin manager
 
 > In order to install the plugins you have to run `prefix + shift + i`
-> 
 
 **Using TPM**
 
@@ -230,7 +226,6 @@ run '~/.tmux/plugins/tpm/tpm'
 ```
 
 > Remember to install the plugins after you’ve saved your config file with `prefix + shift + i`
-> 
 
 Now you can navigate between panes in the same way as you would in NeoVim, using the following key combinations:
 
@@ -240,7 +235,6 @@ Now you can navigate between panes in the same way as you would in NeoVim, using
 - `ctrl + l`: Move one pane right.
 
 > If you have the same plugin in your Neovim config by christoomey, you will also be able to navigate between Neovim panes and Tmux panes.
-> 
 
 ### Using a theme
 
@@ -255,7 +249,6 @@ set -g @themepack 'powerline/default/cyan' # use this theme for tmux-themepack
 ```
 
 > Remember to install the plugins after you’ve saved your config file with `prefix + shift + i`
-> 
 
 ### Keeping sessions after restart (resurrect 🪦)
 
@@ -270,7 +263,6 @@ set -g @continuum-restore 'on' # enable tmux-continuum functionality
 ```
 
 > Remember to install the plugins after you’ve saved your config file with `prefix + shift + i`
-> 
 
 # Conclusion and some words of wisdom
 
