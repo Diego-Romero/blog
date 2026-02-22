@@ -21,7 +21,7 @@ function icon(size) {
   // Center the "d>" as a single unit
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
   <rect width="${size}" height="${size}" rx="${r}" fill="${DARK}"/>
-  <text x="${size * 0.5}" y="${size * 0.58}" font-family="'SF Mono','Fira Code','Courier New',monospace" font-size="${fs}" font-weight="700" text-anchor="middle" dominant-baseline="middle"><tspan fill="${AMBER}">d</tspan><tspan fill="${GREEN}">&gt;</tspan></text>
+  <text x="${size * 0.5}" y="${size * 0.52}" font-family="'SF Mono','Fira Code','Courier New',monospace" font-size="${fs}" font-weight="700" text-anchor="middle" dominant-baseline="middle"><tspan fill="${AMBER}">d</tspan><tspan fill="${GREEN}">&gt;</tspan></text>
 </svg>`
 }
 
