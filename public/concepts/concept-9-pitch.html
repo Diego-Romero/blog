@@ -1,2341 +1,2572 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pitch Side — diegoromero.blog</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-/* ============================================================
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pitch Side — diegoromero.blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ============================================================
    PITCH SIDE — SPORTS EDITORIAL BLOG CONCEPT
    diegoromero.blog
    ============================================================ */
 
-:root {
-  --bg: #FFFFFF;
-  --fg: #111111;
-  --accent: #FF6B35;
-  --accent2: #1B4D3E;
-  --surface: #F4F4F4;
-  --muted: #777777;
-  --border: #E0E0E0;
-  --nav-h: 56px;
-  --bottom-nav-h: 56px;
-  --ticker-h: 32px;
-}
+      :root {
+        --bg: #ffffff;
+        --fg: #111111;
+        --accent: #ff6b35;
+        --accent2: #1b4d3e;
+        --surface: #f4f4f4;
+        --muted: #777777;
+        --border: #e0e0e0;
+        --nav-h: 56px;
+        --bottom-nav-h: 56px;
+        --ticker-h: 32px;
+      }
 
-[data-theme="dark"] {
-  --bg: #111111;
-  --fg: #F4F4F4;
-  --accent: #FF6B35;
-  --accent2: #2D7A5E;
-  --surface: #1E1E1E;
-  --muted: #888888;
-  --border: #2A2A2A;
-}
+      [data-theme="dark"] {
+        --bg: #111111;
+        --fg: #f4f4f4;
+        --accent: #ff6b35;
+        --accent2: #2d7a5e;
+        --surface: #1e1e1e;
+        --muted: #888888;
+        --border: #2a2a2a;
+      }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-html { scroll-behavior: smooth; }
+      html {
+        scroll-behavior: smooth;
+      }
 
-body {
-  font-family: 'Merriweather', Georgia, serif;
-  background: var(--bg);
-  color: var(--fg);
-  min-height: 100vh;
-  padding-top: calc(var(--nav-h) + var(--ticker-h));
-  padding-bottom: var(--bottom-nav-h);
-  transition: background 0.3s, color 0.3s;
-  overflow-x: hidden;
-}
+      body {
+        font-family: "Merriweather", Georgia, serif;
+        background: var(--bg);
+        color: var(--fg);
+        min-height: 100vh;
+        padding-top: calc(var(--nav-h) + var(--ticker-h));
+        padding-bottom: var(--bottom-nav-h);
+        transition:
+          background 0.3s,
+          color 0.3s;
+        overflow-x: hidden;
+      }
 
-/* ============================================================
+      /* ============================================================
    TOP NAV
    ============================================================ */
-.top-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 1000;
-  background: var(--bg);
-  border-bottom: 2px solid var(--fg);
-}
+      .top-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: var(--bg);
+        border-bottom: 2px solid var(--fg);
+      }
 
-.nav-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: var(--nav-h);
-  padding: 0 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: var(--nav-h);
+        padding: 0 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
 
-.nav-logo {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  text-decoration: none;
-  cursor: pointer;
-}
+      .nav-logo {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        text-decoration: none;
+        cursor: pointer;
+      }
 
-.nav-logo-main {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  font-size: 1.4rem;
-  color: var(--fg);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
+      .nav-logo-main {
+        font-family: "Oswald", sans-serif;
+        font-weight: 700;
+        font-size: 1.4rem;
+        color: var(--fg);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
 
-.nav-logo-tag {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  color: var(--accent);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  border: 1px solid var(--accent);
-  padding: 1px 5px;
-  border-radius: 2px;
-}
+      .nav-logo-tag {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.65rem;
+        color: var(--accent);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        border: 1px solid var(--accent);
+        padding: 1px 5px;
+        border-radius: 2px;
+      }
 
-.nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
 
-.nav-season {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  color: var(--muted);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
+      .nav-season {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.7rem;
+        color: var(--muted);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
 
-.dark-toggle {
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  color: var(--fg);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s, border-color 0.2s, transform 0.2s;
-}
+      .dark-toggle {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        color: var(--fg);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          background 0.2s,
+          border-color 0.2s,
+          transform 0.2s;
+      }
 
-.dark-toggle:hover {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
-  transform: rotate(20deg);
-}
+      .dark-toggle:hover {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+        transform: rotate(20deg);
+      }
 
-/* ============================================================
+      /* ============================================================
    SCORE TICKER
    ============================================================ */
-.ticker-wrap {
-  position: fixed;
-  top: var(--nav-h);
-  left: 0; right: 0;
-  z-index: 999;
-  background: var(--fg);
-  height: var(--ticker-h);
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-}
+      .ticker-wrap {
+        position: fixed;
+        top: var(--nav-h);
+        left: 0;
+        right: 0;
+        z-index: 999;
+        background: var(--fg);
+        height: var(--ticker-h);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+      }
 
-.ticker-label {
-  font-family: 'Oswald', sans-serif;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: var(--accent);
-  background: var(--accent2);
-  padding: 0 12px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  flex-shrink: 0;
-  text-transform: uppercase;
-}
+      .ticker-label {
+        font-family: "Oswald", sans-serif;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        color: var(--accent);
+        background: var(--accent2);
+        padding: 0 12px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        flex-shrink: 0;
+        text-transform: uppercase;
+      }
 
-.ticker-track {
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  animation: ticker-scroll 30s linear infinite;
-  will-change: transform;
-}
+      .ticker-track {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        animation: ticker-scroll 30s linear infinite;
+        will-change: transform;
+      }
 
-@keyframes ticker-scroll {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
+      @keyframes ticker-scroll {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
 
-.ticker-item {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  color: var(--bg);
-  padding: 0 32px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  letter-spacing: 0.05em;
-}
+      .ticker-item {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.7rem;
+        color: var(--bg);
+        padding: 0 32px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        letter-spacing: 0.05em;
+      }
 
-.ticker-item::before {
-  content: '▶';
-  color: var(--accent);
-  font-size: 0.5rem;
-}
+      .ticker-item::before {
+        content: "▶";
+        color: var(--accent);
+        font-size: 0.5rem;
+      }
 
-/* ============================================================
+      /* ============================================================
    BOTTOM NAV
    ============================================================ */
-.bottom-nav {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  z-index: 1000;
-  background: var(--bg);
-  border-top: 2px solid var(--fg);
-  display: flex;
-  height: var(--bottom-nav-h);
-}
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: var(--bg);
+        border-top: 2px solid var(--fg);
+        display: flex;
+        height: var(--bottom-nav-h);
+      }
 
-.bottom-nav-btn {
-  flex: 1;
-  background: none;
-  border: none;
-  border-right: 1px solid var(--border);
-  color: var(--muted);
-  font-family: 'Oswald', sans-serif;
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  position: relative;
-  transition: color 0.2s, background 0.2s;
-  padding: 6px 2px;
-}
+      .bottom-nav-btn {
+        flex: 1;
+        background: none;
+        border: none;
+        border-right: 1px solid var(--border);
+        color: var(--muted);
+        font-family: "Oswald", sans-serif;
+        font-size: 0.6rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        position: relative;
+        transition:
+          color 0.2s,
+          background 0.2s;
+        padding: 6px 2px;
+      }
 
-.bottom-nav-btn:last-child { border-right: none; }
+      .bottom-nav-btn:last-child {
+        border-right: none;
+      }
 
-.bottom-nav-btn .btn-icon {
-  font-size: 1rem;
-  line-height: 1;
-}
+      .bottom-nav-btn .btn-icon {
+        font-size: 1rem;
+        line-height: 1;
+      }
 
-.bottom-nav-btn::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 50%;
-  width: 0; height: 3px;
-  background: var(--accent);
-  transition: width 0.25s ease, left 0.25s ease;
-}
+      .bottom-nav-btn::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 3px;
+        background: var(--accent);
+        transition:
+          width 0.25s ease,
+          left 0.25s ease;
+      }
 
-.bottom-nav-btn.active {
-  color: var(--fg);
-}
+      .bottom-nav-btn.active {
+        color: var(--fg);
+      }
 
-.bottom-nav-btn.active::after {
-  width: 100%;
-  left: 0;
-}
+      .bottom-nav-btn.active::after {
+        width: 100%;
+        left: 0;
+      }
 
-/* ============================================================
+      /* ============================================================
    STRIPE DIVIDERS
    ============================================================ */
-.stripe-divider {
-  height: 4px;
-  background: repeating-linear-gradient(
-    -45deg,
-    var(--accent) 0, var(--accent) 10px,
-    transparent 10px, transparent 20px
-  );
-  animation: stripe-slide-in 0.6s ease both;
-}
+      .stripe-divider {
+        height: 4px;
+        background: repeating-linear-gradient(
+          -45deg,
+          var(--accent) 0,
+          var(--accent) 10px,
+          transparent 10px,
+          transparent 20px
+        );
+        animation: stripe-slide-in 0.6s ease both;
+      }
 
-@keyframes stripe-slide-in {
-  from { transform: scaleX(0); transform-origin: left; }
-  to   { transform: scaleX(1); transform-origin: left; }
-}
+      @keyframes stripe-slide-in {
+        from {
+          transform: scaleX(0);
+          transform-origin: left;
+        }
+        to {
+          transform: scaleX(1);
+          transform-origin: left;
+        }
+      }
 
-.stripe-divider-green {
-  height: 4px;
-  background: repeating-linear-gradient(
-    -45deg,
-    var(--accent2) 0, var(--accent2) 10px,
-    transparent 10px, transparent 20px
-  );
-}
+      .stripe-divider-green {
+        height: 4px;
+        background: repeating-linear-gradient(
+          -45deg,
+          var(--accent2) 0,
+          var(--accent2) 10px,
+          transparent 10px,
+          transparent 20px
+        );
+      }
 
-/* ============================================================
+      /* ============================================================
    VIEWS
    ============================================================ */
-.view {
-  display: none;
-  min-height: calc(100vh - var(--nav-h) - var(--ticker-h) - var(--bottom-nav-h));
-  animation: view-in 0.3s ease;
-}
+      .view {
+        display: none;
+        min-height: calc(100vh - var(--nav-h) - var(--ticker-h) - var(--bottom-nav-h));
+        animation: view-in 0.3s ease;
+      }
 
-.view.active { display: block; }
+      .view.active {
+        display: block;
+      }
 
-@keyframes view-in {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+      @keyframes view-in {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-/* ============================================================
+      /* ============================================================
    HOME VIEW
    ============================================================ */
-.hero {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 420px;
-  position: relative;
-  overflow: hidden;
-}
+      .hero {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 420px;
+        position: relative;
+        overflow: hidden;
+      }
 
-.hero-left {
-  background: var(--accent2);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 40px 36px;
-  overflow: hidden;
-}
+      .hero-left {
+        background: var(--accent2);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 40px 36px;
+        overflow: hidden;
+      }
 
-.hero-stripes {
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    -45deg,
-    rgba(255,255,255,0.04) 0,
-    rgba(255,255,255,0.04) 12px,
-    transparent 12px,
-    transparent 24px
-  );
-  pointer-events: none;
-}
+      .hero-stripes {
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          -45deg,
+          rgba(255, 255, 255, 0.04) 0,
+          rgba(255, 255, 255, 0.04) 12px,
+          transparent 12px,
+          transparent 24px
+        );
+        pointer-events: none;
+      }
 
-.hero-left-inner {
-  position: relative;
-  z-index: 1;
-}
+      .hero-left-inner {
+        position: relative;
+        z-index: 1;
+      }
 
-.hero-overline {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  color: var(--accent);
-  text-transform: uppercase;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+      .hero-overline {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        color: var(--accent);
+        text-transform: uppercase;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
 
-.hero-overline::before {
-  content: '';
-  display: inline-block;
-  width: 20px;
-  height: 2px;
-  background: var(--accent);
-}
+      .hero-overline::before {
+        content: "";
+        display: inline-block;
+        width: 20px;
+        height: 2px;
+        background: var(--accent);
+      }
 
-.hero-name {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  font-size: clamp(2.4rem, 5vw, 4rem);
-  color: #ffffff;
-  line-height: 0.95;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  margin-bottom: 16px;
-}
+      .hero-name {
+        font-family: "Oswald", sans-serif;
+        font-weight: 700;
+        font-size: clamp(2.4rem, 5vw, 4rem);
+        color: #ffffff;
+        line-height: 0.95;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+      }
 
-.hero-name span {
-  display: block;
-  color: var(--accent);
-}
+      .hero-name span {
+        display: block;
+        color: var(--accent);
+      }
 
-.hero-desc {
-  font-family: 'Merriweather', serif;
-  font-size: 0.8rem;
-  font-weight: 300;
-  color: rgba(255,255,255,0.75);
-  line-height: 1.65;
-  max-width: 280px;
-}
+      .hero-desc {
+        font-family: "Merriweather", serif;
+        font-size: 0.8rem;
+        font-weight: 300;
+        color: rgba(255, 255, 255, 0.75);
+        line-height: 1.65;
+        max-width: 280px;
+      }
 
-.hero-right {
-  background: var(--bg);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 40px 36px;
-  border-left: 3px solid var(--fg);
-  position: relative;
-}
+      .hero-right {
+        background: var(--bg);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 40px 36px;
+        border-left: 3px solid var(--fg);
+        position: relative;
+      }
 
-.hero-right::before {
-  content: '';
-  position: absolute;
-  left: -3px; top: 50%;
-  transform: translateY(-50%);
-  width: 6px; height: 60px;
-  background: var(--accent);
-}
+      .hero-right::before {
+        content: "";
+        position: absolute;
+        left: -3px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 6px;
+        height: 60px;
+        background: var(--accent);
+      }
 
-.hero-season-block {
-  margin-bottom: 28px;
-}
+      .hero-season-block {
+        margin-bottom: 28px;
+      }
 
-.hero-season-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
-  color: var(--muted);
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
+      .hero-season-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.65rem;
+        letter-spacing: 0.15em;
+        color: var(--muted);
+        text-transform: uppercase;
+        margin-bottom: 4px;
+      }
 
-.hero-season-value {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  font-size: 2.2rem;
-  color: var(--accent);
-  letter-spacing: 0.05em;
-}
+      .hero-season-value {
+        font-family: "Oswald", sans-serif;
+        font-weight: 700;
+        font-size: 2.2rem;
+        color: var(--accent);
+        letter-spacing: 0.05em;
+      }
 
-.hero-tagline {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 400;
-  font-size: 1.15rem;
-  color: var(--fg);
-  letter-spacing: 0.03em;
-  line-height: 1.4;
-  text-transform: uppercase;
-  margin-bottom: 28px;
-  border-left: 3px solid var(--accent);
-  padding-left: 14px;
-}
+      .hero-tagline {
+        font-family: "Oswald", sans-serif;
+        font-weight: 400;
+        font-size: 1.15rem;
+        color: var(--fg);
+        letter-spacing: 0.03em;
+        line-height: 1.4;
+        text-transform: uppercase;
+        margin-bottom: 28px;
+        border-left: 3px solid var(--accent);
+        padding-left: 14px;
+      }
 
-.hero-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--accent);
-  color: #fff;
-  font-family: 'Oswald', sans-serif;
-  font-weight: 600;
-  font-size: 0.8rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 11px 22px;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.15s;
-  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
-}
+      .hero-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--accent);
+        color: #fff;
+        font-family: "Oswald", sans-serif;
+        font-weight: 600;
+        font-size: 0.8rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        padding: 11px 22px;
+        border: none;
+        cursor: pointer;
+        transition:
+          background 0.2s,
+          transform 0.15s;
+        clip-path: polygon(
+          0 0,
+          calc(100% - 8px) 0,
+          100% 8px,
+          100% 100%,
+          8px 100%,
+          0 calc(100% - 8px)
+        );
+      }
 
-.hero-cta:hover {
-  background: var(--accent2);
-  transform: translateY(-2px);
-}
+      .hero-cta:hover {
+        background: var(--accent2);
+        transform: translateY(-2px);
+      }
 
-/* Stats bar */
-.stats-bar {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  background: var(--fg);
-  color: var(--bg);
-}
+      /* Stats bar */
+      .stats-bar {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        background: var(--fg);
+        color: var(--bg);
+      }
 
-.stat-block {
-  padding: 20px 28px;
-  border-right: 1px solid rgba(255,255,255,0.12);
-  position: relative;
-  overflow: hidden;
-}
+      .stat-block {
+        padding: 20px 28px;
+        border-right: 1px solid rgba(255, 255, 255, 0.12);
+        position: relative;
+        overflow: hidden;
+      }
 
-.stat-block:last-child { border-right: none; }
+      .stat-block:last-child {
+        border-right: none;
+      }
 
-.stat-block::before {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0;
-  height: 3px;
-  width: 0;
-  background: var(--accent);
-  transition: width 0.8s ease 0.5s;
-}
+      .stat-block::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 3px;
+        width: 0;
+        background: var(--accent);
+        transition: width 0.8s ease 0.5s;
+      }
 
-.stat-block.animated::before { width: 100%; }
+      .stat-block.animated::before {
+        width: 100%;
+      }
 
-.stat-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.6rem;
-  letter-spacing: 0.15em;
-  color: rgba(255,255,255,0.5);
-  text-transform: uppercase;
-  margin-bottom: 6px;
-}
+      .stat-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.6rem;
+        letter-spacing: 0.15em;
+        color: rgba(255, 255, 255, 0.5);
+        text-transform: uppercase;
+        margin-bottom: 6px;
+      }
 
-[data-theme="dark"] .stat-label { color: rgba(244,244,244,0.4); }
+      [data-theme="dark"] .stat-label {
+        color: rgba(244, 244, 244, 0.4);
+      }
 
-.stat-number {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  font-size: 2.4rem;
-  color: var(--accent);
-  line-height: 1;
-  letter-spacing: -0.01em;
-}
+      .stat-number {
+        font-family: "Oswald", sans-serif;
+        font-weight: 700;
+        font-size: 2.4rem;
+        color: var(--accent);
+        line-height: 1;
+        letter-spacing: -0.01em;
+      }
 
-.stat-unit {
-  font-family: 'Merriweather', serif;
-  font-size: 0.75rem;
-  font-weight: 300;
-  color: rgba(255,255,255,0.65);
-  margin-top: 4px;
-}
+      .stat-unit {
+        font-family: "Merriweather", serif;
+        font-size: 0.75rem;
+        font-weight: 300;
+        color: rgba(255, 255, 255, 0.65);
+        margin-top: 4px;
+      }
 
-[data-theme="dark"] .stat-unit { color: rgba(244,244,244,0.5); }
+      [data-theme="dark"] .stat-unit {
+        color: rgba(244, 244, 244, 0.5);
+      }
 
-/* Home sections */
-.home-section {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 48px 24px;
-}
+      /* Home sections */
+      .home-section {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 48px 24px;
+      }
 
-.section-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 28px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid var(--fg);
-}
+      .section-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 28px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--fg);
+      }
 
-.section-title {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  font-size: 1.5rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--fg);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+      .section-title {
+        font-family: "Oswald", sans-serif;
+        font-weight: 700;
+        font-size: 1.5rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--fg);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
 
-.section-title-num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: var(--accent);
-  background: var(--surface);
-  padding: 2px 7px;
-  border-radius: 2px;
-  letter-spacing: 0.1em;
-}
+      .section-title-num {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: var(--accent);
+        background: var(--surface);
+        padding: 2px 7px;
+        border-radius: 2px;
+        letter-spacing: 0.1em;
+      }
 
-.section-link {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  color: var(--accent);
-  text-transform: uppercase;
-  text-decoration: none;
-  cursor: pointer;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.2s;
-}
+      .section-link {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        color: var(--accent);
+        text-transform: uppercase;
+        text-decoration: none;
+        cursor: pointer;
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.2s;
+      }
 
-.section-link:hover { border-color: var(--accent); }
+      .section-link:hover {
+        border-color: var(--accent);
+      }
 
-/* Cards grid */
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-}
+      /* Cards grid */
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+      }
 
-/* ============================================================
+      /* ============================================================
    ARTICLE CARD (MATCH PROGRAMME STYLE)
    ============================================================ */
-.article-card {
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  position: relative;
-  cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  overflow: hidden;
-}
+      .article-card {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        position: relative;
+        cursor: pointer;
+        transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease;
+        overflow: hidden;
+      }
 
-.article-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-}
+      .article-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      }
 
-.article-card-top {
-  height: 4px;
-  background: var(--accent);
-}
+      .article-card-top {
+        height: 4px;
+        background: var(--accent);
+      }
 
-.article-card-body {
-  padding: 20px 20px 16px;
-}
+      .article-card-body {
+        padding: 20px 20px 16px;
+      }
 
-.article-card-num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: var(--accent);
-  letter-spacing: 0.1em;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+      .article-card-num {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: var(--accent);
+        letter-spacing: 0.1em;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
 
-.article-card-date {
-  color: var(--muted);
-  font-weight: 400;
-}
+      .article-card-date {
+        color: var(--muted);
+        font-weight: 400;
+      }
 
-.article-card-title {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 600;
-  font-size: 1.15rem;
-  line-height: 1.2;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: var(--fg);
-  margin-bottom: 12px;
-}
+      .article-card-title {
+        font-family: "Oswald", sans-serif;
+        font-weight: 600;
+        font-size: 1.15rem;
+        line-height: 1.2;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: var(--fg);
+        margin-bottom: 12px;
+      }
 
-.article-card-excerpt {
-  font-family: 'Merriweather', serif;
-  font-size: 0.78rem;
-  font-weight: 300;
-  color: var(--muted);
-  line-height: 1.6;
-}
+      .article-card-excerpt {
+        font-family: "Merriweather", serif;
+        font-size: 0.78rem;
+        font-weight: 300;
+        color: var(--muted);
+        line-height: 1.6;
+      }
 
-.article-card-footer {
-  padding: 12px 20px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--bg);
-}
+      .article-card-footer {
+        padding: 12px 20px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--bg);
+      }
 
-.card-tags {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
+      .card-tags {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
 
-.tag {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.58rem;
-  letter-spacing: 0.08em;
-  color: var(--accent2);
-  background: rgba(27, 77, 62, 0.1);
-  border: 1px solid var(--accent2);
-  padding: 2px 7px;
-  text-transform: uppercase;
-  border-radius: 2px;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-}
+      .tag {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.58rem;
+        letter-spacing: 0.08em;
+        color: var(--accent2);
+        background: rgba(27, 77, 62, 0.1);
+        border: 1px solid var(--accent2);
+        padding: 2px 7px;
+        text-transform: uppercase;
+        border-radius: 2px;
+        cursor: pointer;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
 
-.tag:hover, .tag.active {
-  background: var(--accent2);
-  color: #fff;
-}
+      .tag:hover,
+      .tag.active {
+        background: var(--accent2);
+        color: #fff;
+      }
 
-.card-mins {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  color: var(--muted);
-  white-space: nowrap;
-}
+      .card-mins {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.65rem;
+        color: var(--muted);
+        white-space: nowrap;
+      }
 
-.card-arrow {
-  font-size: 0.75rem;
-  color: var(--accent);
-  font-weight: 700;
-}
+      .card-arrow {
+        font-size: 0.75rem;
+        color: var(--accent);
+        font-weight: 700;
+      }
 
-/* ============================================================
+      /* ============================================================
    BLOG VIEW — FIXTURES TABLE
    ============================================================ */
-.blog-header {
-  background: var(--accent2);
-  padding: 36px 24px;
-  position: relative;
-  overflow: hidden;
-}
+      .blog-header {
+        background: var(--accent2);
+        padding: 36px 24px;
+        position: relative;
+        overflow: hidden;
+      }
 
-.blog-header::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    -45deg,
-    rgba(255,255,255,0.03) 0,
-    rgba(255,255,255,0.03) 10px,
-    transparent 10px, transparent 20px
-  );
-  pointer-events: none;
-}
+      .blog-header::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          -45deg,
+          rgba(255, 255, 255, 0.03) 0,
+          rgba(255, 255, 255, 0.03) 10px,
+          transparent 10px,
+          transparent 20px
+        );
+        pointer-events: none;
+      }
 
-.blog-header-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}
+      .blog-header-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+      }
 
-.blog-header-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.18em;
-  color: var(--accent);
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
+      .blog-header-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.65rem;
+        letter-spacing: 0.18em;
+        color: var(--accent);
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
 
-.blog-header-title {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  font-size: 2.4rem;
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
+      .blog-header-title {
+        font-family: "Oswald", sans-serif;
+        font-weight: 700;
+        font-size: 2.4rem;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
 
-.blog-header-sub {
-  font-family: 'Merriweather', serif;
-  font-size: 0.8rem;
-  font-weight: 300;
-  color: rgba(255,255,255,0.65);
-  margin-top: 8px;
-}
+      .blog-header-sub {
+        font-family: "Merriweather", serif;
+        font-size: 0.8rem;
+        font-weight: 300;
+        color: rgba(255, 255, 255, 0.65);
+        margin-top: 8px;
+      }
 
-.blog-controls {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 20px 24px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  border-bottom: 1px solid var(--border);
-}
+      .blog-controls {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 20px 24px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        border-bottom: 1px solid var(--border);
+      }
 
-.filter-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
-  color: var(--muted);
-  text-transform: uppercase;
-  margin-right: 4px;
-}
+      .filter-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        text-transform: uppercase;
+        margin-right: 4px;
+      }
 
-/* Fixtures table */
-.fixtures-wrap {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 24px 48px;
-}
+      /* Fixtures table */
+      .fixtures-wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 24px 48px;
+      }
 
-.fixtures-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 16px;
-}
+      .fixtures-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+      }
 
-.fixtures-table thead th {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted);
-  padding: 10px 14px;
-  border-bottom: 2px solid var(--fg);
-  text-align: left;
-  white-space: nowrap;
-}
+      .fixtures-table thead th {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 10px 14px;
+        border-bottom: 2px solid var(--fg);
+        text-align: left;
+        white-space: nowrap;
+      }
 
-.fixtures-table tbody tr {
-  border-bottom: 1px solid var(--border);
-  cursor: pointer;
-  transition: background 0.15s;
-}
+      .fixtures-table tbody tr {
+        border-bottom: 1px solid var(--border);
+        cursor: pointer;
+        transition: background 0.15s;
+      }
 
-.fixtures-table tbody tr:hover {
-  background: var(--surface);
-}
+      .fixtures-table tbody tr:hover {
+        background: var(--surface);
+      }
 
-.fixtures-table tbody tr:hover .match-title {
-  color: var(--accent);
-}
+      .fixtures-table tbody tr:hover .match-title {
+        color: var(--accent);
+      }
 
-.fixtures-table td {
-  padding: 14px;
-  vertical-align: middle;
-}
+      .fixtures-table td {
+        padding: 14px;
+        vertical-align: middle;
+      }
 
-.td-date {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  color: var(--muted);
-  white-space: nowrap;
-  width: 120px;
-}
+      .td-date {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.7rem;
+        color: var(--muted);
+        white-space: nowrap;
+        width: 120px;
+      }
 
-.td-num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--accent);
-  width: 48px;
-  text-align: center;
-}
+      .td-num {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--accent);
+        width: 48px;
+        text-align: center;
+      }
 
-.match-title {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 600;
-  font-size: 1rem;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: var(--fg);
-  transition: color 0.15s;
-}
+      .match-title {
+        font-family: "Oswald", sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: var(--fg);
+        transition: color 0.15s;
+      }
 
-.td-tags { width: 180px; }
-.td-mins {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  color: var(--muted);
-  text-align: right;
-  width: 80px;
-  white-space: nowrap;
-}
+      .td-tags {
+        width: 180px;
+      }
+      .td-mins {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.7rem;
+        color: var(--muted);
+        text-align: right;
+        width: 80px;
+        white-space: nowrap;
+      }
 
-/* Mobile cards for blog */
-.blog-cards-mobile {
-  display: none;
-  padding: 16px 24px 48px;
-  max-width: 1100px;
-  margin: 0 auto;
-}
+      /* Mobile cards for blog */
+      .blog-cards-mobile {
+        display: none;
+        padding: 16px 24px 48px;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
 
-/* ============================================================
+      /* ============================================================
    ARTICLE VIEW — MATCH REPORT
    ============================================================ */
-.article-wrap {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 24px 60px;
-}
+      .article-wrap {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 24px 60px;
+      }
 
-.match-report-header {
-  background: var(--fg);
-  color: var(--bg);
-  padding: 36px;
-  margin: 0 -24px;
-  position: relative;
-  overflow: hidden;
-}
+      .match-report-header {
+        background: var(--fg);
+        color: var(--bg);
+        padding: 36px;
+        margin: 0 -24px;
+        position: relative;
+        overflow: hidden;
+      }
 
-.match-report-header::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    -45deg,
-    rgba(255,107,53,0.08) 0,
-    rgba(255,107,53,0.08) 10px,
-    transparent 10px, transparent 20px
-  );
-  pointer-events: none;
-}
+      .match-report-header::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          -45deg,
+          rgba(255, 107, 53, 0.08) 0,
+          rgba(255, 107, 53, 0.08) 10px,
+          transparent 10px,
+          transparent 20px
+        );
+        pointer-events: none;
+      }
 
-.match-report-inner { position: relative; z-index: 1; }
+      .match-report-inner {
+        position: relative;
+        z-index: 1;
+      }
 
-.match-report-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  color: var(--accent);
-  text-transform: uppercase;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+      .match-report-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        color: var(--accent);
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
 
-.match-report-label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: rgba(255,107,53,0.3);
-}
+      .match-report-label::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: rgba(255, 107, 53, 0.3);
+      }
 
-.match-report-date {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  color: rgba(255,255,255,0.5);
-  margin-bottom: 12px;
-  text-transform: uppercase;
-}
+      .match-report-date {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 12px;
+        text-transform: uppercase;
+      }
 
-[data-theme="dark"] .match-report-date { color: rgba(244,244,244,0.4); }
+      [data-theme="dark"] .match-report-date {
+        color: rgba(244, 244, 244, 0.4);
+      }
 
-.match-report-title {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  font-size: clamp(1.6rem, 4vw, 2.6rem);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  line-height: 1.05;
-  color: #fff;
-  margin-bottom: 16px;
-}
+      .match-report-title {
+        font-family: "Oswald", sans-serif;
+        font-weight: 700;
+        font-size: clamp(1.6rem, 4vw, 2.6rem);
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        line-height: 1.05;
+        color: #fff;
+        margin-bottom: 16px;
+      }
 
-[data-theme="dark"] .match-report-title { color: var(--fg); }
+      [data-theme="dark"] .match-report-title {
+        color: var(--fg);
+      }
 
-.match-report-meta {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
+      .match-report-meta {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
 
-.meta-item {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.08em;
-  color: rgba(255,255,255,0.55);
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  text-transform: uppercase;
-}
+      .meta-item {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.65rem;
+        letter-spacing: 0.08em;
+        color: rgba(255, 255, 255, 0.55);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        text-transform: uppercase;
+      }
 
-[data-theme="dark"] .meta-item { color: rgba(244,244,244,0.4); }
+      [data-theme="dark"] .meta-item {
+        color: rgba(244, 244, 244, 0.4);
+      }
 
-.meta-item strong {
-  color: rgba(255,255,255,0.85);
-  font-weight: 700;
-}
+      .meta-item strong {
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 700;
+      }
 
-[data-theme="dark"] .meta-item strong { color: rgba(244,244,244,0.8); }
+      [data-theme="dark"] .meta-item strong {
+        color: rgba(244, 244, 244, 0.8);
+      }
 
-/* Reading progress bar */
-.reading-progress {
-  height: 3px;
-  background: var(--border);
-  margin: 0 -24px;
-  position: relative;
-  overflow: hidden;
-}
+      /* Reading progress bar */
+      .reading-progress {
+        height: 3px;
+        background: var(--border);
+        margin: 0 -24px;
+        position: relative;
+        overflow: hidden;
+      }
 
-.reading-progress-fill {
-  height: 100%;
-  width: 65%;
-  background: linear-gradient(90deg, var(--accent2), var(--accent));
-  position: relative;
-}
+      .reading-progress-fill {
+        height: 100%;
+        width: 65%;
+        background: linear-gradient(90deg, var(--accent2), var(--accent));
+        position: relative;
+      }
 
-.reading-progress-fill::after {
-  content: '';
-  position: absolute;
-  right: 0; top: 0;
-  height: 100%;
-  width: 40px;
-  background: linear-gradient(90deg, transparent, rgba(255,107,53,0.4));
-  animation: progress-pulse 1.5s ease infinite;
-}
+      .reading-progress-fill::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: 40px;
+        background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.4));
+        animation: progress-pulse 1.5s ease infinite;
+      }
 
-@keyframes progress-pulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.4; }
-}
+      @keyframes progress-pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+      }
 
-/* Article TOC */
-.article-toc {
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-left: 3px solid var(--accent);
-  padding: 20px 22px;
-  margin: 32px 0;
-}
+      /* Article TOC */
+      .article-toc {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-left: 3px solid var(--accent);
+        padding: 20px 22px;
+        margin: 32px 0;
+      }
 
-.toc-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 12px;
-}
+      .toc-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 12px;
+      }
 
-.toc-list {
-  list-style: none;
-  counter-reset: toc;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
+      .toc-list {
+        list-style: none;
+        counter-reset: toc;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
 
-.toc-item {
-  counter-increment: toc;
-  font-family: 'Oswald', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--fg);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: color 0.15s;
-}
+      .toc-item {
+        counter-increment: toc;
+        font-family: "Oswald", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--fg);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: color 0.15s;
+      }
 
-.toc-item::before {
-  content: counter(toc, decimal-leading-zero);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.62rem;
-  color: var(--accent);
-  font-weight: 700;
-  width: 24px;
-  flex-shrink: 0;
-}
+      .toc-item::before {
+        content: counter(toc, decimal-leading-zero);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.62rem;
+        color: var(--accent);
+        font-weight: 700;
+        width: 24px;
+        flex-shrink: 0;
+      }
 
-.toc-item:hover { color: var(--accent); }
-.toc-item.active { color: var(--accent); }
+      .toc-item:hover {
+        color: var(--accent);
+      }
+      .toc-item.active {
+        color: var(--accent);
+      }
 
-/* Article body */
-.article-body {
-  margin-top: 36px;
-}
+      /* Article body */
+      .article-body {
+        margin-top: 36px;
+      }
 
-.article-body h2 {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  font-size: 1.4rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--fg);
-  margin: 40px 0 16px;
-  padding-bottom: 8px;
-  border-bottom: 2px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+      .article-body h2 {
+        font-family: "Oswald", sans-serif;
+        font-weight: 700;
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--fg);
+        margin: 40px 0 16px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
 
-.article-body h2::before {
-  content: attr(data-num);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: var(--accent);
-  background: var(--surface);
-  padding: 2px 7px;
-  border-radius: 2px;
-  flex-shrink: 0;
-}
+      .article-body h2::before {
+        content: attr(data-num);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: var(--accent);
+        background: var(--surface);
+        padding: 2px 7px;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
 
-.article-body p {
-  font-family: 'Merriweather', serif;
-  font-size: 0.92rem;
-  font-weight: 400;
-  line-height: 1.8;
-  color: var(--fg);
-  margin-bottom: 18px;
-}
+      .article-body p {
+        font-family: "Merriweather", serif;
+        font-size: 0.92rem;
+        font-weight: 400;
+        line-height: 1.8;
+        color: var(--fg);
+        margin-bottom: 18px;
+      }
 
-/* Blockquote — post match interview style */
-.article-body blockquote {
-  margin: 32px 0;
-  padding: 20px 24px 20px 32px;
-  border-left: 4px solid var(--accent2);
-  background: var(--surface);
-  position: relative;
-}
+      /* Blockquote — post match interview style */
+      .article-body blockquote {
+        margin: 32px 0;
+        padding: 20px 24px 20px 32px;
+        border-left: 4px solid var(--accent2);
+        background: var(--surface);
+        position: relative;
+      }
 
-.article-body blockquote::before {
-  content: '\201C';
-  font-family: 'Oswald', sans-serif;
-  font-size: 4rem;
-  font-weight: 700;
-  color: var(--accent);
-  position: absolute;
-  top: -8px;
-  left: 10px;
-  line-height: 1;
-  opacity: 0.6;
-}
+      .article-body blockquote::before {
+        content: "\201C";
+        font-family: "Oswald", sans-serif;
+        font-size: 4rem;
+        font-weight: 700;
+        color: var(--accent);
+        position: absolute;
+        top: -8px;
+        left: 10px;
+        line-height: 1;
+        opacity: 0.6;
+      }
 
-.article-body blockquote p {
-  font-family: 'Merriweather', serif;
-  font-style: italic;
-  font-size: 0.95rem;
-  line-height: 1.7;
-  color: var(--fg);
-  margin: 0 0 8px;
-  padding-left: 20px;
-}
+      .article-body blockquote p {
+        font-family: "Merriweather", serif;
+        font-style: italic;
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--fg);
+        margin: 0 0 8px;
+        padding-left: 20px;
+      }
 
-.article-body blockquote cite {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
-  color: var(--muted);
-  text-transform: uppercase;
-  padding-left: 20px;
-  font-style: normal;
-  display: block;
-}
+      .article-body blockquote cite {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        text-transform: uppercase;
+        padding-left: 20px;
+        font-style: normal;
+        display: block;
+      }
 
-.article-body blockquote cite::before {
-  content: '— ';
-}
+      .article-body blockquote cite::before {
+        content: "— ";
+      }
 
-/* Code block */
-.article-body pre {
-  background: #0D1117;
-  border: 1px solid #30363D;
-  border-left: 3px solid var(--accent);
-  border-radius: 2px;
-  padding: 20px 22px;
-  overflow-x: auto;
-  margin: 24px 0;
-  position: relative;
-}
+      /* Code block */
+      .article-body pre {
+        background: #0d1117;
+        border: 1px solid #30363d;
+        border-left: 3px solid var(--accent);
+        border-radius: 2px;
+        padding: 20px 22px;
+        overflow-x: auto;
+        margin: 24px 0;
+        position: relative;
+      }
 
-.code-lang {
-  position: absolute;
-  top: 10px;
-  right: 14px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--accent);
-  text-transform: uppercase;
-  opacity: 0.7;
-}
+      .code-lang {
+        position: absolute;
+        top: 10px;
+        right: 14px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.58rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        text-transform: uppercase;
+        opacity: 0.7;
+      }
 
-.article-body code {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.8rem;
-  line-height: 1.65;
-  color: #E6EDF3;
-}
+      .article-body code {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.8rem;
+        line-height: 1.65;
+        color: #e6edf3;
+      }
 
-.article-body :not(pre) > code {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.82em;
-  color: var(--accent);
-  background: rgba(255,107,53,0.08);
-  padding: 1px 6px;
-  border-radius: 2px;
-}
+      .article-body :not(pre) > code {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.82em;
+        color: var(--accent);
+        background: rgba(255, 107, 53, 0.08);
+        padding: 1px 6px;
+        border-radius: 2px;
+      }
 
-/* ============================================================
+      /* ============================================================
    BOOKS VIEW
    ============================================================ */
-.books-header {
-  background: var(--fg);
-  padding: 36px 24px;
-  position: relative;
-  overflow: hidden;
-}
+      .books-header {
+        background: var(--fg);
+        padding: 36px 24px;
+        position: relative;
+        overflow: hidden;
+      }
 
-.books-header::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    -45deg,
-    rgba(255,107,53,0.06) 0,
-    rgba(255,107,53,0.06) 10px,
-    transparent 10px, transparent 20px
-  );
-  pointer-events: none;
-}
+      .books-header::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          -45deg,
+          rgba(255, 107, 53, 0.06) 0,
+          rgba(255, 107, 53, 0.06) 10px,
+          transparent 10px,
+          transparent 20px
+        );
+        pointer-events: none;
+      }
 
-.books-header-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}
+      .books-header-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+      }
 
-.books-header-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.18em;
-  color: var(--accent);
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
+      .books-header-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.65rem;
+        letter-spacing: 0.18em;
+        color: var(--accent);
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
 
-.books-header-title {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  font-size: 2.4rem;
-  color: var(--bg);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
+      .books-header-title {
+        font-family: "Oswald", sans-serif;
+        font-weight: 700;
+        font-size: 2.4rem;
+        color: var(--bg);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
 
-[data-theme="dark"] .books-header-title { color: var(--fg); }
+      [data-theme="dark"] .books-header-title {
+        color: var(--fg);
+      }
 
-.books-header-sub {
-  font-family: 'Merriweather', serif;
-  font-size: 0.8rem;
-  font-weight: 300;
-  color: var(--muted);
-  margin-top: 8px;
-}
+      .books-header-sub {
+        font-family: "Merriweather", serif;
+        font-size: 0.8rem;
+        font-weight: 300;
+        color: var(--muted);
+        margin-top: 8px;
+      }
 
-/* League table */
-.league-table-wrap {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 24px 24px 48px;
-}
+      /* League table */
+      .league-table-wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 24px 24px 48px;
+      }
 
-.league-table {
-  width: 100%;
-  border-collapse: collapse;
-}
+      .league-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
 
-.league-table thead th {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted);
-  padding: 10px 14px;
-  border-bottom: 2px solid var(--fg);
-  text-align: left;
-}
+      .league-table thead th {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 10px 14px;
+        border-bottom: 2px solid var(--fg);
+        text-align: left;
+      }
 
-.league-table tbody tr {
-  border-bottom: 1px solid var(--border);
-  cursor: pointer;
-  transition: background 0.15s, transform 0.15s;
-}
+      .league-table tbody tr {
+        border-bottom: 1px solid var(--border);
+        cursor: pointer;
+        transition:
+          background 0.15s,
+          transform 0.15s;
+      }
 
-.league-table tbody tr:hover {
-  background: var(--surface);
-  transform: translateX(3px);
-}
+      .league-table tbody tr:hover {
+        background: var(--surface);
+        transform: translateX(3px);
+      }
 
-.league-table td {
-  padding: 16px 14px;
-  vertical-align: middle;
-}
+      .league-table td {
+        padding: 16px 14px;
+        vertical-align: middle;
+      }
 
-.td-pos {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--accent);
-  width: 40px;
-  text-align: center;
-}
+      .td-pos {
+        font-family: "JetBrains Mono", monospace;
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: var(--accent);
+        width: 40px;
+        text-align: center;
+      }
 
-.td-pos.gold  { color: #FFD700; }
-.td-pos.silver { color: #C0C0C0; }
-.td-pos.bronze { color: #CD7F32; }
+      .td-pos.gold {
+        color: #ffd700;
+      }
+      .td-pos.silver {
+        color: #c0c0c0;
+      }
+      .td-pos.bronze {
+        color: #cd7f32;
+      }
 
-.book-title-cell .book-title {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 600;
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  color: var(--fg);
-}
+      .book-title-cell .book-title {
+        font-family: "Oswald", sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        color: var(--fg);
+      }
 
-.book-title-cell .book-author {
-  font-family: 'Merriweather', serif;
-  font-size: 0.72rem;
-  font-weight: 300;
-  color: var(--muted);
-  margin-top: 2px;
-}
+      .book-title-cell .book-author {
+        font-family: "Merriweather", serif;
+        font-size: 0.72rem;
+        font-weight: 300;
+        color: var(--muted);
+        margin-top: 2px;
+      }
 
-.td-genre {
-  width: 100px;
-}
+      .td-genre {
+        width: 100px;
+      }
 
-.td-rating {
-  font-size: 0.85rem;
-  white-space: nowrap;
-  color: var(--accent);
-  width: 100px;
-}
+      .td-rating {
+        font-size: 0.85rem;
+        white-space: nowrap;
+        color: var(--accent);
+        width: 100px;
+      }
 
-.td-year {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  color: var(--muted);
-  width: 80px;
-  text-align: right;
-}
+      .td-year {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.7rem;
+        color: var(--muted);
+        width: 80px;
+        text-align: right;
+      }
 
-/* ============================================================
+      /* ============================================================
    BOOK DETAIL VIEW
    ============================================================ */
-.book-detail-wrap {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 24px 60px;
-}
+      .book-detail-wrap {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 24px 60px;
+      }
 
-.book-detail-header {
-  background: var(--accent2);
-  padding: 40px 36px;
-  margin: 0 -24px;
-  position: relative;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 28px;
-  align-items: end;
-}
+      .book-detail-header {
+        background: var(--accent2);
+        padding: 40px 36px;
+        margin: 0 -24px;
+        position: relative;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 28px;
+        align-items: end;
+      }
 
-.book-detail-header::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    -45deg,
-    rgba(255,255,255,0.04) 0,
-    rgba(255,255,255,0.04) 10px,
-    transparent 10px, transparent 20px
-  );
-  pointer-events: none;
-}
+      .book-detail-header::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          -45deg,
+          rgba(255, 255, 255, 0.04) 0,
+          rgba(255, 255, 255, 0.04) 10px,
+          transparent 10px,
+          transparent 20px
+        );
+        pointer-events: none;
+      }
 
-.book-cover-placeholder {
-  width: 90px;
-  height: 126px;
-  background: var(--fg);
-  border: 2px solid var(--accent);
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 4px;
-  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
-}
+      .book-cover-placeholder {
+        width: 90px;
+        height: 126px;
+        background: var(--fg);
+        border: 2px solid var(--accent);
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 4px;
+        clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+      }
 
-.book-cover-placeholder span {
-  font-family: 'Oswald', sans-serif;
-  font-size: 0.55rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent);
-  text-align: center;
-  padding: 0 6px;
-}
+      .book-cover-placeholder span {
+        font-family: "Oswald", sans-serif;
+        font-size: 0.55rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent);
+        text-align: center;
+        padding: 0 6px;
+      }
 
-.book-detail-meta {
-  position: relative;
-  z-index: 1;
-}
+      .book-detail-meta {
+        position: relative;
+        z-index: 1;
+      }
 
-.book-detail-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.18em;
-  color: var(--accent);
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
+      .book-detail-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.65rem;
+        letter-spacing: 0.18em;
+        color: var(--accent);
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
 
-.book-detail-title {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  line-height: 1.05;
-  color: #fff;
-  margin-bottom: 6px;
-}
+      .book-detail-title {
+        font-family: "Oswald", sans-serif;
+        font-weight: 700;
+        font-size: clamp(1.6rem, 4vw, 2.4rem);
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        line-height: 1.05;
+        color: #fff;
+        margin-bottom: 6px;
+      }
 
-.book-detail-author {
-  font-family: 'Merriweather', serif;
-  font-size: 0.9rem;
-  font-weight: 300;
-  color: rgba(255,255,255,0.7);
-  margin-bottom: 14px;
-}
+      .book-detail-author {
+        font-family: "Merriweather", serif;
+        font-size: 0.9rem;
+        font-weight: 300;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 14px;
+      }
 
-.book-detail-stats {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
+      .book-detail-stats {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
 
-.book-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
+      .book-stat {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
 
-.book-stat-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.55rem;
-  letter-spacing: 0.12em;
-  color: rgba(255,255,255,0.45);
-  text-transform: uppercase;
-}
+      .book-stat-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.55rem;
+        letter-spacing: 0.12em;
+        color: rgba(255, 255, 255, 0.45);
+        text-transform: uppercase;
+      }
 
-.book-stat-val {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: rgba(255,255,255,0.9);
-}
+      .book-stat-val {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.9);
+      }
 
-.book-stat-val.stars { color: var(--accent); font-size: 0.9rem; }
+      .book-stat-val.stars {
+        color: var(--accent);
+        font-size: 0.9rem;
+      }
 
-/* ============================================================
+      /* ============================================================
    PROJECTS VIEW
    ============================================================ */
-.projects-header {
-  background: var(--surface);
-  border-bottom: 2px solid var(--fg);
-  padding: 36px 24px;
-}
+      .projects-header {
+        background: var(--surface);
+        border-bottom: 2px solid var(--fg);
+        padding: 36px 24px;
+      }
 
-.projects-header-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-}
+      .projects-header-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
 
-.projects-header-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.18em;
-  color: var(--accent);
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
+      .projects-header-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.65rem;
+        letter-spacing: 0.18em;
+        color: var(--accent);
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
 
-.projects-header-title {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  font-size: 2.4rem;
-  color: var(--fg);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
+      .projects-header-title {
+        font-family: "Oswald", sans-serif;
+        font-weight: 700;
+        font-size: 2.4rem;
+        color: var(--fg);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
 
-.projects-grid {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 36px 24px 60px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 24px;
-}
+      .projects-grid {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 36px 24px 60px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 24px;
+      }
 
-/* Project card with CSS badge/crest */
-.project-card {
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
+      /* Project card with CSS badge/crest */
+      .project-card {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease;
+      }
 
-.project-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 28px rgba(0,0,0,0.13);
-}
+      .project-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.13);
+      }
 
-.project-card-accent {
-  height: 4px;
-  background: var(--accent);
-}
+      .project-card-accent {
+        height: 4px;
+        background: var(--accent);
+      }
 
-.project-badge {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 52px;
-  height: 60px;
-  background: var(--accent2);
-  clip-path: polygon(50% 0%, 100% 15%, 100% 75%, 50% 100%, 0% 75%, 0% 15%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+      .project-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 52px;
+        height: 60px;
+        background: var(--accent2);
+        clip-path: polygon(50% 0%, 100% 15%, 100% 75%, 50% 100%, 0% 75%, 0% 15%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-.project-badge-inner {
-  width: 36px;
-  height: 44px;
-  background: var(--bg);
-  clip-path: polygon(50% 0%, 100% 15%, 100% 75%, 50% 100%, 0% 75%, 0% 15%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+      .project-badge-inner {
+        width: 36px;
+        height: 44px;
+        background: var(--bg);
+        clip-path: polygon(50% 0%, 100% 15%, 100% 75%, 50% 100%, 0% 75%, 0% 15%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-.project-badge-letter {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: var(--accent2);
-  letter-spacing: 0;
-}
+      .project-badge-letter {
+        font-family: "Oswald", sans-serif;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: var(--accent2);
+        letter-spacing: 0;
+      }
 
-.project-card-body {
-  padding: 20px 20px 16px;
-  padding-right: 80px;
-}
+      .project-card-body {
+        padding: 20px 20px 16px;
+        padding-right: 80px;
+      }
 
-.project-num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: var(--accent);
-  letter-spacing: 0.1em;
-  margin-bottom: 8px;
-}
+      .project-num {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: var(--accent);
+        letter-spacing: 0.1em;
+        margin-bottom: 8px;
+      }
 
-.project-name {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  font-size: 1.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--fg);
-  margin-bottom: 8px;
-}
+      .project-name {
+        font-family: "Oswald", sans-serif;
+        font-weight: 700;
+        font-size: 1.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--fg);
+        margin-bottom: 8px;
+      }
 
-.project-desc {
-  font-family: 'Merriweather', serif;
-  font-size: 0.78rem;
-  font-weight: 300;
-  color: var(--muted);
-  line-height: 1.6;
-}
+      .project-desc {
+        font-family: "Merriweather", serif;
+        font-size: 0.78rem;
+        font-weight: 300;
+        color: var(--muted);
+        line-height: 1.6;
+      }
 
-.project-card-footer {
-  padding: 14px 20px;
-  border-top: 1px solid var(--border);
-  background: var(--bg);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+      .project-card-footer {
+        padding: 14px 20px;
+        border-top: 1px solid var(--border);
+        background: var(--bg);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
 
-.project-stats-row {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
+      .project-stats-row {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
 
-.project-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
+      .project-stat {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
 
-.project-stat-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.55rem;
-  letter-spacing: 0.12em;
-  color: var(--muted);
-  text-transform: uppercase;
-}
+      .project-stat-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.55rem;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+        text-transform: uppercase;
+      }
 
-.project-stat-val {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--fg);
-}
+      .project-stat-val {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--fg);
+      }
 
-.project-stat-val.status-live {
-  color: var(--accent2);
-}
+      .project-stat-val.status-live {
+        color: var(--accent2);
+      }
 
-.tech-stack {
-  display: flex;
-  gap: 5px;
-  flex-wrap: wrap;
-}
+      .tech-stack {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+      }
 
-.tech-pill {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.58rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  color: var(--fg);
-  background: var(--border);
-  padding: 2px 8px;
-  border-radius: 2px;
-  text-transform: uppercase;
-  transition: background 0.15s, color 0.15s;
-}
+      .tech-pill {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.58rem;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        color: var(--fg);
+        background: var(--border);
+        padding: 2px 8px;
+        border-radius: 2px;
+        text-transform: uppercase;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
 
-.project-card:hover .tech-pill {
-  background: var(--accent);
-  color: #fff;
-}
+      .project-card:hover .tech-pill {
+        background: var(--accent);
+        color: #fff;
+      }
 
-/* ============================================================
+      /* ============================================================
    BACK BUTTON
    ============================================================ */
-.back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 16px 0 0;
-  transition: color 0.2s;
-}
+      .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 16px 0 0;
+        transition: color 0.2s;
+      }
 
-.back-btn:hover { color: var(--accent); }
+      .back-btn:hover {
+        color: var(--accent);
+      }
 
-/* ============================================================
+      /* ============================================================
    FOOTER STRIP
    ============================================================ */
-.footer-strip {
-  background: var(--fg);
-  padding: 24px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
+      .footer-strip {
+        background: var(--fg);
+        padding: 24px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
 
-.footer-strip::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    -45deg,
-    rgba(255,107,53,0.05) 0,
-    rgba(255,107,53,0.05) 10px,
-    transparent 10px, transparent 20px
-  );
-  pointer-events: none;
-}
+      .footer-strip::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          -45deg,
+          rgba(255, 107, 53, 0.05) 0,
+          rgba(255, 107, 53, 0.05) 10px,
+          transparent 10px,
+          transparent 20px
+        );
+        pointer-events: none;
+      }
 
-.footer-text {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.12em;
-  color: var(--muted);
-  text-transform: uppercase;
-  position: relative;
-  z-index: 1;
-}
+      .footer-text {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.65rem;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+        text-transform: uppercase;
+        position: relative;
+        z-index: 1;
+      }
 
-.footer-text span {
-  color: var(--accent);
-  font-weight: 700;
-}
+      .footer-text span {
+        color: var(--accent);
+        font-weight: 700;
+      }
 
-/* ============================================================
+      /* ============================================================
    RESPONSIVE — MOBILE
    ============================================================ */
-@media (max-width: 640px) {
-  .hero {
-    grid-template-columns: 1fr;
-    min-height: auto;
-  }
+      @media (max-width: 640px) {
+        .hero {
+          grid-template-columns: 1fr;
+          min-height: auto;
+        }
 
-  .hero-left {
-    padding: 32px 20px;
-    min-height: 200px;
-  }
+        .hero-left {
+          padding: 32px 20px;
+          min-height: 200px;
+        }
 
-  .hero-right {
-    padding: 28px 20px;
-    border-left: none;
-    border-top: 3px solid var(--fg);
-  }
+        .hero-right {
+          padding: 28px 20px;
+          border-left: none;
+          border-top: 3px solid var(--fg);
+        }
 
-  .hero-right::before { display: none; }
+        .hero-right::before {
+          display: none;
+        }
 
-  .stats-bar {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
+        .stats-bar {
+          grid-template-columns: 1fr 1fr 1fr;
+        }
 
-  .stat-block { padding: 16px 12px; }
-  .stat-number { font-size: 1.8rem; }
+        .stat-block {
+          padding: 16px 12px;
+        }
+        .stat-number {
+          font-size: 1.8rem;
+        }
 
-  .cards-grid {
-    grid-template-columns: 1fr;
-  }
+        .cards-grid {
+          grid-template-columns: 1fr;
+        }
 
-  .fixtures-table { display: none; }
-  .blog-cards-mobile { display: block; }
+        .fixtures-table {
+          display: none;
+        }
+        .blog-cards-mobile {
+          display: block;
+        }
 
-  .league-table thead { display: none; }
-  .league-table, .league-table tbody, .league-table tr, .league-table td {
-    display: block;
-    width: 100%;
-  }
+        .league-table thead {
+          display: none;
+        }
+        .league-table,
+        .league-table tbody,
+        .league-table tr,
+        .league-table td {
+          display: block;
+          width: 100%;
+        }
 
-  .league-table tbody tr {
-    padding: 14px;
-    border: 1.5px solid var(--border);
-    margin-bottom: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-    transform: none;
-  }
+        .league-table tbody tr {
+          padding: 14px;
+          border: 1.5px solid var(--border);
+          margin-bottom: 10px;
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 8px;
+          transform: none;
+        }
 
-  .td-pos { width: auto; }
-  .td-genre, .td-year { display: none; }
-  .book-title-cell { flex: 1; }
+        .td-pos {
+          width: auto;
+        }
+        .td-genre,
+        .td-year {
+          display: none;
+        }
+        .book-title-cell {
+          flex: 1;
+        }
 
-  .match-report-header {
-    padding: 24px 20px;
-    margin: 0 -24px;
-  }
+        .match-report-header {
+          padding: 24px 20px;
+          margin: 0 -24px;
+        }
 
-  .book-detail-header {
-    grid-template-columns: 1fr;
-    padding: 28px 20px;
-  }
+        .book-detail-header {
+          grid-template-columns: 1fr;
+          padding: 28px 20px;
+        }
 
-  .book-cover-placeholder { width: 70px; height: 98px; }
+        .book-cover-placeholder {
+          width: 70px;
+          height: 98px;
+        }
 
-  .projects-grid {
-    grid-template-columns: 1fr;
-  }
+        .projects-grid {
+          grid-template-columns: 1fr;
+        }
 
-  .nav-season { display: none; }
+        .nav-season {
+          display: none;
+        }
 
-  .home-section { padding: 32px 16px; }
+        .home-section {
+          padding: 32px 16px;
+        }
 
-  .article-wrap { padding: 0 16px 48px; }
+        .article-wrap {
+          padding: 0 16px 48px;
+        }
 
-  .fixtures-wrap { padding: 0 16px 36px; }
+        .fixtures-wrap {
+          padding: 0 16px 36px;
+        }
 
-  .books-header, .blog-header, .match-report-header {
-    padding: 28px 20px;
-  }
-}
+        .books-header,
+        .blog-header,
+        .match-report-header {
+          padding: 28px 20px;
+        }
+      }
 
-@media (max-width: 440px) {
-  .bottom-nav-btn { font-size: 0.52rem; padding: 4px 1px; }
-  .bottom-nav-btn .btn-icon { font-size: 0.85rem; }
-  .stat-number { font-size: 1.5rem; }
-}
-</style>
-</head>
-<body>
-
-<!-- ============================================================
+      @media (max-width: 440px) {
+        .bottom-nav-btn {
+          font-size: 0.52rem;
+          padding: 4px 1px;
+        }
+        .bottom-nav-btn .btn-icon {
+          font-size: 0.85rem;
+        }
+        .stat-number {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ============================================================
      TOP NAV
      ============================================================ -->
-<nav class="top-nav">
-  <div class="nav-inner">
-    <div class="nav-logo" onclick="switchView('home')">
-      <span class="nav-logo-main">Diego Romero</span>
-      <span class="nav-logo-tag">Blog</span>
-    </div>
-    <div class="nav-actions">
-      <span class="nav-season">Season 2026</span>
-      <button class="dark-toggle" id="darkToggle" title="Toggle dark mode">☀️</button>
-    </div>
-  </div>
-</nav>
+    <nav class="top-nav">
+      <div class="nav-inner">
+        <div class="nav-logo" onclick="switchView('home')">
+          <span class="nav-logo-main">Diego Romero</span>
+          <span class="nav-logo-tag">Blog</span>
+        </div>
+        <div class="nav-actions">
+          <span class="nav-season">Season 2026</span>
+          <button class="dark-toggle" id="darkToggle" title="Toggle dark mode">☀️</button>
+        </div>
+      </div>
+    </nav>
 
-<!-- ============================================================
+    <!-- ============================================================
      SCORE TICKER
      ============================================================ -->
-<div class="ticker-wrap">
-  <div class="ticker-label">Latest</div>
-  <div class="ticker-track" id="tickerTrack">
-    <span class="ticker-item">On Deep Work and Focused Programming</span>
-    <span class="ticker-item">Pomodoro as a Productivity Tool</span>
-    <span class="ticker-item">Types of Rendering in Next.js</span>
-    <span class="ticker-item">The Psychology of Money — My Notes</span>
-    <span class="ticker-item">Rewriting My Blog With Claude Code</span>
-    <span class="ticker-item">On Deep Work and Focused Programming</span>
-    <span class="ticker-item">Pomodoro as a Productivity Tool</span>
-    <span class="ticker-item">Types of Rendering in Next.js</span>
-    <span class="ticker-item">The Psychology of Money — My Notes</span>
-    <span class="ticker-item">Rewriting My Blog With Claude Code</span>
-  </div>
-</div>
+    <div class="ticker-wrap">
+      <div class="ticker-label">Latest</div>
+      <div class="ticker-track" id="tickerTrack">
+        <span class="ticker-item">On Deep Work and Focused Programming</span>
+        <span class="ticker-item">Pomodoro as a Productivity Tool</span>
+        <span class="ticker-item">Types of Rendering in Next.js</span>
+        <span class="ticker-item">The Psychology of Money — My Notes</span>
+        <span class="ticker-item">Rewriting My Blog With Claude Code</span>
+        <span class="ticker-item">On Deep Work and Focused Programming</span>
+        <span class="ticker-item">Pomodoro as a Productivity Tool</span>
+        <span class="ticker-item">Types of Rendering in Next.js</span>
+        <span class="ticker-item">The Psychology of Money — My Notes</span>
+        <span class="ticker-item">Rewriting My Blog With Claude Code</span>
+      </div>
+    </div>
 
-<!-- ============================================================
+    <!-- ============================================================
      VIEWS
      ============================================================ -->
 
-<!-- HOME -->
-<section class="view active" id="view-home">
-
-  <!-- Hero -->
-  <div class="hero">
-    <div class="hero-left">
-      <div class="hero-stripes"></div>
-      <div class="hero-left-inner">
-        <div class="hero-overline">Software Engineer · Writer</div>
-        <h1 class="hero-name">Diego<span>Romero</span></h1>
-        <p class="hero-desc">
-          Dispatches from the intersection of code, focus, and ideas worth keeping.
-        </p>
-      </div>
-    </div>
-    <div class="hero-right">
-      <div class="hero-season-block">
-        <div class="hero-season-label">Current Season</div>
-        <div class="hero-season-value">2026</div>
-      </div>
-      <p class="hero-tagline">Technology · Productivity · Non-Fiction Books</p>
-      <button class="hero-cta" onclick="switchView('blog')">View All Articles →</button>
-    </div>
-  </div>
-
-  <!-- Stats bar -->
-  <div class="stats-bar">
-    <div class="stat-block" data-target="47">
-      <div class="stat-label">Total Articles</div>
-      <div class="stat-number" id="stat-articles">0</div>
-      <div class="stat-unit">Articles Written</div>
-    </div>
-    <div class="stat-block" data-target="12">
-      <div class="stat-label">Books Read</div>
-      <div class="stat-number" id="stat-books">0</div>
-      <div class="stat-unit">This Season</div>
-    </div>
-    <div class="stat-block" data-target="3">
-      <div class="stat-label">Projects</div>
-      <div class="stat-number" id="stat-projects">0</div>
-      <div class="stat-unit">Projects Built</div>
-    </div>
-  </div>
-
-  <div class="stripe-divider"></div>
-
-  <!-- Recent Articles -->
-  <div class="home-section">
-    <div class="section-header">
-      <h2 class="section-title">
-        <span class="section-title-num">01</span>
-        Recent Matches
-      </h2>
-      <span class="section-link" onclick="switchView('blog')">Full Fixture List →</span>
-    </div>
-    <div class="cards-grid">
-
-      <div class="article-card" onclick="switchView('article')">
-        <div class="article-card-top"></div>
-        <div class="article-card-body">
-          <div class="article-card-num">
-            <span>01 / 05</span>
-            <span class="article-card-date">12 FEB 2026</span>
+    <!-- HOME -->
+    <section class="view active" id="view-home">
+      <!-- Hero -->
+      <div class="hero">
+        <div class="hero-left">
+          <div class="hero-stripes"></div>
+          <div class="hero-left-inner">
+            <div class="hero-overline">Software Engineer · Writer</div>
+            <h1 class="hero-name">Diego<span>Romero</span></h1>
+            <p class="hero-desc">
+              Dispatches from the intersection of code, focus, and ideas worth keeping.
+            </p>
           </div>
-          <h3 class="article-card-title">Pomodoro as a Productivity Tool</h3>
-          <p class="article-card-excerpt">
-            Breaking work into 25-minute sprints sounds trivially simple. The results, over months of practice, are anything but.
-          </p>
         </div>
-        <div class="article-card-footer">
-          <div class="card-tags">
-            <span class="tag">Productivity</span>
-            <span class="tag">Focus</span>
+        <div class="hero-right">
+          <div class="hero-season-block">
+            <div class="hero-season-label">Current Season</div>
+            <div class="hero-season-value">2026</div>
           </div>
-          <span class="card-mins">6 mins ⏱</span>
+          <p class="hero-tagline">Technology · Productivity · Non-Fiction Books</p>
+          <button class="hero-cta" onclick="switchView('blog')">View All Articles →</button>
         </div>
       </div>
 
-      <div class="article-card">
-        <div class="article-card-top"></div>
-        <div class="article-card-body">
-          <div class="article-card-num">
-            <span>02 / 05</span>
-            <span class="article-card-date">28 JAN 2026</span>
-          </div>
-          <h3 class="article-card-title">On Deep Work and Focused Programming</h3>
-          <p class="article-card-excerpt">
-            Cal Newport's framework applied to software development. What changes when you protect your concentration fiercely?
-          </p>
+      <!-- Stats bar -->
+      <div class="stats-bar">
+        <div class="stat-block" data-target="47">
+          <div class="stat-label">Total Articles</div>
+          <div class="stat-number" id="stat-articles">0</div>
+          <div class="stat-unit">Articles Written</div>
         </div>
-        <div class="article-card-footer">
-          <div class="card-tags">
-            <span class="tag">Deep Work</span>
-            <span class="tag">Dev</span>
-          </div>
-          <span class="card-mins">8 mins ⏱</span>
+        <div class="stat-block" data-target="12">
+          <div class="stat-label">Books Read</div>
+          <div class="stat-number" id="stat-books">0</div>
+          <div class="stat-unit">This Season</div>
+        </div>
+        <div class="stat-block" data-target="3">
+          <div class="stat-label">Projects</div>
+          <div class="stat-number" id="stat-projects">0</div>
+          <div class="stat-unit">Projects Built</div>
         </div>
       </div>
 
-      <div class="article-card">
-        <div class="article-card-top"></div>
-        <div class="article-card-body">
-          <div class="article-card-num">
-            <span>03 / 05</span>
-            <span class="article-card-date">14 JAN 2026</span>
-          </div>
-          <h3 class="article-card-title">Types of Rendering in Next.js</h3>
-          <p class="article-card-excerpt">
-            SSR, SSG, ISR, CSR — a plain-language breakdown of when to reach for each strategy and why it matters.
-          </p>
+      <div class="stripe-divider"></div>
+
+      <!-- Recent Articles -->
+      <div class="home-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <span class="section-title-num">01</span>
+            Recent Matches
+          </h2>
+          <span class="section-link" onclick="switchView('blog')">Full Fixture List →</span>
         </div>
-        <div class="article-card-footer">
-          <div class="card-tags">
-            <span class="tag">Next.js</span>
-            <span class="tag">React</span>
-          </div>
-          <span class="card-mins">7 mins ⏱</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="stripe-divider-green"></div>
-
-  <!-- Featured Books -->
-  <div class="home-section">
-    <div class="section-header">
-      <h2 class="section-title">
-        <span class="section-title-num">02</span>
-        Top of the Table
-      </h2>
-      <span class="section-link" onclick="switchView('books')">Full League Table →</span>
-    </div>
-    <div class="cards-grid">
-
-      <div class="article-card" onclick="switchView('book-detail')">
-        <div class="article-card-top" style="background: var(--accent2);"></div>
-        <div class="article-card-body">
-          <div class="article-card-num">
-            <span style="color: #FFD700;">POS 01</span>
-            <span class="article-card-date">★★★★★</span>
-          </div>
-          <h3 class="article-card-title">Shoe Dog</h3>
-          <p class="article-card-excerpt">
-            Phil Knight's memoir of building Nike from a handshake deal with a Japanese shoe company into a global empire. Raw, honest, and electric.
-          </p>
-        </div>
-        <div class="article-card-footer">
-          <div class="card-tags">
-            <span class="tag">Memoir</span>
-            <span class="tag">Business</span>
-          </div>
-          <span class="card-mins">Phil Knight</span>
-        </div>
-      </div>
-
-      <div class="article-card">
-        <div class="article-card-top" style="background: var(--accent2);"></div>
-        <div class="article-card-body">
-          <div class="article-card-num">
-            <span style="color: #C0C0C0;">POS 02</span>
-            <span class="article-card-date">★★★★★</span>
-          </div>
-          <h3 class="article-card-title">Deep Work</h3>
-          <p class="article-card-excerpt">
-            Cal Newport's case for radical focus in a distracted world. Still the single best productivity book I've read.
-          </p>
-        </div>
-        <div class="article-card-footer">
-          <div class="card-tags">
-            <span class="tag">Focus</span>
-            <span class="tag">Career</span>
-          </div>
-          <span class="card-mins">Cal Newport</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="stripe-divider"></div>
-
-  <!-- Projects teaser -->
-  <div class="home-section">
-    <div class="section-header">
-      <h2 class="section-title">
-        <span class="section-title-num">03</span>
-        Squad
-      </h2>
-      <span class="section-link" onclick="switchView('projects')">Full Roster →</span>
-    </div>
-    <div class="cards-grid">
-
-      <div class="project-card">
-        <div class="project-card-accent"></div>
-        <div class="project-badge">
-          <div class="project-badge-inner">
-            <span class="project-badge-letter">D</span>
-          </div>
-        </div>
-        <div class="project-card-body">
-          <div class="project-num">PROJECT 01</div>
-          <div class="project-name">Deepflow</div>
-          <p class="project-desc">A focus timer app built for programmers. Pomodoro-based with session tracking.</p>
-        </div>
-        <div class="project-card-footer">
-          <div class="project-stats-row">
-            <div class="project-stat">
-              <span class="project-stat-label">Year</span>
-              <span class="project-stat-val">2025</span>
+        <div class="cards-grid">
+          <div class="article-card" onclick="switchView('article')">
+            <div class="article-card-top"></div>
+            <div class="article-card-body">
+              <div class="article-card-num">
+                <span>01 / 05</span>
+                <span class="article-card-date">12 FEB 2026</span>
+              </div>
+              <h3 class="article-card-title">Pomodoro as a Productivity Tool</h3>
+              <p class="article-card-excerpt">
+                Breaking work into 25-minute sprints sounds trivially simple. The results, over
+                months of practice, are anything but.
+              </p>
             </div>
-            <div class="project-stat">
-              <span class="project-stat-label">Status</span>
-              <span class="project-stat-val status-live">Live</span>
+            <div class="article-card-footer">
+              <div class="card-tags">
+                <span class="tag">Productivity</span>
+                <span class="tag">Focus</span>
+              </div>
+              <span class="card-mins">6 mins ⏱</span>
             </div>
           </div>
-          <div class="tech-stack">
-            <span class="tech-pill">React</span>
-            <span class="tech-pill">Next.js</span>
-            <span class="tech-pill">Firebase</span>
-          </div>
-        </div>
-      </div>
 
-      <div class="project-card">
-        <div class="project-card-accent"></div>
-        <div class="project-badge">
-          <div class="project-badge-inner">
-            <span class="project-badge-letter">L</span>
-          </div>
-        </div>
-        <div class="project-card-body">
-          <div class="project-num">PROJECT 02</div>
-          <div class="project-name">Listu</div>
-          <p class="project-desc">iOS habit tracker with a clean SwiftUI interface and streak-based motivation.</p>
-        </div>
-        <div class="project-card-footer">
-          <div class="project-stats-row">
-            <div class="project-stat">
-              <span class="project-stat-label">Year</span>
-              <span class="project-stat-val">2024</span>
+          <div class="article-card">
+            <div class="article-card-top"></div>
+            <div class="article-card-body">
+              <div class="article-card-num">
+                <span>02 / 05</span>
+                <span class="article-card-date">28 JAN 2026</span>
+              </div>
+              <h3 class="article-card-title">On Deep Work and Focused Programming</h3>
+              <p class="article-card-excerpt">
+                Cal Newport's framework applied to software development. What changes when you
+                protect your concentration fiercely?
+              </p>
             </div>
-            <div class="project-stat">
-              <span class="project-stat-label">Status</span>
-              <span class="project-stat-val status-live">Live</span>
+            <div class="article-card-footer">
+              <div class="card-tags">
+                <span class="tag">Deep Work</span>
+                <span class="tag">Dev</span>
+              </div>
+              <span class="card-mins">8 mins ⏱</span>
             </div>
           </div>
-          <div class="tech-stack">
-            <span class="tech-pill">Swift</span>
-            <span class="tech-pill">SwiftUI</span>
+
+          <div class="article-card">
+            <div class="article-card-top"></div>
+            <div class="article-card-body">
+              <div class="article-card-num">
+                <span>03 / 05</span>
+                <span class="article-card-date">14 JAN 2026</span>
+              </div>
+              <h3 class="article-card-title">Types of Rendering in Next.js</h3>
+              <p class="article-card-excerpt">
+                SSR, SSG, ISR, CSR — a plain-language breakdown of when to reach for each strategy
+                and why it matters.
+              </p>
+            </div>
+            <div class="article-card-footer">
+              <div class="card-tags">
+                <span class="tag">Next.js</span>
+                <span class="tag">React</span>
+              </div>
+              <span class="card-mins">7 mins ⏱</span>
+            </div>
           </div>
         </div>
       </div>
 
-    </div>
-  </div>
+      <div class="stripe-divider-green"></div>
 
-  <div class="footer-strip">
-    <p class="footer-text">diegoromero.blog · Concept <span>Pitch Side</span> · Season 2026</p>
-  </div>
-
-</section>
-
-<!-- BLOG -->
-<section class="view" id="view-blog">
-
-  <div class="blog-header">
-    <div class="blog-header-inner">
-      <div class="blog-header-label">Fixtures List · All Articles</div>
-      <h1 class="blog-header-title">The Blog</h1>
-      <p class="blog-header-sub">Technology, productivity, and ideas from the reading pile.</p>
-    </div>
-  </div>
-
-  <div class="stripe-divider"></div>
-
-  <div class="blog-controls">
-    <span class="filter-label">Filter:</span>
-    <span class="tag active" data-filter="all" onclick="filterArticles(this)">All</span>
-    <span class="tag" data-filter="productivity" onclick="filterArticles(this)">Productivity</span>
-    <span class="tag" data-filter="dev" onclick="filterArticles(this)">Dev</span>
-    <span class="tag" data-filter="books" onclick="filterArticles(this)">Books</span>
-    <span class="tag" data-filter="focus" onclick="filterArticles(this)">Focus</span>
-  </div>
-
-  <!-- Desktop fixtures table -->
-  <div class="fixtures-wrap">
-    <table class="fixtures-table" id="fixturesTable">
-      <thead>
-        <tr>
-          <th style="width:40px;">#</th>
-          <th style="width:120px;">Date</th>
-          <th>Match (Article)</th>
-          <th class="td-tags">Tags</th>
-          <th style="text-align:right;">Mins</th>
-        </tr>
-      </thead>
-      <tbody id="fixturesTbody">
-        <tr data-tags="productivity focus" onclick="switchView('article')">
-          <td class="td-num">01</td>
-          <td class="td-date">12 FEB 2026</td>
-          <td><span class="match-title">Pomodoro as a Productivity Tool</span></td>
-          <td class="td-tags">
-            <div class="card-tags"><span class="tag">Productivity</span><span class="tag">Focus</span></div>
-          </td>
-          <td class="td-mins">6 min</td>
-        </tr>
-        <tr data-tags="dev focus">
-          <td class="td-num">02</td>
-          <td class="td-date">28 JAN 2026</td>
-          <td><span class="match-title">On Deep Work and Focused Programming</span></td>
-          <td class="td-tags">
-            <div class="card-tags"><span class="tag">Deep Work</span><span class="tag">Dev</span></div>
-          </td>
-          <td class="td-mins">8 min</td>
-        </tr>
-        <tr data-tags="dev">
-          <td class="td-num">03</td>
-          <td class="td-date">14 JAN 2026</td>
-          <td><span class="match-title">Types of Rendering in Next.js</span></td>
-          <td class="td-tags">
-            <div class="card-tags"><span class="tag">Next.js</span><span class="tag">Dev</span></div>
-          </td>
-          <td class="td-mins">7 min</td>
-        </tr>
-        <tr data-tags="books productivity">
-          <td class="td-num">04</td>
-          <td class="td-date">03 JAN 2026</td>
-          <td><span class="match-title">The Psychology of Money — My Notes</span></td>
-          <td class="td-tags">
-            <div class="card-tags"><span class="tag">Books</span><span class="tag">Money</span></div>
-          </td>
-          <td class="td-mins">9 min</td>
-        </tr>
-        <tr data-tags="dev productivity">
-          <td class="td-num">05</td>
-          <td class="td-date">18 DEC 2025</td>
-          <td><span class="match-title">Rewriting My Blog With Claude Code</span></td>
-          <td class="td-tags">
-            <div class="card-tags"><span class="tag">Dev</span><span class="tag">AI</span></div>
-          </td>
-          <td class="td-mins">5 min</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- Mobile version -->
-    <div class="blog-cards-mobile">
-      <div class="cards-grid">
-
-        <div class="article-card" onclick="switchView('article')">
-          <div class="article-card-top"></div>
-          <div class="article-card-body">
-            <div class="article-card-num"><span>01 / 05</span><span class="article-card-date">12 FEB 2026</span></div>
-            <h3 class="article-card-title">Pomodoro as a Productivity Tool</h3>
-            <p class="article-card-excerpt">Breaking work into 25-minute sprints sounds simple. The results are anything but.</p>
-          </div>
-          <div class="article-card-footer">
-            <div class="card-tags"><span class="tag">Productivity</span><span class="tag">Focus</span></div>
-            <span class="card-mins">6 min</span>
-          </div>
+      <!-- Featured Books -->
+      <div class="home-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <span class="section-title-num">02</span>
+            Top of the Table
+          </h2>
+          <span class="section-link" onclick="switchView('books')">Full League Table →</span>
         </div>
-
-        <div class="article-card">
-          <div class="article-card-top"></div>
-          <div class="article-card-body">
-            <div class="article-card-num"><span>02 / 05</span><span class="article-card-date">28 JAN 2026</span></div>
-            <h3 class="article-card-title">On Deep Work and Focused Programming</h3>
-            <p class="article-card-excerpt">Newport's framework applied to software development. What changes when you protect concentration?</p>
+        <div class="cards-grid">
+          <div class="article-card" onclick="switchView('book-detail')">
+            <div class="article-card-top" style="background: var(--accent2)"></div>
+            <div class="article-card-body">
+              <div class="article-card-num">
+                <span style="color: #ffd700">POS 01</span>
+                <span class="article-card-date">★★★★★</span>
+              </div>
+              <h3 class="article-card-title">Shoe Dog</h3>
+              <p class="article-card-excerpt">
+                Phil Knight's memoir of building Nike from a handshake deal with a Japanese shoe
+                company into a global empire. Raw, honest, and electric.
+              </p>
+            </div>
+            <div class="article-card-footer">
+              <div class="card-tags">
+                <span class="tag">Memoir</span>
+                <span class="tag">Business</span>
+              </div>
+              <span class="card-mins">Phil Knight</span>
+            </div>
           </div>
-          <div class="article-card-footer">
-            <div class="card-tags"><span class="tag">Deep Work</span><span class="tag">Dev</span></div>
-            <span class="card-mins">8 min</span>
+
+          <div class="article-card">
+            <div class="article-card-top" style="background: var(--accent2)"></div>
+            <div class="article-card-body">
+              <div class="article-card-num">
+                <span style="color: #c0c0c0">POS 02</span>
+                <span class="article-card-date">★★★★★</span>
+              </div>
+              <h3 class="article-card-title">Deep Work</h3>
+              <p class="article-card-excerpt">
+                Cal Newport's case for radical focus in a distracted world. Still the single best
+                productivity book I've read.
+              </p>
+            </div>
+            <div class="article-card-footer">
+              <div class="card-tags">
+                <span class="tag">Focus</span>
+                <span class="tag">Career</span>
+              </div>
+              <span class="card-mins">Cal Newport</span>
+            </div>
           </div>
-        </div>
-
-        <div class="article-card">
-          <div class="article-card-top"></div>
-          <div class="article-card-body">
-            <div class="article-card-num"><span>03 / 05</span><span class="article-card-date">14 JAN 2026</span></div>
-            <h3 class="article-card-title">Types of Rendering in Next.js</h3>
-            <p class="article-card-excerpt">SSR, SSG, ISR, CSR — plain-language breakdown of when to use each strategy.</p>
-          </div>
-          <div class="article-card-footer">
-            <div class="card-tags"><span class="tag">Next.js</span><span class="tag">Dev</span></div>
-            <span class="card-mins">7 min</span>
-          </div>
-        </div>
-
-        <div class="article-card">
-          <div class="article-card-top"></div>
-          <div class="article-card-body">
-            <div class="article-card-num"><span>04 / 05</span><span class="article-card-date">03 JAN 2026</span></div>
-            <h3 class="article-card-title">The Psychology of Money — My Notes</h3>
-            <p class="article-card-excerpt">Housel writes about money in a way that feels like wisdom, not finance advice.</p>
-          </div>
-          <div class="article-card-footer">
-            <div class="card-tags"><span class="tag">Books</span><span class="tag">Money</span></div>
-            <span class="card-mins">9 min</span>
-          </div>
-        </div>
-
-        <div class="article-card">
-          <div class="article-card-top"></div>
-          <div class="article-card-body">
-            <div class="article-card-num"><span>05 / 05</span><span class="article-card-date">18 DEC 2025</span></div>
-            <h3 class="article-card-title">Rewriting My Blog With Claude Code</h3>
-            <p class="article-card-excerpt">What it felt like to pair program with an AI for a week on a real project.</p>
-          </div>
-          <div class="article-card-footer">
-            <div class="card-tags"><span class="tag">Dev</span><span class="tag">AI</span></div>
-            <span class="card-mins">5 min</span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <div class="footer-strip">
-    <p class="footer-text">diegoromero.blog · <span>5 Articles</span> in the archive</p>
-  </div>
-
-</section>
-
-<!-- ARTICLE -->
-<section class="view" id="view-article">
-  <div class="article-wrap">
-
-    <button class="back-btn" onclick="switchView('blog')">← Back to Fixtures</button>
-
-    <div class="match-report-header">
-      <div class="match-report-inner">
-        <div class="match-report-label">Match Report</div>
-        <div class="match-report-date">12 FEB 2026 · Article 01 / 05</div>
-        <h1 class="match-report-title">Pomodoro as a Productivity Tool</h1>
-        <div class="match-report-meta">
-          <span class="meta-item">By <strong>Diego Romero</strong></span>
-          <span class="meta-item">Reading Time <strong>6 min</strong></span>
-          <span class="meta-item">Category <strong>Productivity</strong></span>
         </div>
       </div>
-    </div>
 
-    <div class="reading-progress">
-      <div class="reading-progress-fill"></div>
-    </div>
+      <div class="stripe-divider"></div>
 
-    <div class="stripe-divider"></div>
+      <!-- Projects teaser -->
+      <div class="home-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <span class="section-title-num">03</span>
+            Squad
+          </h2>
+          <span class="section-link" onclick="switchView('projects')">Full Roster →</span>
+        </div>
+        <div class="cards-grid">
+          <div class="project-card">
+            <div class="project-card-accent"></div>
+            <div class="project-badge">
+              <div class="project-badge-inner">
+                <span class="project-badge-letter">D</span>
+              </div>
+            </div>
+            <div class="project-card-body">
+              <div class="project-num">PROJECT 01</div>
+              <div class="project-name">Deepflow</div>
+              <p class="project-desc">
+                A focus timer app built for programmers. Pomodoro-based with session tracking.
+              </p>
+            </div>
+            <div class="project-card-footer">
+              <div class="project-stats-row">
+                <div class="project-stat">
+                  <span class="project-stat-label">Year</span>
+                  <span class="project-stat-val">2025</span>
+                </div>
+                <div class="project-stat">
+                  <span class="project-stat-label">Status</span>
+                  <span class="project-stat-val status-live">Live</span>
+                </div>
+              </div>
+              <div class="tech-stack">
+                <span class="tech-pill">React</span>
+                <span class="tech-pill">Next.js</span>
+                <span class="tech-pill">Firebase</span>
+              </div>
+            </div>
+          </div>
 
-    <div class="article-toc">
-      <div class="toc-label">Formation / Contents</div>
-      <ul class="toc-list">
-        <li class="toc-item active">The Technique Explained</li>
-        <li class="toc-item">Why 25 Minutes Works</li>
-        <li class="toc-item">Adapting It for Deep Work</li>
-        <li class="toc-item">My Current Setup</li>
-      </ul>
-    </div>
+          <div class="project-card">
+            <div class="project-card-accent"></div>
+            <div class="project-badge">
+              <div class="project-badge-inner">
+                <span class="project-badge-letter">L</span>
+              </div>
+            </div>
+            <div class="project-card-body">
+              <div class="project-num">PROJECT 02</div>
+              <div class="project-name">Listu</div>
+              <p class="project-desc">
+                iOS habit tracker with a clean SwiftUI interface and streak-based motivation.
+              </p>
+            </div>
+            <div class="project-card-footer">
+              <div class="project-stats-row">
+                <div class="project-stat">
+                  <span class="project-stat-label">Year</span>
+                  <span class="project-stat-val">2024</span>
+                </div>
+                <div class="project-stat">
+                  <span class="project-stat-label">Status</span>
+                  <span class="project-stat-val status-live">Live</span>
+                </div>
+              </div>
+              <div class="tech-stack">
+                <span class="tech-pill">Swift</span>
+                <span class="tech-pill">SwiftUI</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <div class="article-body">
+      <div class="footer-strip">
+        <p class="footer-text">diegoromero.blog · Concept <span>Pitch Side</span> · Season 2026</p>
+      </div>
+    </section>
 
-      <h2 data-num="01">The Technique Explained</h2>
-      <p>
-        The Pomodoro Technique was invented by Francesco Cirillo in the late 1980s. The name comes from a tomato-shaped kitchen timer he used as a university student. The method is deceptively minimal: work for 25 minutes, uninterrupted, then take a 5-minute break. Every four rounds, take a longer break of 15 to 30 minutes. That is the entire rulebook.
-      </p>
-      <p>
-        What strikes most people when they first try it is not the breaks — it is the enforced singularity of focus. You are not allowed to switch tasks mid-pomodoro. If a distraction surfaces, you write it down and return to it later. The pomodoro is treated as an atomic unit: indivisible.
-      </p>
+    <!-- BLOG -->
+    <section class="view" id="view-blog">
+      <div class="blog-header">
+        <div class="blog-header-inner">
+          <div class="blog-header-label">Fixtures List · All Articles</div>
+          <h1 class="blog-header-title">The Blog</h1>
+          <p class="blog-header-sub">Technology, productivity, and ideas from the reading pile.</p>
+        </div>
+      </div>
 
-      <blockquote>
-        <p>One thing I did not expect was how the timer creates a kind of psychological safety. You are not working forever — you are working for 25 minutes. That is a manageable promise to make to yourself.</p>
-        <cite>Diego Romero, in conversation with himself at 10pm</cite>
-      </blockquote>
+      <div class="stripe-divider"></div>
 
-      <h2 data-num="02">Why 25 Minutes Works</h2>
-      <p>
-        The 25-minute window is short enough to feel non-threatening, but long enough to get into a genuine flow state. Cognitive science research on attention suggests that sustained focus — real, high-quality focus — is difficult to maintain beyond 45 minutes without degradation. Twenty-five minutes sits comfortably inside that window.
-      </p>
-      <p>
-        The break is not just rest. It is cognitive consolidation. Memory research consistently shows that the mind continues to process and integrate information during rest periods. The 5-minute break is working even when you are not. This is the hidden advantage the technique's critics — who call it too simplistic — tend to miss.
-      </p>
-      <p>
-        There is also the momentum effect. Completing a pomodoro is a small win. Small wins compound. After a morning of six completed pomodoros, the sense of forward movement is tangible and motivating in a way that a vague "I worked hard today" never quite is.
-      </p>
+      <div class="blog-controls">
+        <span class="filter-label">Filter:</span>
+        <span class="tag active" data-filter="all" onclick="filterArticles(this)">All</span>
+        <span class="tag" data-filter="productivity" onclick="filterArticles(this)"
+          >Productivity</span
+        >
+        <span class="tag" data-filter="dev" onclick="filterArticles(this)">Dev</span>
+        <span class="tag" data-filter="books" onclick="filterArticles(this)">Books</span>
+        <span class="tag" data-filter="focus" onclick="filterArticles(this)">Focus</span>
+      </div>
 
-      <h2 data-num="03">Adapting It for Deep Work</h2>
-      <p>
-        Pure Pomodoro and Deep Work (Cal Newport's concept) exist in slight tension. Newport advocates for longer, sustained blocks — often 90 minutes or more. The 25-minute ceiling can feel restrictive if you are genuinely deep in a complex problem. My adaptation: I use the Pomodoro structure for planning and shallow work, and I allow myself to extend a session when I hit real flow. The timer becomes a floor, not a ceiling.
-      </p>
-      <p>
-        The key is using the technique's check-in discipline without becoming enslaved to its intervals. The moment the timer goes off is a prompt to ask: "Am I in flow, or am I coasting?" If flow, keep going. If coasting, the break is exactly what you need.
-      </p>
+      <!-- Desktop fixtures table -->
+      <div class="fixtures-wrap">
+        <table class="fixtures-table" id="fixturesTable">
+          <thead>
+            <tr>
+              <th style="width: 40px">#</th>
+              <th style="width: 120px">Date</th>
+              <th>Match (Article)</th>
+              <th class="td-tags">Tags</th>
+              <th style="text-align: right">Mins</th>
+            </tr>
+          </thead>
+          <tbody id="fixturesTbody">
+            <tr data-tags="productivity focus" onclick="switchView('article')">
+              <td class="td-num">01</td>
+              <td class="td-date">12 FEB 2026</td>
+              <td><span class="match-title">Pomodoro as a Productivity Tool</span></td>
+              <td class="td-tags">
+                <div class="card-tags">
+                  <span class="tag">Productivity</span><span class="tag">Focus</span>
+                </div>
+              </td>
+              <td class="td-mins">6 min</td>
+            </tr>
+            <tr data-tags="dev focus">
+              <td class="td-num">02</td>
+              <td class="td-date">28 JAN 2026</td>
+              <td><span class="match-title">On Deep Work and Focused Programming</span></td>
+              <td class="td-tags">
+                <div class="card-tags">
+                  <span class="tag">Deep Work</span><span class="tag">Dev</span>
+                </div>
+              </td>
+              <td class="td-mins">8 min</td>
+            </tr>
+            <tr data-tags="dev">
+              <td class="td-num">03</td>
+              <td class="td-date">14 JAN 2026</td>
+              <td><span class="match-title">Types of Rendering in Next.js</span></td>
+              <td class="td-tags">
+                <div class="card-tags">
+                  <span class="tag">Next.js</span><span class="tag">Dev</span>
+                </div>
+              </td>
+              <td class="td-mins">7 min</td>
+            </tr>
+            <tr data-tags="books productivity">
+              <td class="td-num">04</td>
+              <td class="td-date">03 JAN 2026</td>
+              <td><span class="match-title">The Psychology of Money — My Notes</span></td>
+              <td class="td-tags">
+                <div class="card-tags">
+                  <span class="tag">Books</span><span class="tag">Money</span>
+                </div>
+              </td>
+              <td class="td-mins">9 min</td>
+            </tr>
+            <tr data-tags="dev productivity">
+              <td class="td-num">05</td>
+              <td class="td-date">18 DEC 2025</td>
+              <td><span class="match-title">Rewriting My Blog With Claude Code</span></td>
+              <td class="td-tags">
+                <div class="card-tags"><span class="tag">Dev</span><span class="tag">AI</span></div>
+              </td>
+              <td class="td-mins">5 min</td>
+            </tr>
+          </tbody>
+        </table>
 
-      <blockquote>
-        <p>The Pomodoro timer is not a task manager. It is an attention manager. That reframe changes everything about how you use it.</p>
-        <cite>A note in the margin of my copy of Deep Work</cite>
-      </blockquote>
+        <!-- Mobile version -->
+        <div class="blog-cards-mobile">
+          <div class="cards-grid">
+            <div class="article-card" onclick="switchView('article')">
+              <div class="article-card-top"></div>
+              <div class="article-card-body">
+                <div class="article-card-num">
+                  <span>01 / 05</span><span class="article-card-date">12 FEB 2026</span>
+                </div>
+                <h3 class="article-card-title">Pomodoro as a Productivity Tool</h3>
+                <p class="article-card-excerpt">
+                  Breaking work into 25-minute sprints sounds simple. The results are anything but.
+                </p>
+              </div>
+              <div class="article-card-footer">
+                <div class="card-tags">
+                  <span class="tag">Productivity</span><span class="tag">Focus</span>
+                </div>
+                <span class="card-mins">6 min</span>
+              </div>
+            </div>
 
-      <h2 data-num="04">My Current Setup</h2>
-      <p>
-        I run Deepflow — my own focus timer app — which extends Pomodoro with session tagging and daily analytics. Each session gets a category label (coding, writing, reading, admin) and a brief note on what was accomplished. After a week, the data paints an accurate picture of where your attention actually goes, versus where you think it goes.
-      </p>
-      <p>
-        The gap between those two numbers is, consistently, humbling. Here is a minimal JavaScript timer to illustrate the core loop — the same logic that powers Deepflow:
-      </p>
+            <div class="article-card">
+              <div class="article-card-top"></div>
+              <div class="article-card-body">
+                <div class="article-card-num">
+                  <span>02 / 05</span><span class="article-card-date">28 JAN 2026</span>
+                </div>
+                <h3 class="article-card-title">On Deep Work and Focused Programming</h3>
+                <p class="article-card-excerpt">
+                  Newport's framework applied to software development. What changes when you protect
+                  concentration?
+                </p>
+              </div>
+              <div class="article-card-footer">
+                <div class="card-tags">
+                  <span class="tag">Deep Work</span><span class="tag">Dev</span>
+                </div>
+                <span class="card-mins">8 min</span>
+              </div>
+            </div>
 
-<pre><code><span class="code-lang">JavaScript</span>
+            <div class="article-card">
+              <div class="article-card-top"></div>
+              <div class="article-card-body">
+                <div class="article-card-num">
+                  <span>03 / 05</span><span class="article-card-date">14 JAN 2026</span>
+                </div>
+                <h3 class="article-card-title">Types of Rendering in Next.js</h3>
+                <p class="article-card-excerpt">
+                  SSR, SSG, ISR, CSR — plain-language breakdown of when to use each strategy.
+                </p>
+              </div>
+              <div class="article-card-footer">
+                <div class="card-tags">
+                  <span class="tag">Next.js</span><span class="tag">Dev</span>
+                </div>
+                <span class="card-mins">7 min</span>
+              </div>
+            </div>
+
+            <div class="article-card">
+              <div class="article-card-top"></div>
+              <div class="article-card-body">
+                <div class="article-card-num">
+                  <span>04 / 05</span><span class="article-card-date">03 JAN 2026</span>
+                </div>
+                <h3 class="article-card-title">The Psychology of Money — My Notes</h3>
+                <p class="article-card-excerpt">
+                  Housel writes about money in a way that feels like wisdom, not finance advice.
+                </p>
+              </div>
+              <div class="article-card-footer">
+                <div class="card-tags">
+                  <span class="tag">Books</span><span class="tag">Money</span>
+                </div>
+                <span class="card-mins">9 min</span>
+              </div>
+            </div>
+
+            <div class="article-card">
+              <div class="article-card-top"></div>
+              <div class="article-card-body">
+                <div class="article-card-num">
+                  <span>05 / 05</span><span class="article-card-date">18 DEC 2025</span>
+                </div>
+                <h3 class="article-card-title">Rewriting My Blog With Claude Code</h3>
+                <p class="article-card-excerpt">
+                  What it felt like to pair program with an AI for a week on a real project.
+                </p>
+              </div>
+              <div class="article-card-footer">
+                <div class="card-tags"><span class="tag">Dev</span><span class="tag">AI</span></div>
+                <span class="card-mins">5 min</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-strip">
+        <p class="footer-text">diegoromero.blog · <span>5 Articles</span> in the archive</p>
+      </div>
+    </section>
+
+    <!-- ARTICLE -->
+    <section class="view" id="view-article">
+      <div class="article-wrap">
+        <button class="back-btn" onclick="switchView('blog')">← Back to Fixtures</button>
+
+        <div class="match-report-header">
+          <div class="match-report-inner">
+            <div class="match-report-label">Match Report</div>
+            <div class="match-report-date">12 FEB 2026 · Article 01 / 05</div>
+            <h1 class="match-report-title">Pomodoro as a Productivity Tool</h1>
+            <div class="match-report-meta">
+              <span class="meta-item">By <strong>Diego Romero</strong></span>
+              <span class="meta-item">Reading Time <strong>6 min</strong></span>
+              <span class="meta-item">Category <strong>Productivity</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="reading-progress">
+          <div class="reading-progress-fill"></div>
+        </div>
+
+        <div class="stripe-divider"></div>
+
+        <div class="article-toc">
+          <div class="toc-label">Formation / Contents</div>
+          <ul class="toc-list">
+            <li class="toc-item active">The Technique Explained</li>
+            <li class="toc-item">Why 25 Minutes Works</li>
+            <li class="toc-item">Adapting It for Deep Work</li>
+            <li class="toc-item">My Current Setup</li>
+          </ul>
+        </div>
+
+        <div class="article-body">
+          <h2 data-num="01">The Technique Explained</h2>
+          <p>
+            The Pomodoro Technique was invented by Francesco Cirillo in the late 1980s. The name
+            comes from a tomato-shaped kitchen timer he used as a university student. The method is
+            deceptively minimal: work for 25 minutes, uninterrupted, then take a 5-minute break.
+            Every four rounds, take a longer break of 15 to 30 minutes. That is the entire rulebook.
+          </p>
+          <p>
+            What strikes most people when they first try it is not the breaks — it is the enforced
+            singularity of focus. You are not allowed to switch tasks mid-pomodoro. If a distraction
+            surfaces, you write it down and return to it later. The pomodoro is treated as an atomic
+            unit: indivisible.
+          </p>
+
+          <blockquote>
+            <p>
+              One thing I did not expect was how the timer creates a kind of psychological safety.
+              You are not working forever — you are working for 25 minutes. That is a manageable
+              promise to make to yourself.
+            </p>
+            <cite>Diego Romero, in conversation with himself at 10pm</cite>
+          </blockquote>
+
+          <h2 data-num="02">Why 25 Minutes Works</h2>
+          <p>
+            The 25-minute window is short enough to feel non-threatening, but long enough to get
+            into a genuine flow state. Cognitive science research on attention suggests that
+            sustained focus — real, high-quality focus — is difficult to maintain beyond 45 minutes
+            without degradation. Twenty-five minutes sits comfortably inside that window.
+          </p>
+          <p>
+            The break is not just rest. It is cognitive consolidation. Memory research consistently
+            shows that the mind continues to process and integrate information during rest periods.
+            The 5-minute break is working even when you are not. This is the hidden advantage the
+            technique's critics — who call it too simplistic — tend to miss.
+          </p>
+          <p>
+            There is also the momentum effect. Completing a pomodoro is a small win. Small wins
+            compound. After a morning of six completed pomodoros, the sense of forward movement is
+            tangible and motivating in a way that a vague "I worked hard today" never quite is.
+          </p>
+
+          <h2 data-num="03">Adapting It for Deep Work</h2>
+          <p>
+            Pure Pomodoro and Deep Work (Cal Newport's concept) exist in slight tension. Newport
+            advocates for longer, sustained blocks — often 90 minutes or more. The 25-minute ceiling
+            can feel restrictive if you are genuinely deep in a complex problem. My adaptation: I
+            use the Pomodoro structure for planning and shallow work, and I allow myself to extend a
+            session when I hit real flow. The timer becomes a floor, not a ceiling.
+          </p>
+          <p>
+            The key is using the technique's check-in discipline without becoming enslaved to its
+            intervals. The moment the timer goes off is a prompt to ask: "Am I in flow, or am I
+            coasting?" If flow, keep going. If coasting, the break is exactly what you need.
+          </p>
+
+          <blockquote>
+            <p>
+              The Pomodoro timer is not a task manager. It is an attention manager. That reframe
+              changes everything about how you use it.
+            </p>
+            <cite>A note in the margin of my copy of Deep Work</cite>
+          </blockquote>
+
+          <h2 data-num="04">My Current Setup</h2>
+          <p>
+            I run Deepflow — my own focus timer app — which extends Pomodoro with session tagging
+            and daily analytics. Each session gets a category label (coding, writing, reading,
+            admin) and a brief note on what was accomplished. After a week, the data paints an
+            accurate picture of where your attention actually goes, versus where you think it goes.
+          </p>
+          <p>
+            The gap between those two numbers is, consistently, humbling. Here is a minimal
+            JavaScript timer to illustrate the core loop — the same logic that powers Deepflow:
+          </p>
+
+          <pre><code><span class="code-lang">JavaScript</span>
 class PomodoroTimer {
   constructor(workMins = 25, breakMins = 5) {
     this.workMs   = workMins  * 60 * 1000;
@@ -2382,541 +2613,584 @@ const timer = new PomodoroTimer(25, 5);
 timer.start();
 </code></pre>
 
-      <p>
-        The simplicity of the implementation is part of the point. The Pomodoro Technique is not a complex system — it is a simple contract with your own attention. The difficulty lies not in understanding it but in honouring it, session after session, day after day.
-      </p>
-      <p>
-        Start with one pomodoro tomorrow morning, before you check email, before you open Slack. See what 25 minutes of genuine focus produces. I suspect the answer will recalibrate your sense of what is possible in a working day.
-      </p>
-
-    </div>
-
-  </div>
-</section>
-
-<!-- BOOKS -->
-<section class="view" id="view-books">
-
-  <div class="books-header">
-    <div class="books-header-inner">
-      <div class="books-header-label">League Table · Reading Log</div>
-      <h1 class="books-header-title">The Books</h1>
-      <p class="books-header-sub">Non-fiction that earns a permanent place on the shelf.</p>
-    </div>
-  </div>
-
-  <div class="stripe-divider"></div>
-
-  <div class="league-table-wrap">
-    <table class="league-table">
-      <thead>
-        <tr>
-          <th style="width:40px; text-align:center;">Pos</th>
-          <th>Title &amp; Author</th>
-          <th>Genre</th>
-          <th>Rating</th>
-          <th style="text-align:right;">Read</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr onclick="switchView('book-detail')">
-          <td class="td-pos gold">01</td>
-          <td class="book-title-cell">
-            <div class="book-title">Shoe Dog</div>
-            <div class="book-author">Phil Knight</div>
-          </td>
-          <td class="td-genre"><span class="tag">Memoir</span></td>
-          <td class="td-rating">★★★★★</td>
-          <td class="td-year">2026</td>
-        </tr>
-        <tr>
-          <td class="td-pos silver">02</td>
-          <td class="book-title-cell">
-            <div class="book-title">Deep Work</div>
-            <div class="book-author">Cal Newport</div>
-          </td>
-          <td class="td-genre"><span class="tag">Focus</span></td>
-          <td class="td-rating">★★★★★</td>
-          <td class="td-year">2025</td>
-        </tr>
-        <tr>
-          <td class="td-pos bronze">03</td>
-          <td class="book-title-cell">
-            <div class="book-title">The Psychology of Money</div>
-            <div class="book-author">Morgan Housel</div>
-          </td>
-          <td class="td-genre"><span class="tag">Finance</span></td>
-          <td class="td-rating">★★★★★</td>
-          <td class="td-year">2025</td>
-        </tr>
-        <tr>
-          <td class="td-pos">04</td>
-          <td class="book-title-cell">
-            <div class="book-title">The Courage to Be Disliked</div>
-            <div class="book-author">Kishimi &amp; Koga</div>
-          </td>
-          <td class="td-genre"><span class="tag">Philosophy</span></td>
-          <td class="td-rating">★★★★★</td>
-          <td class="td-year">2025</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="footer-strip">
-    <p class="footer-text">diegoromero.blog · <span>4 Books</span> reviewed this season</p>
-  </div>
-
-</section>
-
-<!-- BOOK DETAIL -->
-<section class="view" id="view-book-detail">
-  <div class="book-detail-wrap">
-
-    <button class="back-btn" onclick="switchView('books')">← Back to League Table</button>
-
-    <div class="book-detail-header">
-      <div class="book-cover-placeholder">
-        <span>Shoe Dog</span>
+          <p>
+            The simplicity of the implementation is part of the point. The Pomodoro Technique is not
+            a complex system — it is a simple contract with your own attention. The difficulty lies
+            not in understanding it but in honouring it, session after session, day after day.
+          </p>
+          <p>
+            Start with one pomodoro tomorrow morning, before you check email, before you open Slack.
+            See what 25 minutes of genuine focus produces. I suspect the answer will recalibrate
+            your sense of what is possible in a working day.
+          </p>
+        </div>
       </div>
-      <div class="book-detail-meta">
-        <div class="book-detail-label">Book Review · Pos 01</div>
-        <h1 class="book-detail-title">Shoe Dog</h1>
-        <div class="book-detail-author">Phil Knight</div>
-        <div class="book-detail-stats">
-          <div class="book-stat">
-            <span class="book-stat-label">Rating</span>
-            <span class="book-stat-val stars">★★★★★</span>
+    </section>
+
+    <!-- BOOKS -->
+    <section class="view" id="view-books">
+      <div class="books-header">
+        <div class="books-header-inner">
+          <div class="books-header-label">League Table · Reading Log</div>
+          <h1 class="books-header-title">The Books</h1>
+          <p class="books-header-sub">Non-fiction that earns a permanent place on the shelf.</p>
+        </div>
+      </div>
+
+      <div class="stripe-divider"></div>
+
+      <div class="league-table-wrap">
+        <table class="league-table">
+          <thead>
+            <tr>
+              <th style="width: 40px; text-align: center">Pos</th>
+              <th>Title &amp; Author</th>
+              <th>Genre</th>
+              <th>Rating</th>
+              <th style="text-align: right">Read</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr onclick="switchView('book-detail')">
+              <td class="td-pos gold">01</td>
+              <td class="book-title-cell">
+                <div class="book-title">Shoe Dog</div>
+                <div class="book-author">Phil Knight</div>
+              </td>
+              <td class="td-genre"><span class="tag">Memoir</span></td>
+              <td class="td-rating">★★★★★</td>
+              <td class="td-year">2026</td>
+            </tr>
+            <tr>
+              <td class="td-pos silver">02</td>
+              <td class="book-title-cell">
+                <div class="book-title">Deep Work</div>
+                <div class="book-author">Cal Newport</div>
+              </td>
+              <td class="td-genre"><span class="tag">Focus</span></td>
+              <td class="td-rating">★★★★★</td>
+              <td class="td-year">2025</td>
+            </tr>
+            <tr>
+              <td class="td-pos bronze">03</td>
+              <td class="book-title-cell">
+                <div class="book-title">The Psychology of Money</div>
+                <div class="book-author">Morgan Housel</div>
+              </td>
+              <td class="td-genre"><span class="tag">Finance</span></td>
+              <td class="td-rating">★★★★★</td>
+              <td class="td-year">2025</td>
+            </tr>
+            <tr>
+              <td class="td-pos">04</td>
+              <td class="book-title-cell">
+                <div class="book-title">The Courage to Be Disliked</div>
+                <div class="book-author">Kishimi &amp; Koga</div>
+              </td>
+              <td class="td-genre"><span class="tag">Philosophy</span></td>
+              <td class="td-rating">★★★★★</td>
+              <td class="td-year">2025</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="footer-strip">
+        <p class="footer-text">diegoromero.blog · <span>4 Books</span> reviewed this season</p>
+      </div>
+    </section>
+
+    <!-- BOOK DETAIL -->
+    <section class="view" id="view-book-detail">
+      <div class="book-detail-wrap">
+        <button class="back-btn" onclick="switchView('books')">← Back to League Table</button>
+
+        <div class="book-detail-header">
+          <div class="book-cover-placeholder">
+            <span>Shoe Dog</span>
           </div>
-          <div class="book-stat">
-            <span class="book-stat-label">Genre</span>
-            <span class="book-stat-val">Memoir</span>
+          <div class="book-detail-meta">
+            <div class="book-detail-label">Book Review · Pos 01</div>
+            <h1 class="book-detail-title">Shoe Dog</h1>
+            <div class="book-detail-author">Phil Knight</div>
+            <div class="book-detail-stats">
+              <div class="book-stat">
+                <span class="book-stat-label">Rating</span>
+                <span class="book-stat-val stars">★★★★★</span>
+              </div>
+              <div class="book-stat">
+                <span class="book-stat-label">Genre</span>
+                <span class="book-stat-val">Memoir</span>
+              </div>
+              <div class="book-stat">
+                <span class="book-stat-label">Read</span>
+                <span class="book-stat-val">Jan 2026</span>
+              </div>
+              <div class="book-stat">
+                <span class="book-stat-label">Pages</span>
+                <span class="book-stat-val">386</span>
+              </div>
+            </div>
           </div>
-          <div class="book-stat">
-            <span class="book-stat-label">Read</span>
-            <span class="book-stat-val">Jan 2026</span>
+        </div>
+
+        <div class="stripe-divider"></div>
+
+        <div class="article-body" style="margin-top: 32px">
+          <h2 data-num="01">What It's About</h2>
+          <p>
+            Shoe Dog is Phil Knight's memoir of the years from 1962 to 1980, covering the improbable
+            creation of Nike. It starts with Knight as a 24-year-old Stanford MBA graduate with a
+            wild idea: import high-quality Japanese running shoes to the United States. It ends,
+            roughly, when the company went public and he knew the thing would survive him. What
+            happens in between is one of the most gripping business narratives ever put to paper.
+          </p>
+          <p>
+            Knight writes with unusual candour. He does not present himself as a visionary who
+            always knew it would work. He presents himself as a man who was often terrified,
+            frequently wrong, perpetually short of cash, and somehow unable to stop. That honesty is
+            the book's greatest strength.
+          </p>
+
+          <h2 data-num="02">The Entrepreneurial Grit</h2>
+          <p>
+            What stayed with me most is the financial precariousness of Nike's early years. Knight
+            operated with almost no working capital for most of the company's first decade. He would
+            sell a batch of shoes, use the money to order more shoes before he had sold the first
+            batch, and then scramble to find bridge financing to cover the gap. This cycle repeated
+            — terrifyingly, relentlessly — year after year. The banks threatened to pull his credit
+            lines. Japanese partners threatened to cut him off. Distributors stole his designs. He
+            kept going.
+          </p>
+          <p>
+            The team he assembled is equally remarkable. Jeff Johnson, the first employee, would
+            send Knight obsessive letters about shoe technology, store design, and marketing. Bob
+            Woodell ran operations from a wheelchair after a swimming accident robbed him of the use
+            of his legs. Bill Bowerman — Knight's old track coach — was gluing together shoe
+            prototypes in his kitchen and eventually poured rubber into a waffle iron to create the
+            iconic waffle sole. These are not corporate archetypes. They are oddballs who cared too
+            much.
+          </p>
+
+          <blockquote>
+            <p>
+              The cowards never started and the weak died along the way. That leaves us. Let me ask
+              you, who would you rather be?
+            </p>
+            <cite>Phil Knight, Shoe Dog</cite>
+          </blockquote>
+
+          <h2 data-num="03">What It Taught Me</h2>
+          <p>
+            I read this book while in the early stages of building Deepflow, and its timing was
+            perfect. The specific lesson I took from it was about the relationship between
+            conviction and information. Knight had very little evidence that Blue Ribbon Sports — as
+            Nike was first called — would work. He had a hunch, some early sales numbers, and an
+            unreasonable attachment to the idea. He moved anyway.
+          </p>
+          <p>
+            That is not a call to recklessness. Knight was methodical about what he could control:
+            product quality, relationships with suppliers, team selection. He was comfortable with
+            uncertainty about what he could not control: the market, competitor moves, macroeconomic
+            conditions. Separating those two categories and acting decisively on the first is a
+            skill I am still developing.
+          </p>
+          <p>
+            The book also reframed my understanding of what success means at the start of a venture.
+            Nike "succeeded" multiple times before it actually succeeded — meaning it survived. Each
+            crisis that Knight navigated was a version of the company dying and coming back.
+            Durability is the underrated virtue.
+          </p>
+
+          <blockquote>
+            <p>
+              I'd tell men and women in their mid-twenties not to settle for a job or a career or
+              even a calling. I'd tell them to seek a cause. And if you're wondering what your cause
+              is? I'd say: you'll know it when you find it. That's as specific as I can get.
+            </p>
+            <cite>Phil Knight, Shoe Dog</cite>
+          </blockquote>
+
+          <h2 data-num="04">A Quote That Hit Hard</h2>
+          <p>
+            The quote above about "cause" is the one most readers highlight. But the line that
+            stopped me cold was simpler, buried mid-narrative: "I wanted to win. Or maybe I just
+            didn't want to lose. I'm still not sure there's a difference." That sentence carries the
+            entire ambiguity of competitive drive. I have been thinking about it since.
+          </p>
+          <p>
+            If you build things, or want to, read this book. It will not give you a framework or a
+            checklist. It will give you something harder to manufacture: the sense that someone else
+            was exactly as scared as you are, and they kept going anyway.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="view" id="view-projects">
+      <div class="projects-header">
+        <div class="projects-header-inner">
+          <div class="projects-header-label">Squad Roster · Active Projects</div>
+          <h1 class="projects-header-title">The Projects</h1>
+        </div>
+      </div>
+
+      <div class="stripe-divider"></div>
+
+      <div class="projects-grid">
+        <div class="project-card">
+          <div class="project-card-accent"></div>
+          <div class="project-badge">
+            <div class="project-badge-inner">
+              <span class="project-badge-letter">D</span>
+            </div>
           </div>
-          <div class="book-stat">
-            <span class="book-stat-label">Pages</span>
-            <span class="book-stat-val">386</span>
+          <div class="project-card-body">
+            <div class="project-num">PROJECT 01 / 03</div>
+            <div class="project-name">Deepflow</div>
+            <p class="project-desc">
+              A focus timer web app built for programmers and writers. Pomodoro-based sessions with
+              category tagging, daily analytics, and streak tracking. Designed for the long game.
+            </p>
+          </div>
+          <div class="project-card-footer">
+            <div class="project-stats-row">
+              <div class="project-stat">
+                <span class="project-stat-label">Year</span>
+                <span class="project-stat-val">2025</span>
+              </div>
+              <div class="project-stat">
+                <span class="project-stat-label">Status</span>
+                <span class="project-stat-val status-live">Live</span>
+              </div>
+              <div class="project-stat">
+                <span class="project-stat-label">Type</span>
+                <span class="project-stat-val">Web App</span>
+              </div>
+            </div>
+            <div class="tech-stack">
+              <span class="tech-pill">React</span>
+              <span class="tech-pill">TypeScript</span>
+              <span class="tech-pill">Next.js</span>
+              <span class="tech-pill">Firebase</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-card-accent"></div>
+          <div class="project-badge">
+            <div class="project-badge-inner">
+              <span class="project-badge-letter">L</span>
+            </div>
+          </div>
+          <div class="project-card-body">
+            <div class="project-num">PROJECT 02 / 03</div>
+            <div class="project-name">Listu</div>
+            <p class="project-desc">
+              Native iOS habit tracker with a minimal SwiftUI interface. Streak-based motivation
+              system, local-first data, and daily review prompts. No subscriptions, no noise.
+            </p>
+          </div>
+          <div class="project-card-footer">
+            <div class="project-stats-row">
+              <div class="project-stat">
+                <span class="project-stat-label">Year</span>
+                <span class="project-stat-val">2024</span>
+              </div>
+              <div class="project-stat">
+                <span class="project-stat-label">Status</span>
+                <span class="project-stat-val status-live">Live</span>
+              </div>
+              <div class="project-stat">
+                <span class="project-stat-label">Type</span>
+                <span class="project-stat-val">iOS App</span>
+              </div>
+            </div>
+            <div class="tech-stack">
+              <span class="tech-pill">Swift</span>
+              <span class="tech-pill">SwiftUI</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-card-accent"></div>
+          <div class="project-badge">
+            <div class="project-badge-inner">
+              <span class="project-badge-letter">K</span>
+            </div>
+          </div>
+          <div class="project-card-body">
+            <div class="project-num">PROJECT 03 / 03</div>
+            <div class="project-name">KODR</div>
+            <p class="project-desc">
+              A CLI tool for developers that scaffolds opinionated project structures, generates
+              component boilerplate, and runs pre-commit quality checks. Built for speed and
+              consistency.
+            </p>
+          </div>
+          <div class="project-card-footer">
+            <div class="project-stats-row">
+              <div class="project-stat">
+                <span class="project-stat-label">Year</span>
+                <span class="project-stat-val">2024</span>
+              </div>
+              <div class="project-stat">
+                <span class="project-stat-label">Status</span>
+                <span class="project-stat-val status-live">Live</span>
+              </div>
+              <div class="project-stat">
+                <span class="project-stat-label">Type</span>
+                <span class="project-stat-val">CLI Tool</span>
+              </div>
+            </div>
+            <div class="tech-stack">
+              <span class="tech-pill">Node.js</span>
+              <span class="tech-pill">TypeScript</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="stripe-divider"></div>
-
-    <div class="article-body" style="margin-top: 32px;">
-
-      <h2 data-num="01">What It's About</h2>
-      <p>
-        Shoe Dog is Phil Knight's memoir of the years from 1962 to 1980, covering the improbable creation of Nike. It starts with Knight as a 24-year-old Stanford MBA graduate with a wild idea: import high-quality Japanese running shoes to the United States. It ends, roughly, when the company went public and he knew the thing would survive him. What happens in between is one of the most gripping business narratives ever put to paper.
-      </p>
-      <p>
-        Knight writes with unusual candour. He does not present himself as a visionary who always knew it would work. He presents himself as a man who was often terrified, frequently wrong, perpetually short of cash, and somehow unable to stop. That honesty is the book's greatest strength.
-      </p>
-
-      <h2 data-num="02">The Entrepreneurial Grit</h2>
-      <p>
-        What stayed with me most is the financial precariousness of Nike's early years. Knight operated with almost no working capital for most of the company's first decade. He would sell a batch of shoes, use the money to order more shoes before he had sold the first batch, and then scramble to find bridge financing to cover the gap. This cycle repeated — terrifyingly, relentlessly — year after year. The banks threatened to pull his credit lines. Japanese partners threatened to cut him off. Distributors stole his designs. He kept going.
-      </p>
-      <p>
-        The team he assembled is equally remarkable. Jeff Johnson, the first employee, would send Knight obsessive letters about shoe technology, store design, and marketing. Bob Woodell ran operations from a wheelchair after a swimming accident robbed him of the use of his legs. Bill Bowerman — Knight's old track coach — was gluing together shoe prototypes in his kitchen and eventually poured rubber into a waffle iron to create the iconic waffle sole. These are not corporate archetypes. They are oddballs who cared too much.
-      </p>
-
-      <blockquote>
-        <p>The cowards never started and the weak died along the way. That leaves us. Let me ask you, who would you rather be?</p>
-        <cite>Phil Knight, Shoe Dog</cite>
-      </blockquote>
-
-      <h2 data-num="03">What It Taught Me</h2>
-      <p>
-        I read this book while in the early stages of building Deepflow, and its timing was perfect. The specific lesson I took from it was about the relationship between conviction and information. Knight had very little evidence that Blue Ribbon Sports — as Nike was first called — would work. He had a hunch, some early sales numbers, and an unreasonable attachment to the idea. He moved anyway.
-      </p>
-      <p>
-        That is not a call to recklessness. Knight was methodical about what he could control: product quality, relationships with suppliers, team selection. He was comfortable with uncertainty about what he could not control: the market, competitor moves, macroeconomic conditions. Separating those two categories and acting decisively on the first is a skill I am still developing.
-      </p>
-      <p>
-        The book also reframed my understanding of what success means at the start of a venture. Nike "succeeded" multiple times before it actually succeeded — meaning it survived. Each crisis that Knight navigated was a version of the company dying and coming back. Durability is the underrated virtue.
-      </p>
-
-      <blockquote>
-        <p>I'd tell men and women in their mid-twenties not to settle for a job or a career or even a calling. I'd tell them to seek a cause. And if you're wondering what your cause is? I'd say: you'll know it when you find it. That's as specific as I can get.</p>
-        <cite>Phil Knight, Shoe Dog</cite>
-      </blockquote>
-
-      <h2 data-num="04">A Quote That Hit Hard</h2>
-      <p>
-        The quote above about "cause" is the one most readers highlight. But the line that stopped me cold was simpler, buried mid-narrative: "I wanted to win. Or maybe I just didn't want to lose. I'm still not sure there's a difference." That sentence carries the entire ambiguity of competitive drive. I have been thinking about it since.
-      </p>
-      <p>
-        If you build things, or want to, read this book. It will not give you a framework or a checklist. It will give you something harder to manufacture: the sense that someone else was exactly as scared as you are, and they kept going anyway.
-      </p>
-
-    </div>
-
-  </div>
-</section>
-
-<!-- PROJECTS -->
-<section class="view" id="view-projects">
-
-  <div class="projects-header">
-    <div class="projects-header-inner">
-      <div class="projects-header-label">Squad Roster · Active Projects</div>
-      <h1 class="projects-header-title">The Projects</h1>
-    </div>
-  </div>
-
-  <div class="stripe-divider"></div>
-
-  <div class="projects-grid">
-
-    <div class="project-card">
-      <div class="project-card-accent"></div>
-      <div class="project-badge">
-        <div class="project-badge-inner">
-          <span class="project-badge-letter">D</span>
-        </div>
+      <div class="footer-strip">
+        <p class="footer-text">diegoromero.blog · <span>3 Projects</span> on the pitch</p>
       </div>
-      <div class="project-card-body">
-        <div class="project-num">PROJECT 01 / 03</div>
-        <div class="project-name">Deepflow</div>
-        <p class="project-desc">
-          A focus timer web app built for programmers and writers. Pomodoro-based sessions with category tagging, daily analytics, and streak tracking. Designed for the long game.
-        </p>
-      </div>
-      <div class="project-card-footer">
-        <div class="project-stats-row">
-          <div class="project-stat">
-            <span class="project-stat-label">Year</span>
-            <span class="project-stat-val">2025</span>
-          </div>
-          <div class="project-stat">
-            <span class="project-stat-label">Status</span>
-            <span class="project-stat-val status-live">Live</span>
-          </div>
-          <div class="project-stat">
-            <span class="project-stat-label">Type</span>
-            <span class="project-stat-val">Web App</span>
-          </div>
-        </div>
-        <div class="tech-stack">
-          <span class="tech-pill">React</span>
-          <span class="tech-pill">TypeScript</span>
-          <span class="tech-pill">Next.js</span>
-          <span class="tech-pill">Firebase</span>
-        </div>
-      </div>
-    </div>
+    </section>
 
-    <div class="project-card">
-      <div class="project-card-accent"></div>
-      <div class="project-badge">
-        <div class="project-badge-inner">
-          <span class="project-badge-letter">L</span>
-        </div>
-      </div>
-      <div class="project-card-body">
-        <div class="project-num">PROJECT 02 / 03</div>
-        <div class="project-name">Listu</div>
-        <p class="project-desc">
-          Native iOS habit tracker with a minimal SwiftUI interface. Streak-based motivation system, local-first data, and daily review prompts. No subscriptions, no noise.
-        </p>
-      </div>
-      <div class="project-card-footer">
-        <div class="project-stats-row">
-          <div class="project-stat">
-            <span class="project-stat-label">Year</span>
-            <span class="project-stat-val">2024</span>
-          </div>
-          <div class="project-stat">
-            <span class="project-stat-label">Status</span>
-            <span class="project-stat-val status-live">Live</span>
-          </div>
-          <div class="project-stat">
-            <span class="project-stat-label">Type</span>
-            <span class="project-stat-val">iOS App</span>
-          </div>
-        </div>
-        <div class="tech-stack">
-          <span class="tech-pill">Swift</span>
-          <span class="tech-pill">SwiftUI</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="project-card-accent"></div>
-      <div class="project-badge">
-        <div class="project-badge-inner">
-          <span class="project-badge-letter">K</span>
-        </div>
-      </div>
-      <div class="project-card-body">
-        <div class="project-num">PROJECT 03 / 03</div>
-        <div class="project-name">KODR</div>
-        <p class="project-desc">
-          A CLI tool for developers that scaffolds opinionated project structures, generates component boilerplate, and runs pre-commit quality checks. Built for speed and consistency.
-        </p>
-      </div>
-      <div class="project-card-footer">
-        <div class="project-stats-row">
-          <div class="project-stat">
-            <span class="project-stat-label">Year</span>
-            <span class="project-stat-val">2024</span>
-          </div>
-          <div class="project-stat">
-            <span class="project-stat-label">Status</span>
-            <span class="project-stat-val status-live">Live</span>
-          </div>
-          <div class="project-stat">
-            <span class="project-stat-label">Type</span>
-            <span class="project-stat-val">CLI Tool</span>
-          </div>
-        </div>
-        <div class="tech-stack">
-          <span class="tech-pill">Node.js</span>
-          <span class="tech-pill">TypeScript</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="footer-strip">
-    <p class="footer-text">diegoromero.blog · <span>3 Projects</span> on the pitch</p>
-  </div>
-
-</section>
-
-<!-- ============================================================
+    <!-- ============================================================
      BOTTOM NAV
      ============================================================ -->
-<nav class="bottom-nav">
-  <button class="bottom-nav-btn active" id="btn-home" onclick="switchView('home')">
-    <span class="btn-icon">⚽</span>HOME
-  </button>
-  <button class="bottom-nav-btn" id="btn-blog" onclick="switchView('blog')">
-    <span class="btn-icon">📋</span>BLOG
-  </button>
-  <button class="bottom-nav-btn" id="btn-article" onclick="switchView('article')">
-    <span class="btn-icon">📰</span>ARTICLE
-  </button>
-  <button class="bottom-nav-btn" id="btn-books" onclick="switchView('books')">
-    <span class="btn-icon">📚</span>BOOKS
-  </button>
-  <button class="bottom-nav-btn" id="btn-book-detail" onclick="switchView('book-detail')">
-    <span class="btn-icon">📖</span>BOOK
-  </button>
-  <button class="bottom-nav-btn" id="btn-projects" onclick="switchView('projects')">
-    <span class="btn-icon">🛠</span>PROJECTS
-  </button>
-</nav>
+    <nav class="bottom-nav">
+      <button class="bottom-nav-btn active" id="btn-home" onclick="switchView('home')">
+        <span class="btn-icon">⚽</span>HOME
+      </button>
+      <button class="bottom-nav-btn" id="btn-blog" onclick="switchView('blog')">
+        <span class="btn-icon">📋</span>BLOG
+      </button>
+      <button class="bottom-nav-btn" id="btn-article" onclick="switchView('article')">
+        <span class="btn-icon">📰</span>ARTICLE
+      </button>
+      <button class="bottom-nav-btn" id="btn-books" onclick="switchView('books')">
+        <span class="btn-icon">📚</span>BOOKS
+      </button>
+      <button class="bottom-nav-btn" id="btn-book-detail" onclick="switchView('book-detail')">
+        <span class="btn-icon">📖</span>BOOK
+      </button>
+      <button class="bottom-nav-btn" id="btn-projects" onclick="switchView('projects')">
+        <span class="btn-icon">🛠</span>PROJECTS
+      </button>
+    </nav>
 
-<!-- ============================================================
+    <!-- ============================================================
      JAVASCRIPT
      ============================================================ -->
-<script>
-  /* ----------------------------------------------------------
+    <script>
+      /* ----------------------------------------------------------
      View switching
   ---------------------------------------------------------- */
-  const VIEW_MAP = {
-    'home':        { view: 'view-home',        btn: 'btn-home'        },
-    'blog':        { view: 'view-blog',        btn: 'btn-blog'        },
-    'article':     { view: 'view-article',     btn: 'btn-article'     },
-    'books':       { view: 'view-books',       btn: 'btn-books'       },
-    'book-detail': { view: 'view-book-detail', btn: 'btn-book-detail' },
-    'projects':    { view: 'view-projects',    btn: 'btn-projects'    },
-  };
+      const VIEW_MAP = {
+        home: { view: "view-home", btn: "btn-home" },
+        blog: { view: "view-blog", btn: "btn-blog" },
+        article: { view: "view-article", btn: "btn-article" },
+        books: { view: "view-books", btn: "btn-books" },
+        "book-detail": { view: "view-book-detail", btn: "btn-book-detail" },
+        projects: { view: "view-projects", btn: "btn-projects" },
+      }
 
-  let currentView = 'home';
+      let currentView = "home"
 
-  function switchView(name) {
-    if (!VIEW_MAP[name]) return;
+      function switchView(name) {
+        if (!VIEW_MAP[name]) return
 
-    // Deactivate all views and buttons
-    document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.bottom-nav-btn').forEach(el => el.classList.remove('active'));
+        // Deactivate all views and buttons
+        document.querySelectorAll(".view").forEach((el) => el.classList.remove("active"))
+        document.querySelectorAll(".bottom-nav-btn").forEach((el) => el.classList.remove("active"))
 
-    // Activate target
-    document.getElementById(VIEW_MAP[name].view).classList.add('active');
-    document.getElementById(VIEW_MAP[name].btn).classList.add('active');
+        // Activate target
+        document.getElementById(VIEW_MAP[name].view).classList.add("active")
+        document.getElementById(VIEW_MAP[name].btn).classList.add("active")
 
-    currentView = name;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+        currentView = name
+        window.scrollTo({ top: 0, behavior: "smooth" })
 
-    // Trigger stat animation when returning to home
-    if (name === 'home') {
-      setTimeout(animateStats, 200);
-    }
-  }
+        // Trigger stat animation when returning to home
+        if (name === "home") {
+          setTimeout(animateStats, 200)
+        }
+      }
 
-  /* ----------------------------------------------------------
+      /* ----------------------------------------------------------
      Dark mode toggle
   ---------------------------------------------------------- */
-  const darkToggle = document.getElementById('darkToggle');
-  let isDark = false;
+      const darkToggle = document.getElementById("darkToggle")
+      let isDark = false
 
-  // Respect system preference on load
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    isDark = true;
-    document.documentElement.setAttribute('data-theme', 'dark');
-    darkToggle.textContent = '🌙';
-  }
+      // Respect system preference on load
+      if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        isDark = true
+        document.documentElement.setAttribute("data-theme", "dark")
+        darkToggle.textContent = "🌙"
+      }
 
-  darkToggle.addEventListener('click', () => {
-    isDark = !isDark;
-    if (isDark) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      darkToggle.textContent = '🌙';
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-      darkToggle.textContent = '☀️';
-    }
-  });
+      darkToggle.addEventListener("click", () => {
+        isDark = !isDark
+        if (isDark) {
+          document.documentElement.setAttribute("data-theme", "dark")
+          darkToggle.textContent = "🌙"
+        } else {
+          document.documentElement.removeAttribute("data-theme")
+          darkToggle.textContent = "☀️"
+        }
+      })
 
-  /* ----------------------------------------------------------
+      /* ----------------------------------------------------------
      Stat number counter animation
   ---------------------------------------------------------- */
-  function animateCounter(el, target, duration) {
-    const start     = performance.now();
-    const startVal  = 0;
+      function animateCounter(el, target, duration) {
+        const start = performance.now()
+        const startVal = 0
 
-    function step(now) {
-      const elapsed  = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      // Ease out cubic
-      const eased    = 1 - Math.pow(1 - progress, 3);
-      const current  = Math.round(startVal + (target - startVal) * eased);
-      el.textContent = current;
-      if (progress < 1) requestAnimationFrame(step);
-    }
-
-    requestAnimationFrame(step);
-  }
-
-  function animateStats() {
-    const blocks = document.querySelectorAll('.stat-block');
-    const ids    = ['stat-articles', 'stat-books', 'stat-projects'];
-    const targets = [47, 12, 3];
-
-    ids.forEach((id, i) => {
-      const el = document.getElementById(id);
-      if (el) animateCounter(el, targets[i], 1200);
-    });
-
-    blocks.forEach(block => {
-      block.classList.add('animated');
-    });
-  }
-
-  // IntersectionObserver to trigger stats when stats bar is visible
-  const statsBar = document.querySelector('.stats-bar');
-  let statsAnimated = false;
-
-  if (statsBar) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !statsAnimated) {
-          statsAnimated = true;
-          animateStats();
+        function step(now) {
+          const elapsed = now - start
+          const progress = Math.min(elapsed / duration, 1)
+          // Ease out cubic
+          const eased = 1 - Math.pow(1 - progress, 3)
+          const current = Math.round(startVal + (target - startVal) * eased)
+          el.textContent = current
+          if (progress < 1) requestAnimationFrame(step)
         }
-      });
-    }, { threshold: 0.3 });
-    observer.observe(statsBar);
-  }
 
-  /* ----------------------------------------------------------
+        requestAnimationFrame(step)
+      }
+
+      function animateStats() {
+        const blocks = document.querySelectorAll(".stat-block")
+        const ids = ["stat-articles", "stat-books", "stat-projects"]
+        const targets = [47, 12, 3]
+
+        ids.forEach((id, i) => {
+          const el = document.getElementById(id)
+          if (el) animateCounter(el, targets[i], 1200)
+        })
+
+        blocks.forEach((block) => {
+          block.classList.add("animated")
+        })
+      }
+
+      // IntersectionObserver to trigger stats when stats bar is visible
+      const statsBar = document.querySelector(".stats-bar")
+      let statsAnimated = false
+
+      if (statsBar) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting && !statsAnimated) {
+                statsAnimated = true
+                animateStats()
+              }
+            })
+          },
+          { threshold: 0.3 }
+        )
+        observer.observe(statsBar)
+      }
+
+      /* ----------------------------------------------------------
      Blog tag filter
   ---------------------------------------------------------- */
-  function filterArticles(tagEl) {
-    const filter = tagEl.dataset.filter;
+      function filterArticles(tagEl) {
+        const filter = tagEl.dataset.filter
 
-    // Update active tag in controls
-    document.querySelectorAll('.blog-controls .tag').forEach(t => t.classList.remove('active'));
-    tagEl.classList.add('active');
+        // Update active tag in controls
+        document
+          .querySelectorAll(".blog-controls .tag")
+          .forEach((t) => t.classList.remove("active"))
+        tagEl.classList.add("active")
 
-    // Filter desktop table rows
-    const rows = document.querySelectorAll('#fixturesTbody tr');
-    rows.forEach(row => {
-      const tags = (row.dataset.tags || '').toLowerCase();
-      if (filter === 'all' || tags.includes(filter.toLowerCase())) {
-        row.style.display = '';
-      } else {
-        row.style.display = 'none';
+        // Filter desktop table rows
+        const rows = document.querySelectorAll("#fixturesTbody tr")
+        rows.forEach((row) => {
+          const tags = (row.dataset.tags || "").toLowerCase()
+          if (filter === "all" || tags.includes(filter.toLowerCase())) {
+            row.style.display = ""
+          } else {
+            row.style.display = "none"
+          }
+        })
       }
-    });
-  }
 
-  /* ----------------------------------------------------------
+      /* ----------------------------------------------------------
      TOC scroll spy (decorative — highlights based on scroll)
   ---------------------------------------------------------- */
-  function initTocSpy() {
-    const tocItems = document.querySelectorAll('.toc-item');
-    if (!tocItems.length) return;
+      function initTocSpy() {
+        const tocItems = document.querySelectorAll(".toc-item")
+        if (!tocItems.length) return
 
-    const articleView = document.getElementById('view-article');
+        const articleView = document.getElementById("view-article")
 
-    articleView.addEventListener('scroll', () => {
-      const headings = articleView.querySelectorAll('.article-body h2');
-      let active = 0;
+        articleView.addEventListener("scroll", () => {
+          const headings = articleView.querySelectorAll(".article-body h2")
+          let active = 0
 
-      headings.forEach((h, i) => {
-        if (h.getBoundingClientRect().top < 200) active = i;
-      });
+          headings.forEach((h, i) => {
+            if (h.getBoundingClientRect().top < 200) active = i
+          })
 
-      tocItems.forEach((item, i) => {
-        item.classList.toggle('active', i === active);
-      });
-    });
-  }
+          tocItems.forEach((item, i) => {
+            item.classList.toggle("active", i === active)
+          })
+        })
+      }
 
-  // Window scroll also works since we scroll the body
-  window.addEventListener('scroll', () => {
-    if (currentView !== 'article') return;
+      // Window scroll also works since we scroll the body
+      window.addEventListener("scroll", () => {
+        if (currentView !== "article") return
 
-    const headings = document.querySelectorAll('#view-article .article-body h2');
-    const tocItems = document.querySelectorAll('#view-article .toc-item');
-    let active = 0;
+        const headings = document.querySelectorAll("#view-article .article-body h2")
+        const tocItems = document.querySelectorAll("#view-article .toc-item")
+        let active = 0
 
-    headings.forEach((h, i) => {
-      const rect = h.getBoundingClientRect();
-      const topOffset = 150;
-      if (rect.top < topOffset) active = i;
-    });
+        headings.forEach((h, i) => {
+          const rect = h.getBoundingClientRect()
+          const topOffset = 150
+          if (rect.top < topOffset) active = i
+        })
 
-    tocItems.forEach((item, i) => {
-      item.classList.toggle('active', i === active);
-    });
-  });
+        tocItems.forEach((item, i) => {
+          item.classList.toggle("active", i === active)
+        })
+      })
 
-  /* ----------------------------------------------------------
+      /* ----------------------------------------------------------
      Stripe divider animation on view load
   ---------------------------------------------------------- */
-  function replayStripes() {
-    document.querySelectorAll('.stripe-divider').forEach(el => {
-      el.style.animation = 'none';
-      el.offsetHeight; // reflow
-      el.style.animation = '';
-    });
-  }
+      function replayStripes() {
+        document.querySelectorAll(".stripe-divider").forEach((el) => {
+          el.style.animation = "none"
+          el.offsetHeight // reflow
+          el.style.animation = ""
+        })
+      }
 
-  // Re-trigger stripe animation on view switch
-  const origSwitch = switchView;
-  window.switchView = function(name) {
-    origSwitch(name);
-    setTimeout(replayStripes, 50);
-  };
+      // Re-trigger stripe animation on view switch
+      const origSwitch = switchView
+      window.switchView = function (name) {
+        origSwitch(name)
+        setTimeout(replayStripes, 50)
+      }
 
-  /* ----------------------------------------------------------
+      /* ----------------------------------------------------------
      Init
   ---------------------------------------------------------- */
-  document.addEventListener('DOMContentLoaded', () => {
-    // Animate stats on initial load with a small delay
-    setTimeout(animateStats, 600);
-    initTocSpy();
-  });
-</script>
-</body>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Animate stats on initial load with a small delay
+        setTimeout(animateStats, 600)
+        initTocSpy()
+      })
+    </script>
+  </body>
 </html>

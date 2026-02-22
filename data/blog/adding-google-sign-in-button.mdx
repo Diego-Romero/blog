@@ -35,19 +35,19 @@ To add the Google sign-in button to your website, follow these steps:
 2. [Configure your OAuth consent screen](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid).
 3. Open the **Credentials** page of the [Google APIs console](https://console.developers.google.com/apis).
 
-    ![Screenshot 2023-11-24 at 16.29.29.png](/static/images/blog/adding-google-sign-in-button/Screenshot_2023-11-24_at_16.29.29.png)
+   ![Screenshot 2023-11-24 at 16.29.29.png](/static/images/blog/adding-google-sign-in-button/Screenshot_2023-11-24_at_16.29.29.png)
 
 4. Click **Create credentials > OAuth client ID** and for **Application type** select **Web application** to create a new client ID. To use an existing client ID select one of type **Web application**.
 
-    ![Screenshot 2023-11-24 at 16.30.30.png](/static/images/blog/adding-google-sign-in-button/Screenshot_2023-11-24_at_16.30.30.png)
+   ![Screenshot 2023-11-24 at 16.30.30.png](/static/images/blog/adding-google-sign-in-button/Screenshot_2023-11-24_at_16.30.30.png)
 
 5. **Create credentials**: In the Google Cloud Console, navigate to the "Credentials" page. Create a new OAuth 2.0 client ID credential. Specify the authorized JavaScript origins and redirect URIs for your website. For local tests or development add both **`http://localhost`** and **`http://localhost:<port_number>`.**
 
-    ![Screenshot 2023-11-24 at 16.34.41.png](/static/images/blog/adding-google-sign-in-button/Screenshot_2023-11-24_at_16.34.41.png)
+   ![Screenshot 2023-11-24 at 16.34.41.png](/static/images/blog/adding-google-sign-in-button/Screenshot_2023-11-24_at_16.34.41.png)
 
 6. You will now have access to your client ID, which you will need to integrate the button
 
-    ![Screenshot 2023-11-24 at 16.45.18.png](/static/images/blog/adding-google-sign-in-button/Screenshot_2023-11-24_at_16.45.18.png)
+   ![Screenshot 2023-11-24 at 16.45.18.png](/static/images/blog/adding-google-sign-in-button/Screenshot_2023-11-24_at_16.45.18.png)
 
 ## Code Implementation
 
@@ -57,18 +57,18 @@ To add the Google sign-in button to your website, follow these steps:
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>My Website</title>
-    <link rel="stylesheet" href="./style.css">
-    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="icon" href="./favicon.ico" type="image/x-icon" />
   </head>
   <body>
     <main>
-        <h1>Welcome to My Website</h1>  
+      <h1>Welcome to My Website</h1>
     </main>
- <script src="index.js"></script>
+    <script src="index.js"></script>
   </body>
 </html>
 ```
@@ -92,19 +92,19 @@ To add the Google sign-in button to your website, follow these steps:
   window.onload = function () {
     google.accounts.id.initialize({
       client_id: "your client id",
-      callback: handleCredentialResponse
-    });
+      callback: handleCredentialResponse,
+    })
     google.accounts.id.renderButton(
       document.getElementById("buttonDiv"),
-      { theme: "outline", size: "large" }  // customization attributes
-    );
-    google.accounts.id.prompt(); // also display the One Tap dialog
+      { theme: "outline", size: "large" } // customization attributes
+    )
+    google.accounts.id.prompt() // also display the One Tap dialog
 
     function handleCredentialResponse(response) {
-      console.log("Encoded JWT ID token: " + response.credential);
+      console.log("Encoded JWT ID token: " + response.credential)
     }
   }
-  </script>
+</script>
 ```
 
 You should now have a fully rendered Google Sign In Button which you can use and receive a JWT token to help you authenticate.
@@ -116,63 +116,60 @@ The full code is here:
 ```html
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>My Website</title>
-  <link rel="icon" href="./favicon.ico" type="image/x-icon">
-  <style>
-    main {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 2rem;
-    }
-
-    #g_id_onload {
-      display: none;
-    }
-
-    .g_id_signin {
-      margin-top: 2rem;
-    }
-  </style>
-</head>
-
-<body>
-  <main>
-
-    <h1>Welcome to My Website</h1>
-    <div id="buttonDiv"></div>
-    <script src="https://accounts.google.com/gsi/client" async></script>
-    <script>
-      window.onload = function () {
-        google.accounts.id.initialize({
-          client_id: "your client id",
-          callback: handleCredentialResponse
-        });
-        google.accounts.id.renderButton(
-          document.getElementById("buttonDiv"),
-          { theme: "outline", size: "large" }  // customization attributes
-        );
-        google.accounts.id.prompt(); // also display the One Tap dialog
-
-        function handleCredentialResponse(response) {
-          console.log("Encoded JWT ID token: " + response.credential);
-        }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>My Website</title>
+    <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+    <style>
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
       }
-    </script>
-  </main>
-</body>
 
+      h1 {
+        font-size: 3rem;
+        margin-bottom: 2rem;
+      }
+
+      #g_id_onload {
+        display: none;
+      }
+
+      .g_id_signin {
+        margin-top: 2rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <h1>Welcome to My Website</h1>
+      <div id="buttonDiv"></div>
+      <script src="https://accounts.google.com/gsi/client" async></script>
+      <script>
+        window.onload = function () {
+          google.accounts.id.initialize({
+            client_id: "your client id",
+            callback: handleCredentialResponse,
+          })
+          google.accounts.id.renderButton(
+            document.getElementById("buttonDiv"),
+            { theme: "outline", size: "large" } // customization attributes
+          )
+          google.accounts.id.prompt() // also display the One Tap dialog
+
+          function handleCredentialResponse(response) {
+            console.log("Encoded JWT ID token: " + response.credential)
+          }
+        }
+      </script>
+    </main>
+  </body>
 </html>
 ```
 

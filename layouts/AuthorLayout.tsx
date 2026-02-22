@@ -9,42 +9,100 @@ interface Props {
 }
 
 export default function AuthorLayout({ children, content }: Props) {
-  const { name, avatar, occupation, company, email, twitter, linkedin, github } = content
+  const { name, avatar, occupation, company, twitter, linkedin, github } = content
 
   return (
-    <>
-      <div className="divide-y divide-gray-200 dark:divide-gray-700">
-        <div className="space-y-2 pb-8 pt-6 md:space-y-5">
-          <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
-            About
-          </h1>
-        </div>
-        <div className="items-start space-y-2 xl:grid xl:grid-cols-3 xl:gap-x-8 xl:space-y-0">
-          <div className="flex flex-col items-center space-x-2 pt-8">
-            {avatar && (
-              <Image
-                src={avatar}
-                alt="avatar"
-                width={192}
-                height={192}
-                className="h-48 w-48 rounded-full"
-              />
+    <div className="content-container">
+      <div className="page-header">
+        <p className="section-label">about</p>
+        <h1 className="section-title" style={{ fontSize: "1.6rem" }}>
+          Hello, I&apos;m {name}
+        </h1>
+      </div>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr",
+          gap: "3rem",
+        }}
+        className="xl:grid-cols-[280px_1fr]"
+      >
+        {/* Sidebar — avatar + meta */}
+        <aside
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "0.75rem",
+            paddingTop: "0.5rem",
+          }}
+          className="xl:items-start"
+        >
+          {avatar && (
+            <Image
+              src={avatar}
+              alt={name}
+              width={160}
+              height={160}
+              style={{
+                borderRadius: "0",
+                border: "2px solid var(--border)",
+                width: "160px",
+                height: "160px",
+                objectFit: "cover",
+              }}
+            />
+          )}
+
+          <div
+            style={{
+              background: "var(--surface)",
+              border: "1px solid var(--border)",
+              padding: "1rem",
+              width: "100%",
+              maxWidth: "280px",
+              fontFamily: "var(--font-space-mono), 'Space Mono', monospace",
+              fontSize: "0.72rem",
+            }}
+          >
+            <div style={{ color: "var(--accent)", fontWeight: 700, marginBottom: "0.5rem" }}>
+              {"// profile"}
+            </div>
+            {name && (
+              <div style={{ marginBottom: "0.25rem" }}>
+                <span style={{ color: "var(--accent2)" }}>name</span>
+                <span style={{ color: "var(--muted)" }}>: </span>
+                <span style={{ color: "var(--fg)" }}>{name}</span>
+              </div>
             )}
-            <h3 className="pb-2 pt-4 text-2xl font-bold leading-8 tracking-tight">{name}</h3>
-            <div className="text-gray-500 dark:text-gray-400">{occupation}</div>
-            <div className="text-gray-500 dark:text-gray-400">{company}</div>
-            <div className="flex space-x-3 pt-6">
-              {/* <SocialIcon kind="mail" href={`mailto:${email}`} /> */}
-              <SocialIcon kind="github" href={github} />
-              <SocialIcon kind="linkedin" href={linkedin} />
-              <SocialIcon kind="twitter" href={twitter} />
+            {occupation && (
+              <div style={{ marginBottom: "0.25rem" }}>
+                <span style={{ color: "var(--accent2)" }}>role</span>
+                <span style={{ color: "var(--muted)" }}>: </span>
+                <span style={{ color: "var(--fg)" }}>{occupation}</span>
+              </div>
+            )}
+            {company && (
+              <div style={{ marginBottom: "0.75rem" }}>
+                <span style={{ color: "var(--accent2)" }}>co</span>
+                <span style={{ color: "var(--muted)" }}> : </span>
+                <span style={{ color: "var(--fg)" }}>{company}</span>
+              </div>
+            )}
+            <div style={{ display: "flex", gap: "0.75rem", marginTop: "0.5rem" }}>
+              <SocialIcon kind="github" href={github} size={5} />
+              <SocialIcon kind="linkedin" href={linkedin} size={5} />
+              <SocialIcon kind="twitter" href={twitter} size={5} />
             </div>
           </div>
-          <div className="prose max-w-none pb-8 pt-8 dark:prose-invert xl:col-span-2">
-            {children}
-          </div>
+        </aside>
+
+        {/* Content */}
+        <div className="prose prose-lg dark:prose-invert" style={{ paddingBottom: "3rem" }}>
+          {children}
         </div>
       </div>
-    </>
+    </div>
   )
 }

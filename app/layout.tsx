@@ -1,12 +1,12 @@
 import "css/tailwind.css"
 import "pliny/search/algolia.css"
 
-import { Space_Grotesk } from "next/font/google"
+import { Space_Grotesk, Space_Mono, Lora, Fira_Code } from "next/font/google"
 import { Analytics, AnalyticsConfig } from "pliny/analytics"
 import { SearchProvider, SearchConfig } from "pliny/search"
 import Header from "@/components/Header"
-import SectionContainer from "@/components/SectionContainer"
 import Footer from "@/components/Footer"
+import MobileNav from "@/components/MobileNav"
 import siteMetadata from "@/data/siteMetadata"
 import { ThemeProviders } from "./theme-providers"
 import { Metadata } from "next"
@@ -15,6 +15,25 @@ const space_grotesk = Space_Grotesk({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-space-grotesk",
+})
+
+const space_mono = Space_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "700"],
+  variable: "--font-space-mono",
+})
+
+const lora = Lora({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-lora",
+})
+
+const fira_code = Fira_Code({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-fira-code",
 })
 
 export const metadata: Metadata = {
@@ -61,7 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang={siteMetadata.language}
-      className={`${space_grotesk.variable} scroll-smooth`}
+      className={`${space_grotesk.variable} ${space_mono.variable} ${lora.variable} ${fira_code.variable} scroll-smooth`}
       suppressHydrationWarning
     >
       <link rel="apple-touch-icon" sizes="76x76" href="/static/favicons/apple-touch-icon.png" />
@@ -70,21 +89,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <link rel="manifest" href="/static/favicons/site.webmanifest" />
       <link rel="mask-icon" href="/static/favicons/safari-pinned-tab.svg" color="#5bbad5" />
       <meta name="msapplication-TileColor" content="#000000" />
-      <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
-      <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
+      <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FAFAF5" />
+      <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1A1A2E" />
       <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
-      <body className="bg-white text-black antialiased dark:bg-gray-950 dark:text-white">
+      <body className="antialiased">
         <ThemeProviders>
           <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
-          <SectionContainer>
-            <div className="flex h-screen flex-col justify-between font-sans">
-              <SearchProvider searchConfig={siteMetadata.search as SearchConfig}>
-                <Header />
-                <main className="mb-auto">{children}</main>
-              </SearchProvider>
-              <Footer />
-            </div>
-          </SectionContainer>
+          <SearchProvider searchConfig={siteMetadata.search as SearchConfig}>
+            <Header />
+            <main className="site-main">{children}</main>
+            <MobileNav />
+            <Footer />
+          </SearchProvider>
         </ThemeProviders>
       </body>
     </html>
