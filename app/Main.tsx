@@ -41,6 +41,29 @@ const protocols = [
     slug: "sleep",
     icon: "😴",
   },
+  {
+    title: "Supplement Stack",
+    description: "What I take, why I take it, and what the research says.",
+    slug: "supplements",
+    icon: "💊",
+  },
+]
+
+const projects = [
+  {
+    title: "Deepflow",
+    description:
+      "A focus timer app for people who want to do deep work, not just read about it. AI-driven productivity coaching and distraction blocking.",
+    href: "https://deepflow.me",
+    icon: "🎯",
+  },
+  {
+    title: "This Blog",
+    description:
+      "Built with Next.js, Contentlayer, and the Terminal Warm design system. Open source.",
+    href: "https://github.com/Diego-Romero/blog",
+    icon: "📝",
+  },
 ]
 
 export default function Home({ posts }) {
@@ -50,13 +73,11 @@ export default function Home({ posts }) {
     <div className="content-container">
       {/* ── HERO ─────────────────────────────────────── */}
       <section className="hero">
-        {/* $ whoami terminal line */}
         <div className="hero-prompt">
           <span className="prompt-dollar">$</span>
           whoami
         </div>
 
-        {/* Output block */}
         <div className="hero-whoami-output">
           <div>
             <span className="out-key">name</span>
@@ -75,13 +96,11 @@ export default function Home({ posts }) {
           </div>
         </div>
 
-        {/* Big name with cursor */}
         <h1 className="hero-name">
           Diego <span className="name-accent">Romero</span>
           <span className="cursor-blink" aria-hidden="true" />
         </h1>
 
-        {/* CTAs */}
         <div className="flex flex-wrap gap-3">
           <Link href="/blog" className="btn btn-primary">
             Read the blog
@@ -147,20 +166,19 @@ export default function Home({ posts }) {
             <p className="section-label">systems</p>
             <h2 className="section-title">Protocols</h2>
           </div>
+          <Link
+            href="/protocols"
+            style={{
+              fontFamily: "var(--font-space-mono), 'Space Mono', monospace",
+              fontSize: "0.65rem",
+              color: "var(--muted)",
+              letterSpacing: "0.04em",
+              textDecoration: "none",
+            }}
+          >
+            see all →
+          </Link>
         </div>
-
-        <p
-          style={{
-            fontFamily: "var(--font-lora), Lora, Georgia, serif",
-            color: "var(--muted)",
-            marginBottom: "1.5rem",
-            fontSize: "0.95rem",
-            lineHeight: "1.6",
-          }}
-        >
-          The routines and systems I use to stay sharp, healthy, and productive. Each one is a
-          living document — updated as I learn what works.
-        </p>
 
         <div className="protocol-grid">
           {protocols.map((p) => (
@@ -171,6 +189,45 @@ export default function Home({ posts }) {
                 <p className="protocol-desc">{p.description}</p>
               </div>
             </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── PROJECTS ─────────────────────────────────── */}
+      <section className="home-section">
+        <div className="home-section-hd">
+          <div>
+            <p className="section-label">building</p>
+            <h2 className="section-title">Projects</h2>
+          </div>
+          <Link
+            href="/projects"
+            style={{
+              fontFamily: "var(--font-space-mono), 'Space Mono', monospace",
+              fontSize: "0.65rem",
+              color: "var(--muted)",
+              letterSpacing: "0.04em",
+              textDecoration: "none",
+            }}
+          >
+            see all →
+          </Link>
+        </div>
+
+        <div className="protocol-grid">
+          {projects.map((p) => (
+            <Link
+              key={p.title}
+              href={p.href}
+              className="protocol-card"
+              style={{ textDecoration: "none" }}
+            >
+              <span className="protocol-icon">{p.icon}</span>
+              <div>
+                <h3 className="protocol-title">{p.title}</h3>
+                <p className="protocol-desc">{p.description}</p>
+              </div>
+            </Link>
           ))}
         </div>
       </section>

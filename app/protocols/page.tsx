@@ -49,12 +49,6 @@ const protocols = [
     icon: "💊",
     status: "coming soon",
   },
-  {
-    title: "Cleaning Protocol",
-    description: "Keeping the space clean without thinking about it. Systems over motivation.",
-    icon: "🧹",
-    status: "coming soon",
-  },
 ]
 
 export default function ProtocolsPage() {
