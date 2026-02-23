@@ -45,24 +45,44 @@ function socialBanner() {
 }
 
 async function gen(svg, path, w, h) {
-  await sharp(Buffer.from(svg)).resize(w, h || w).png().toFile(path)
+  await sharp(Buffer.from(svg))
+    .resize(w, h || w)
+    .png()
+    .toFile(path)
   console.log(`  ✓ ${path}`)
 }
 
 async function generateIco(path) {
-  const png16 = await sharp(Buffer.from(icon(16))).resize(16).png().toBuffer()
-  const png32 = await sharp(Buffer.from(icon(32))).resize(32).png().toBuffer()
-  const images = [{ data: png16, w: 16 }, { data: png32, w: 32 }]
+  const png16 = await sharp(Buffer.from(icon(16)))
+    .resize(16)
+    .png()
+    .toBuffer()
+  const png32 = await sharp(Buffer.from(icon(32)))
+    .resize(32)
+    .png()
+    .toBuffer()
+  const images = [
+    { data: png16, w: 16 },
+    { data: png32, w: 32 },
+  ]
   const hdr = Buffer.alloc(6)
-  hdr.writeUInt16LE(0, 0); hdr.writeUInt16LE(1, 2); hdr.writeUInt16LE(2, 4)
+  hdr.writeUInt16LE(0, 0)
+  hdr.writeUInt16LE(1, 2)
+  hdr.writeUInt16LE(2, 4)
   let off = 6 + 2 * 16
-  const entries = [], datas = []
+  const entries = [],
+    datas = []
   for (const img of images) {
     const e = Buffer.alloc(16)
-    e.writeUInt8(img.w, 0); e.writeUInt8(img.w, 1)
-    e.writeUInt16LE(1, 4); e.writeUInt16LE(32, 6)
-    e.writeUInt32LE(img.data.length, 8); e.writeUInt32LE(off, 12)
-    entries.push(e); datas.push(img.data); off += img.data.length
+    e.writeUInt8(img.w, 0)
+    e.writeUInt8(img.w, 1)
+    e.writeUInt16LE(1, 4)
+    e.writeUInt16LE(32, 6)
+    e.writeUInt32LE(img.data.length, 8)
+    e.writeUInt32LE(off, 12)
+    entries.push(e)
+    datas.push(img.data)
+    off += img.data.length
   }
   writeFileSync(path, Buffer.concat([hdr, ...entries, ...datas]))
   console.log(`  ✓ ${path}`)
