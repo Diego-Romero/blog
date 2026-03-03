@@ -145,6 +145,40 @@ export const Book = defineDocumentType(() => ({
   },
 }))
 
+export const Protocol = defineDocumentType(() => ({
+  name: "Protocol",
+  filePathPattern: "protocol/**/*.mdx",
+  contentType: "mdx",
+  fields: {
+    title: { type: "string", required: true },
+    date: { type: "date", required: true },
+    tags: { type: "list", of: { type: "string" }, default: [] },
+    lastmod: { type: "date" },
+    draft: { type: "boolean" },
+    summary: { type: "string" },
+    images: { type: "json" },
+    authors: { type: "list", of: { type: "string" } },
+    layout: { type: "string" },
+    icon: { type: "string" },
+  },
+  computedFields: {
+    ...computedFields,
+    structuredData: {
+      type: "json",
+      resolve: (doc) => ({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: doc.title,
+        datePublished: doc.date,
+        dateModified: doc.lastmod || doc.date,
+        description: doc.summary,
+        image: doc.images ? doc.images[0] : siteMetadata.socialBanner,
+        url: `${siteMetadata.siteUrl}/${doc._raw.flattenedPath}`,
+      }),
+    },
+  },
+}))
+
 export const Authors = defineDocumentType(() => ({
   name: "Authors",
   filePathPattern: "authors/**/*.mdx",
@@ -165,7 +199,7 @@ export const Authors = defineDocumentType(() => ({
 
 export default makeSource({
   contentDirPath: "data",
-  documentTypes: [Blog, Authors, Book],
+  documentTypes: [Blog, Authors, Book, Protocol],
   mdx: {
     cwd: process.cwd(),
     remarkPlugins: [
@@ -185,8 +219,8 @@ export default makeSource({
     ],
   },
   onSuccess: async (importData) => {
-    const { allBlogs, allBooks } = await importData()
-    const allData = [...allBlogs, ...allBooks]
+    const { allBlogs, allBooks, allProtocols } = await importData()
+    const allData = [...allBlogs, ...allBooks, ...allProtocols]
     createTagCount(allData)
     createSearchIndex(allData)
   },

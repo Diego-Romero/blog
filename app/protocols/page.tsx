@@ -1,57 +1,26 @@
 import { Metadata } from "next"
+import Link from "@/components/Link"
+import { allProtocols } from "contentlayer/generated"
 
 export const metadata: Metadata = {
   title: "Protocols",
   description: "The routines and systems I use to stay sharp, healthy, and productive.",
 }
 
-const protocols = [
-  {
-    title: "Morning Protocol",
-    description: "Wake, move, focus. The first 90 minutes that set the tone for the day.",
-    icon: "☀️",
-    status: "coming soon",
-  },
-  {
-    title: "Evening Protocol",
-    description: "Wind down, reflect, prepare for tomorrow.",
-    icon: "🌙",
-    status: "coming soon",
-  },
-  {
-    title: "Workout Protocol",
-    description: "Daily hypertrophy training, morning cardio, and recovery strategies.",
-    icon: "🏋️",
-    status: "coming soon",
-  },
-  {
-    title: "Deep Work Protocol",
-    description: "How I structure focused, distraction-free work blocks.",
-    icon: "🧠",
-    status: "coming soon",
-  },
-  {
-    title: "Weekly Review",
-    description: "Sunday reset — review the week, plan the next, recalibrate.",
-    icon: "📋",
-    status: "coming soon",
-  },
-  {
-    title: "Sleep Protocol",
-    description:
-      "Optimizing for 7.5 hours of quality sleep. Eight Sleep, blackout curtains, the works.",
-    icon: "😴",
-    status: "coming soon",
-  },
-  {
-    title: "Supplement Stack",
-    description: "What I take, why I take it, and what the research says.",
-    icon: "💊",
-    status: "coming soon",
-  },
-]
+const staticProtocols: { title: string; description: string; icon: string }[] = []
 
 export default function ProtocolsPage() {
+  // Build a map of published protocols by matching on title keywords
+  const publishedProtocols = allProtocols
+    .filter((p) => !p.draft)
+    .reduce(
+      (acc, p) => {
+        acc[p.slug] = p
+        return acc
+      },
+      {} as Record<string, (typeof allProtocols)[number]>
+    )
+
   return (
     <div className="content-container">
       <div className="page-header">
@@ -77,27 +46,44 @@ export default function ProtocolsPage() {
       </p>
 
       <div className="protocol-grid">
-        {protocols.map((p) => (
+        {/* Contentlayer-backed protocols — linked cards */}
+        {allProtocols
+          .filter((p) => !p.draft)
+          .map((p) => (
+            <Link
+              key={p.slug}
+              href={`/protocols/${p.slug}`}
+              className="protocol-card"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <span className="protocol-icon">{p.icon || "📄"}</span>
+              <div>
+                <h3 className="protocol-title">{p.title}</h3>
+                <p className="protocol-desc">{p.summary}</p>
+              </div>
+            </Link>
+          ))}
+
+        {/* Static "coming soon" protocols */}
+        {staticProtocols.map((p) => (
           <div key={p.title} className="protocol-card">
             <span className="protocol-icon">{p.icon}</span>
             <div>
               <h3 className="protocol-title">{p.title}</h3>
               <p className="protocol-desc">{p.description}</p>
-              {p.status && (
-                <span
-                  style={{
-                    fontFamily: "var(--font-space-mono), 'Space Mono', monospace",
-                    fontSize: "0.6rem",
-                    color: "var(--accent)",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.05em",
-                    marginTop: "0.5rem",
-                    display: "inline-block",
-                  }}
-                >
-                  {p.status}
-                </span>
-              )}
+              <span
+                style={{
+                  fontFamily: "var(--font-space-mono), 'Space Mono', monospace",
+                  fontSize: "0.6rem",
+                  color: "var(--accent)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
+                  marginTop: "0.5rem",
+                  display: "inline-block",
+                }}
+              >
+                coming soon
+              </span>
             </div>
           </div>
         ))}
