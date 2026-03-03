@@ -7,45 +7,33 @@ const MAX_DISPLAY = 6
 const protocols = [
   {
     title: "Morning Protocol",
-    description: "Wake, move, focus. The first 90 minutes that set the tone.",
-    slug: "morning",
+    description: "Wake, move, focus. The first 90 minutes that set the tone for the day.",
+    slug: "morning-protocol",
     icon: "☀️",
   },
   {
     title: "Evening Protocol",
     description: "Wind down, reflect, prepare for tomorrow.",
-    slug: "evening",
+    slug: "evening-protocol",
     icon: "🌙",
   },
   {
     title: "Workout Protocol",
-    description: "Hypertrophy training, daily cardio, and recovery.",
-    slug: "workout",
+    description: "Strength and conditioning built around Wendler's 5/3/1.",
+    slug: "workout-protocol",
     icon: "🏋️",
   },
   {
-    title: "Deep Work Protocol",
-    description: "How I structure focused, distraction-free work blocks.",
-    slug: "deep-work",
-    icon: "🧠",
-  },
-  {
-    title: "Weekly Review",
-    description: "Sunday reset — review, plan, and recalibrate.",
-    slug: "weekly-review",
-    icon: "📋",
+    title: "Nutrition Protocol",
+    description: "Fueling training, losing fat, and staying healthy — on autopilot.",
+    slug: "nutrition-protocol",
+    icon: "🍽️",
   },
   {
     title: "Sleep Protocol",
-    description: "Optimizing for 7.5 hours of quality sleep.",
-    slug: "sleep",
+    description: "Environment, timing, tracking, and troubleshooting for quality sleep.",
+    slug: "sleep-protocol",
     icon: "😴",
-  },
-  {
-    title: "Supplement Stack",
-    description: "What I take, why I take it, and what the research says.",
-    slug: "supplements",
-    icon: "💊",
   },
 ]
 
@@ -182,13 +170,18 @@ export default function Home({ posts }) {
 
         <div className="protocol-grid">
           {protocols.map((p) => (
-            <div key={p.slug} className="protocol-card">
+            <Link
+              key={p.slug}
+              href={`/protocols/${p.slug}`}
+              className="protocol-card"
+              style={{ textDecoration: "none" }}
+            >
               <span className="protocol-icon">{p.icon}</span>
               <div>
                 <h3 className="protocol-title">{p.title}</h3>
                 <p className="protocol-desc">{p.description}</p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
