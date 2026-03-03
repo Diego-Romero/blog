@@ -219,9 +219,14 @@ export default makeSource({
     ],
   },
   onSuccess: async (importData) => {
-    const { allBlogs, allBooks, allProtocols } = await importData()
-    const allData = [...allBlogs, ...allBooks, ...allProtocols]
-    createTagCount(allData)
-    createSearchIndex(allData)
+    try {
+      const { allBlogs, allBooks, allProtocols } = await importData()
+      const allData = [...allBlogs, ...allBooks, ...allProtocols]
+      createTagCount(allData)
+      createSearchIndex(allData)
+    } catch (e) {
+      console.warn("contentlayer onSuccess callback failed:", e)
+      console.warn("Tag counts and search index may not be up to date.")
+    }
   },
 })
