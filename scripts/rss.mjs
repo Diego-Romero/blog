@@ -4,7 +4,7 @@ import GithubSlugger from "github-slugger"
 import { escape } from "pliny/utils/htmlEscaper.js"
 import siteMetadata from "../data/siteMetadata.js"
 import tagData from "../app/tag-data.json" with { type: "json" }
-import { allBlogs, allBooks } from "../.contentlayer/generated/index.mjs"
+import { allBlogs, allBooks, allProtocols } from "../.contentlayer/generated/index.mjs"
 import { sortPosts } from "pliny/utils/contentlayer.js"
 
 const generateRssItem = (config, post) => `
@@ -48,6 +48,7 @@ async function generateRSS(config, allPosts, page = "feed.xml") {
       const filteredPosts = allPosts.filter((post) =>
         post.tags.map((t) => GithubSlugger.slug(t)).includes(tag)
       )
+      if (filteredPosts.length === 0) continue
       const rss = generateRss(config, filteredPosts, `tags/${tag}/${page}`)
       const rssPath = path.join("public", "tags", tag)
       mkdirSync(rssPath, { recursive: true })
@@ -57,7 +58,7 @@ async function generateRSS(config, allPosts, page = "feed.xml") {
 }
 
 const rss = () => {
-  const allPosts = [...allBlogs, ...allBooks]
+  const allPosts = [...allBlogs, ...allBooks, ...allProtocols]
   generateRSS(siteMetadata, allPosts)
   console.log("RSS feed generated...")
 }
