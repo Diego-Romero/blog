@@ -6,18 +6,6 @@ const MAX_DISPLAY = 6
 
 const protocols = [
   {
-    title: "Morning Protocol",
-    description: "Wake, move, focus. The first 90 minutes that set the tone for the day.",
-    slug: "morning-protocol",
-    icon: "☀️",
-  },
-  {
-    title: "Evening Protocol",
-    description: "Wind down, reflect, prepare for tomorrow.",
-    slug: "evening-protocol",
-    icon: "🌙",
-  },
-  {
     title: "Workout Protocol",
     description: "Strength and conditioning built around Wendler's 5/3/1.",
     slug: "workout-protocol",
@@ -28,12 +16,6 @@ const protocols = [
     description: "Fueling training, losing fat, and staying healthy — on autopilot.",
     slug: "nutrition-protocol",
     icon: "🍽️",
-  },
-  {
-    title: "Sleep Protocol",
-    description: "Environment, timing, tracking, and troubleshooting for quality sleep.",
-    slug: "sleep-protocol",
-    icon: "😴",
   },
 ]
 
