@@ -5,6 +5,11 @@ import styles from "./hal.module.css"
 
 type Run = {
   id: string
+  triggered_by: string | null
+  requested_by: string | null
+  repository_url: string | null
+  trigger_url: string | null
+  run_count?: number
   repository: string | null
   pr: number | null
   title: string | null
@@ -30,7 +35,7 @@ type Run = {
   review_url: string | null
   events?: { at: string; event: string }[]
 }
-type Listing = { runs: Run[]; total: number; next_cursor: string | null }
+type Listing = { runs: Run[]; total: number; total_runs: number; next_cursor: string | null }
 const count = (value: number | null) => (value == null ? "—" : value.toLocaleString())
 const cost = (value: number | null) => (value == null ? "Unavailable" : `$${value.toFixed(6)}`)
 const date = (value: string | null) =>
@@ -57,6 +62,15 @@ const eventLabels: Record<string, string> = {
   operator_validation: "Operator validation recorded",
 }
 
+const triggerLabel = (trigger: string | null) =>
+  trigger === "push"
+    ? "Push · automatic re-review"
+    : trigger === "manual /Hal"
+      ? "/Hal comment"
+      : trigger === "manual"
+        ? "Manual review (command not recorded)"
+        : trigger || "Trigger not recorded"
+
 function Status({ value }: { value: string }) {
   return (
     <span className={styles.status} data-state={value}>
@@ -67,6 +81,7 @@ function Status({ value }: { value: string }) {
 
 export default function HalDashboard() {
   const detailPanel = useRef<HTMLElement>(null)
+  const historyPanel = useRef<HTMLElement>(null)
   const selectedButton = useRef<HTMLButtonElement | null>(null)
   const [auth, setAuth] = useState<"checking" | "in" | "out">("checking")
   const [password, setPassword] = useState("")
@@ -76,6 +91,8 @@ export default function HalDashboard() {
   const [listing, setListing] = useState<Listing | null>(null)
   const [cursors, setCursors] = useState<(string | null)[]>([null])
   const [limit, setLimit] = useState(20)
+  const [view, setView] = useState<"latest" | "all">("latest")
+  const [prFilter, setPrFilter] = useState<{ repository: string; pr: number } | null>(null)
   const [refresh, setRefresh] = useState(0)
   const [updated, setUpdated] = useState<string | null>(null)
   const [selected, setSelected] = useState<string | null>(null)
@@ -91,7 +108,11 @@ export default function HalDashboard() {
       if (busy || document.hidden) return
       busy = true
       try {
-        const query = new URLSearchParams({ limit: String(limit) })
+        const query = new URLSearchParams({ limit: String(limit), view })
+        if (prFilter) {
+          query.set("repository", prFilter.repository)
+          query.set("pr", String(prFilter.pr))
+        }
         if (cursor) query.set("cursor", cursor)
         const response = await fetch(`/api/hal/runs?${query}`, {
           cache: "no-store",
@@ -128,7 +149,7 @@ export default function HalDashboard() {
       controller.abort()
       clearInterval(timer)
     }
-  }, [auth, cursor, limit, refresh])
+  }, [auth, cursor, limit, refresh, view, prFilter])
 
   useEffect(() => {
     setDetail(null)
@@ -203,6 +224,17 @@ export default function HalDashboard() {
       setError((e as Error).message)
     }
   }
+  function changeView(
+    next: "latest" | "all",
+    filter: { repository: string; pr: number } | null = null
+  ) {
+    setView(next)
+    setPrFilter(filter)
+    setCursors([null])
+    setSelected(null)
+    setListing(null)
+  }
+
   function paginate(next: boolean) {
     setSelected(null)
     setCursors((value) =>
@@ -268,10 +300,22 @@ export default function HalDashboard() {
         <>
           <div className={styles.toolbar}>
             <div>
-              <strong>{listing?.total ?? "—"}</strong> recorded reviews{" "}
+              <strong>{listing?.total ?? "—"}</strong>{" "}
+              {view === "latest" ? "pull requests" : "review runs"}{" "}
               <span className={styles.divider}>/</span> newest first
             </div>
             <div className={styles.controls}>
+              <label>
+                View{" "}
+                <select
+                  aria-label="Review view"
+                  value={view}
+                  onChange={(event) => changeView(event.target.value as "latest" | "all")}
+                >
+                  <option value="latest">Latest per PR</option>
+                  <option value="all">All runs</option>
+                </select>
+              </label>
               <label>
                 Per page{" "}
                 <select
@@ -296,13 +340,32 @@ export default function HalDashboard() {
               </button>
             </div>
           </div>
+          <div className={styles.historyScope}>
+            {prFilter ? (
+              <>
+                <span>
+                  History for {prFilter.repository} #{prFilter.pr}
+                </span>
+                <button className={styles.button} onClick={() => changeView("latest")}>
+                  Back to latest PRs
+                </button>
+              </>
+            ) : (
+              <span>
+                {view === "latest"
+                  ? "One entry per PR, showing its latest review."
+                  : "Every review attempt, including re-reviews."}{" "}
+                {listing ? `${listing.total_runs} total runs preserved.` : ""}
+              </span>
+            )}
+          </div>
           <div className={styles.updated} role="status">
             {loading
               ? "Updating reviews…"
               : `Updated ${updated ? new Date(updated).toLocaleTimeString() : "—"} · refreshes every 15 seconds`}
           </div>
           <div className={styles.workspace}>
-            <section aria-label="Review history" className={styles.history}>
+            <section ref={historyPanel} aria-label="Review history" className={styles.history}>
               {!listing?.runs.length ? (
                 <div className={styles.empty}>
                   {loading
@@ -313,6 +376,8 @@ export default function HalDashboard() {
                 listing.runs.map((run) => (
                   <button
                     key={run.id}
+                    data-run-id={run.id}
+                    data-review-key={`${run.repository}#${run.pr}`}
                     className={`${styles.row} ${selected === run.id ? styles.selected : ""}`}
                     aria-pressed={selected === run.id}
                     onClick={(event) => {
@@ -324,18 +389,33 @@ export default function HalDashboard() {
                   >
                     <div className={styles.rowTop}>
                       <span>
-                        {run.repository || "Repository not recorded"} <b>#{run.pr ?? "—"}</b>
+                        <span className={styles.repoLabel}>Repository</span>
+                        <strong className={styles.repository}>
+                          {run.repository || "Not recorded"} <b>PR #{run.pr ?? "—"}</b>
+                        </strong>
                       </span>
                       <Status value={run.status} />
                     </div>
                     <h2>{run.title || `Review ${run.id.slice(0, 8)}`}</h2>
-                    <div className={styles.timestamp}>
-                      {date(run.started_at)} ·{" "}
-                      {run.trigger === "push" ? "Push re-review" : "Manual review"}
+                    <div className={styles.timestamp}>{date(run.started_at)}</div>
+                    <div className={styles.trigger}>
+                      Triggered by{" "}
+                      <strong>
+                        {run.triggered_by ? `@${run.triggered_by}` : "actor not recorded"}
+                      </strong>{" "}
+                      · {triggerLabel(run.trigger)}
+                    </div>
+                    <div className={styles.attempts}>
+                      {view === "latest"
+                        ? `${run.run_count || 1} ${(run.run_count || 1) === 1 ? "run" : "runs"} · latest review`
+                        : `Run ${run.id.slice(0, 8)}`}
+                      {run.head ? ` · commit ${run.head.slice(0, 8)}` : ""}
                     </div>
                     <div className={styles.rowMeta}>
                       <span>
-                        {run.model?.replace("system.ai.", "") || "Model not recorded"}{" "}
+                        Model:{" "}
+                        {run.model?.replace("system.ai.", "") ||
+                          (run.status === "blocked_size" ? "not called" : "not recorded")}{" "}
                         <em>/ {run.profile || "—"}</em>
                       </span>
                       <span>{count(run.tokens)} tokens</span>
@@ -399,6 +479,51 @@ export default function HalDashboard() {
                   <Status value={detail.status} />
                   <dl className={styles.facts}>
                     <div>
+                      <dt>Repository</dt>
+                      <dd>
+                        {detail.repository_url ? (
+                          <a href={detail.repository_url} target="_blank" rel="noreferrer">
+                            {detail.repository} ↗
+                          </a>
+                        ) : (
+                          detail.repository || "Not recorded"
+                        )}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Triggered by</dt>
+                      <dd>{detail.triggered_by ? `@${detail.triggered_by}` : "Not recorded"}</dd>
+                    </div>
+                    <div>
+                      <dt>Trigger</dt>
+                      <dd>{triggerLabel(detail.trigger)}</dd>
+                    </div>
+                    {detail.requested_by && detail.requested_by !== detail.triggered_by ? (
+                      <div>
+                        <dt>Original requester</dt>
+                        <dd>@{detail.requested_by}</dd>
+                      </div>
+                    ) : null}
+                    <div>
+                      <dt>
+                        {["complete", "partial"].includes(detail.status)
+                          ? "Model used"
+                          : "Review model"}
+                      </dt>
+                      <dd>
+                        <code>
+                          {detail.model ||
+                            (detail.status === "blocked_size"
+                              ? "Not called — PR size limit"
+                              : "Not recorded")}
+                        </code>
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Review profile</dt>
+                      <dd>{detail.profile || "Not recorded"}</dd>
+                    </div>
+                    <div>
                       <dt>Scope</dt>
                       <dd>{detail.scope || "Not recorded"}</dd>
                     </div>
@@ -430,6 +555,17 @@ export default function HalDashboard() {
                   {detail.error_type ? (
                     <p className={styles.error}>Error type: {detail.error_type}</p>
                   ) : null}
+                  {view === "latest" && detail.repository && detail.pr ? (
+                    <button
+                      className={styles.button}
+                      onClick={() => {
+                        changeView("all", { repository: detail.repository!, pr: detail.pr! })
+                        historyPanel.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+                      }}
+                    >
+                      View this PR’s runs →
+                    </button>
+                  ) : null}
                   <ol className={styles.timeline}>
                     {detail.events?.map((event, index) => (
                       <li key={`${event.at}-${index}`}>
@@ -442,6 +578,11 @@ export default function HalDashboard() {
                     ))}
                   </ol>
                   <div className={styles.resultLinks}>
+                    {detail.trigger_url ? (
+                      <a href={detail.trigger_url} target="_blank" rel="noreferrer">
+                        Trigger comment ↗
+                      </a>
+                    ) : null}
                     {detail.summary_url ? (
                       <a href={detail.summary_url} target="_blank" rel="noreferrer">
                         GitHub summary ↗

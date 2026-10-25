@@ -307,3 +307,16 @@ Dashboard browser checks run with `HAL_E2E_PASSWORD` supplied privately:
 `pnpm exec playwright test e2e/hal.spec.ts`. Set `PLAYWRIGHT_BASE_URL` to run
 against a deployed HTTPS build instead of starting the local development server.
 Production cookies require HTTPS; use the dev server for local WebKit checks.
+
+
+The dashboard defaults to **Latest per PR**: one entry for each repository/PR,
+showing the newest attempt and its total run count. Select **All runs** for the
+chronological audit list, or open a review and choose **View this PR’s runs** for
+that PR's complete history. Run IDs and commit hashes distinguish attempts.
+Grouping is applied by the backend before pagination; no audit records are removed.
+
+
+Review rows explicitly show the repository and triggering GitHub user alongside
+`/Hal comment` or `Push · automatic re-review`. The detail panel distinguishes
+the event sender from the original requester and links to the source comment
+when recorded. Older runs without actor evidence say “not recorded.”

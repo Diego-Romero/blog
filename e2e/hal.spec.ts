@@ -27,9 +27,36 @@ test("team can sign in, paginate, inspect a timeline, refresh and sign out", asy
   )
   await page.getByLabel("Team password").fill(process.env.HAL_E2E_PASSWORD!)
   await page.getByRole("button", { name: "View reviews" }).click()
-  await expect(page.getByText("recorded reviews", { exact: false })).toBeVisible()
-  await page.getByLabel("Reviews per page").selectOption("5")
+  await expect(page.getByLabel("Review view")).toHaveValue("latest")
   const rows = page.getByRole("region", { name: "Review history" }).locator("button[aria-pressed]")
+  const grouped = await (await page.request.get("/api/hal/runs?view=latest")).json()
+  await expect(rows).toHaveCount(Math.min(20, grouped.total))
+  const identities = await rows.evaluateAll((elements) =>
+    elements.map((element) => element.getAttribute("data-review-key"))
+  )
+  expect(new Set(identities).size).toBe(identities.length)
+  await expect(rows.first()).toContainText("latest review")
+  await expect(rows.first()).toContainText("Repository")
+  await expect(rows.first()).toContainText(grouped.runs[0].repository)
+  await expect(rows.first()).toContainText(`Triggered by @${grouped.runs[0].triggered_by}`)
+  await rows.first().click()
+  const latestDetails = page.getByRole("complementary", { name: "Review details" })
+  await latestDetails.getByRole("button", { name: "View this PR’s runs" }).click()
+  const latest = grouped.runs[0]
+  await expect(
+    page.getByText(`History for ${latest.repository} #${latest.pr}`, { exact: true })
+  ).toBeVisible()
+  await expect(rows).toHaveCount(Math.min(20, latest.run_count))
+  expect(
+    await rows.evaluateAll(
+      (elements) => new Set(elements.map((element) => element.getAttribute("data-review-key"))).size
+    )
+  ).toBe(1)
+  await page.getByRole("button", { name: "Back to latest PRs" }).click()
+  await expect(rows).toHaveCount(Math.min(20, grouped.total))
+  await page.getByLabel("Review view").selectOption("all")
+  await expect(rows).toHaveCount(Math.min(20, grouped.total_runs))
+  await page.getByLabel("Reviews per page").selectOption("5")
   await expect(rows).toHaveCount(5)
   const first = (await rows.first().textContent()) || ""
   await page.getByRole("button", { name: "Older" }).click()
@@ -46,6 +73,13 @@ test("team can sign in, paginate, inspect a timeline, refresh and sign out", asy
     /^https:\/\/github\.com\//
   )
   await expect(details.getByText("Input / output")).toBeVisible()
+  await expect(details.getByText("Model used", { exact: true })).toBeVisible()
+  await expect(details.locator("code").first()).toHaveText(grouped.runs[0].model)
+  await expect(details.getByText("Triggered by", { exact: true })).toBeVisible()
+  await expect(details.getByRole("link", { name: "Trigger comment" })).toHaveAttribute(
+    "href",
+    /#issuecomment-\d+$/
+  )
   await page.getByRole("button", { name: "Refresh", exact: false }).click()
   await expect(page.getByRole("button", { name: "Refresh", exact: false })).toBeEnabled()
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
