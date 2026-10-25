@@ -413,7 +413,9 @@ export default function HalDashboard() {
                     </div>
                     <div className={styles.rowMeta}>
                       <span>
-                        {run.model?.replace("system.ai.", "") || "Model not recorded"}{" "}
+                        Model:{" "}
+                        {run.model?.replace("system.ai.", "") ||
+                          (run.status === "blocked_size" ? "not called" : "not recorded")}{" "}
                         <em>/ {run.profile || "—"}</em>
                       </span>
                       <span>{count(run.tokens)} tokens</span>
@@ -502,6 +504,25 @@ export default function HalDashboard() {
                         <dd>@{detail.requested_by}</dd>
                       </div>
                     ) : null}
+                    <div>
+                      <dt>
+                        {["complete", "partial"].includes(detail.status)
+                          ? "Model used"
+                          : "Review model"}
+                      </dt>
+                      <dd>
+                        <code>
+                          {detail.model ||
+                            (detail.status === "blocked_size"
+                              ? "Not called — PR size limit"
+                              : "Not recorded")}
+                        </code>
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Review profile</dt>
+                      <dd>{detail.profile || "Not recorded"}</dd>
+                    </div>
                     <div>
                       <dt>Scope</dt>
                       <dd>{detail.scope || "Not recorded"}</dd>

@@ -73,6 +73,8 @@ test("team can sign in, paginate, inspect a timeline, refresh and sign out", asy
     /^https:\/\/github\.com\//
   )
   await expect(details.getByText("Input / output")).toBeVisible()
+  await expect(details.getByText("Model used", { exact: true })).toBeVisible()
+  await expect(details.locator("code").first()).toHaveText(grouped.runs[0].model)
   await expect(details.getByText("Triggered by", { exact: true })).toBeVisible()
   await expect(details.getByRole("link", { name: "Trigger comment" })).toHaveAttribute(
     "href",
