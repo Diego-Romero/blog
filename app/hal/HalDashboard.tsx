@@ -5,6 +5,10 @@ import styles from "./hal.module.css"
 
 type Run = {
   id: string
+  triggered_by: string | null
+  requested_by: string | null
+  repository_url: string | null
+  trigger_url: string | null
   run_count?: number
   repository: string | null
   pr: number | null
@@ -57,6 +61,15 @@ const eventLabels: Record<string, string> = {
   restart_reconciled: "Interrupted run reconciled",
   operator_validation: "Operator validation recorded",
 }
+
+const triggerLabel = (trigger: string | null) =>
+  trigger === "push"
+    ? "Push · automatic re-review"
+    : trigger === "manual /Hal"
+      ? "/Hal comment"
+      : trigger === "manual"
+        ? "Manual review (command not recorded)"
+        : trigger || "Trigger not recorded"
 
 function Status({ value }: { value: string }) {
   return (
@@ -376,14 +389,21 @@ export default function HalDashboard() {
                   >
                     <div className={styles.rowTop}>
                       <span>
-                        {run.repository || "Repository not recorded"} <b>#{run.pr ?? "—"}</b>
+                        <span className={styles.repoLabel}>Repository</span>
+                        <strong className={styles.repository}>
+                          {run.repository || "Not recorded"} <b>PR #{run.pr ?? "—"}</b>
+                        </strong>
                       </span>
                       <Status value={run.status} />
                     </div>
                     <h2>{run.title || `Review ${run.id.slice(0, 8)}`}</h2>
-                    <div className={styles.timestamp}>
-                      {date(run.started_at)} ·{" "}
-                      {run.trigger === "push" ? "Push re-review" : "Manual review"}
+                    <div className={styles.timestamp}>{date(run.started_at)}</div>
+                    <div className={styles.trigger}>
+                      Triggered by{" "}
+                      <strong>
+                        {run.triggered_by ? `@${run.triggered_by}` : "actor not recorded"}
+                      </strong>{" "}
+                      · {triggerLabel(run.trigger)}
                     </div>
                     <div className={styles.attempts}>
                       {view === "latest"
@@ -457,6 +477,32 @@ export default function HalDashboard() {
                   <Status value={detail.status} />
                   <dl className={styles.facts}>
                     <div>
+                      <dt>Repository</dt>
+                      <dd>
+                        {detail.repository_url ? (
+                          <a href={detail.repository_url} target="_blank" rel="noreferrer">
+                            {detail.repository} ↗
+                          </a>
+                        ) : (
+                          detail.repository || "Not recorded"
+                        )}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Triggered by</dt>
+                      <dd>{detail.triggered_by ? `@${detail.triggered_by}` : "Not recorded"}</dd>
+                    </div>
+                    <div>
+                      <dt>Trigger</dt>
+                      <dd>{triggerLabel(detail.trigger)}</dd>
+                    </div>
+                    {detail.requested_by && detail.requested_by !== detail.triggered_by ? (
+                      <div>
+                        <dt>Original requester</dt>
+                        <dd>@{detail.requested_by}</dd>
+                      </div>
+                    ) : null}
+                    <div>
                       <dt>Scope</dt>
                       <dd>{detail.scope || "Not recorded"}</dd>
                     </div>
@@ -511,6 +557,11 @@ export default function HalDashboard() {
                     ))}
                   </ol>
                   <div className={styles.resultLinks}>
+                    {detail.trigger_url ? (
+                      <a href={detail.trigger_url} target="_blank" rel="noreferrer">
+                        Trigger comment ↗
+                      </a>
+                    ) : null}
                     {detail.summary_url ? (
                       <a href={detail.summary_url} target="_blank" rel="noreferrer">
                         GitHub summary ↗

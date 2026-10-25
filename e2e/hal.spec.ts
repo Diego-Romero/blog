@@ -36,6 +36,9 @@ test("team can sign in, paginate, inspect a timeline, refresh and sign out", asy
   )
   expect(new Set(identities).size).toBe(identities.length)
   await expect(rows.first()).toContainText("latest review")
+  await expect(rows.first()).toContainText("Repository")
+  await expect(rows.first()).toContainText(grouped.runs[0].repository)
+  await expect(rows.first()).toContainText(`Triggered by @${grouped.runs[0].triggered_by}`)
   await rows.first().click()
   const latestDetails = page.getByRole("complementary", { name: "Review details" })
   await latestDetails.getByRole("button", { name: "View this PR’s runs" }).click()
@@ -70,6 +73,11 @@ test("team can sign in, paginate, inspect a timeline, refresh and sign out", asy
     /^https:\/\/github\.com\//
   )
   await expect(details.getByText("Input / output")).toBeVisible()
+  await expect(details.getByText("Triggered by", { exact: true })).toBeVisible()
+  await expect(details.getByRole("link", { name: "Trigger comment" })).toHaveAttribute(
+    "href",
+    /#issuecomment-\d+$/
+  )
   await page.getByRole("button", { name: "Refresh", exact: false }).click()
   await expect(page.getByRole("button", { name: "Refresh", exact: false })).toBeEnabled()
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(

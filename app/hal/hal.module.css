@@ -539,3 +539,38 @@
     white-space: nowrap;
   }
 }
+
+.repoLabel {
+  display: block;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+.repository {
+  display: block;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--fg);
+}
+.trigger {
+  font-size: 10px;
+  line-height: 1.8;
+  color: var(--muted);
+  margin-top: 8px;
+  overflow-wrap: anywhere;
+}
+.trigger strong {
+  color: var(--fg);
+  font-weight: 400;
+}
+@media (max-width: 560px) {
+  .repository {
+    font-size: 11px;
+  }
+  .trigger {
+    font-size: 9px;
+  }
+}
