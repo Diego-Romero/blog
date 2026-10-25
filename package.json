@@ -3,12 +3,12 @@
   "version": "2.0.2",
   "private": true,
   "engines": {
-    "node": "20.x"
+    "node": "24.x"
   },
   "scripts": {
     "start": "next dev",
     "dev": "cross-env INIT_CWD=$PWD next dev",
-    "build": "cross-env INIT_CWD=$PWD next build && cross-env NODE_OPTIONS='--experimental-json-modules' node ./scripts/postbuild.mjs",
+    "build": "cross-env INIT_CWD=$PWD next build && node ./scripts/postbuild.mjs",
     "serve": "next start",
     "analyze": "cross-env ANALYZE=true next build",
     "lint": "next lint --fix --dir pages --dir app --dir components --dir lib --dir layouts --dir scripts",
@@ -16,7 +16,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@next/bundle-analyzer": "13.5.3",
+    "@next/bundle-analyzer": "14.2.35",
     "@tailwindcss/forms": "^0.5.4",
     "@tailwindcss/typography": "^0.5.9",
     "autoprefixer": "^10.4.13",
@@ -25,7 +25,7 @@
     "github-slugger": "^1.4.0",
     "gray-matter": "^4.0.2",
     "image-size": "1.0.0",
-    "next": "13.5.3",
+    "next": "14.2.35",
     "next-contentlayer": "0.3.4",
     "next-themes": "^0.2.1",
     "pliny": "0.1.4",
@@ -54,7 +54,7 @@
     "@typescript-eslint/parser": "^6.1.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.45.0",
-    "eslint-config-next": "13.5.3",
+    "eslint-config-next": "14.2.35",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^5.0.0",
     "husky": "^8.0.0",
@@ -80,5 +80,11 @@
     "*.+(js|jsx|ts|tsx|json|css|md|mdx)": [
       "prettier --write"
     ]
-  }
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@contentlayer/core@0.3.4": "patches/@contentlayer__core@0.3.4.patch"
+    }
+  },
+  "packageManager": "pnpm@10.1.0"
 }
