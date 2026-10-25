@@ -507,3 +507,35 @@
     padding: 16px;
   }
 }
+
+.historyScope {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 10px;
+  margin: 5px 0 12px;
+  line-height: 1.8;
+}
+.attempts {
+  font-size: 9px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+.history {
+  scroll-margin-top: 80px;
+}
+.timeline {
+  margin-top: 24px;
+}
+@media (max-width: 560px) {
+  .controls {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .controls label {
+    white-space: nowrap;
+  }
+}
