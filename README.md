@@ -258,3 +258,31 @@ Using the template? Support this effort by giving a star on GitHub, sharing your
 ## Licence
 
 [MIT](https://github.com/timlrx/tailwind-nextjs-starter-blog/blob/main/LICENSE) © [Timothy Lin](https://www.timlrx.com)
+
+
+## Hal review log
+
+`/hal` is a password-protected, read-only dashboard for the Hal pilot. It lists
+reviews newest first, supports cursor pagination (20 per page by default), and
+refreshes the current page and selected timeline every 15 seconds while visible.
+The Hal navigation link opens it. No rebuild is needed when a new review runs.
+
+Set these **server-only** variables in Vercel and `.env.local` for development:
+
+- `HAL_AUDIT_URL`: HTTPS origin of the Hal worker, with no path.
+- `HAL_AUDIT_TOKEN`: the worker's separate read-only audit token (at least 32 characters).
+- `HAL_DASHBOARD_PASSWORD`: shared team password (at least 16 characters).
+- `HAL_SESSION_SECRET`: random session signing secret (at least 32 characters).
+
+Provision production secrets separately from preview deployments. Keep them out
+of source control and client bundles. A signed, HttpOnly, SameSite=Strict cookie
+grants eight hours of access; production cookies are Secure. Rotate the session
+secret to revoke existing access, and rotate both it and the password when changing
+the team password. Sign out clears the cookie. There are no write/review-trigger
+controls or individual user accounts in this pilot.
+
+The Next.js API authenticates the browser before proxying to the worker. It never
+sends the upstream token to the browser. Hal returns only an allowlist of metadata
+and stage timestamps: no PR descriptions, source diffs, prompt/model messages, raw
+traces, stderr, or arbitrary audit event details. Errors and unknown costs are shown
+explicitly; an unavailable cost is not treated as zero.
