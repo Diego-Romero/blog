@@ -22,14 +22,16 @@ test("team can sign in, paginate, inspect a timeline, refresh and sign out", asy
   await expect(page.getByRole("heading", { name: "Open the review log" })).toBeVisible()
   await page.getByLabel("Team password").fill("incorrect-test-password")
   await page.getByRole("button", { name: "View reviews" }).click()
-  await expect(page.getByRole("alert")).toContainText("Incorrect password")
+  await expect(page.getByRole("alert").filter({ hasText: "Incorrect password" })).toContainText(
+    "Incorrect password"
+  )
   await page.getByLabel("Team password").fill(process.env.HAL_E2E_PASSWORD!)
   await page.getByRole("button", { name: "View reviews" }).click()
   await expect(page.getByText("recorded reviews", { exact: false })).toBeVisible()
   await page.getByLabel("Reviews per page").selectOption("5")
   const rows = page.getByRole("region", { name: "Review history" }).locator("button[aria-pressed]")
   await expect(rows).toHaveCount(5)
-  const first = await rows.first().innerText()
+  const first = (await rows.first().textContent()) || ""
   await page.getByRole("button", { name: "Older" }).click()
   await expect(page.getByText("Page 2", { exact: true })).toBeVisible()
   await expect(rows.first()).not.toHaveText(first)

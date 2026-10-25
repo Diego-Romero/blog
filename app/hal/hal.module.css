@@ -273,6 +273,7 @@
 }
 .detail {
   position: sticky;
+  scroll-margin-top: 80px;
   top: 80px;
   padding: 23px 25px;
   min-width: 0;

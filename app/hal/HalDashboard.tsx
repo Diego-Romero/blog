@@ -1,6 +1,6 @@
 "use client"
 
-import { FormEvent, useEffect, useState } from "react"
+import { FormEvent, useEffect, useRef, useState } from "react"
 import styles from "./hal.module.css"
 
 type Run = {
@@ -66,6 +66,8 @@ function Status({ value }: { value: string }) {
 }
 
 export default function HalDashboard() {
+  const detailPanel = useRef<HTMLElement>(null)
+  const selectedButton = useRef<HTMLButtonElement | null>(null)
   const [auth, setAuth] = useState<"checking" | "in" | "out">("checking")
   const [password, setPassword] = useState("")
   const [signingIn, setSigningIn] = useState(false)
@@ -313,7 +315,12 @@ export default function HalDashboard() {
                     key={run.id}
                     className={`${styles.row} ${selected === run.id ? styles.selected : ""}`}
                     aria-pressed={selected === run.id}
-                    onClick={() => setSelected(run.id)}
+                    onClick={(event) => {
+                      selectedButton.current = event.currentTarget
+                      setSelected(run.id)
+                      if (window.matchMedia("(max-width: 900px)").matches)
+                        detailPanel.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+                    }}
                   >
                     <div className={styles.rowTop}>
                       <span>
@@ -359,11 +366,17 @@ export default function HalDashboard() {
                 </button>
               </nav>
             </section>
-            <aside className={styles.detail} aria-label="Review details">
+            <aside ref={detailPanel} className={styles.detail} aria-label="Review details">
               <div className={styles.detailHeader}>
                 <span className={styles.eyebrow}>Review timeline</span>
                 {selected ? (
-                  <button aria-label="Close review details" onClick={() => setSelected(null)}>
+                  <button
+                    aria-label="Close review details"
+                    onClick={() => {
+                      setSelected(null)
+                      selectedButton.current?.focus()
+                    }}
+                  >
                     ×
                   </button>
                 ) : null}

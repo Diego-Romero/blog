@@ -286,3 +286,24 @@ sends the upstream token to the browser. Hal returns only an allowlist of metada
 and stage timestamps: no PR descriptions, source diffs, prompt/model messages, raw
 traces, stderr, or arbitrary audit event details. Errors and unknown costs are shown
 explicitly; an unavailable cost is not treated as zero.
+
+
+### Deployment runtime compatibility
+
+Vercel no longer accepts new Node 20 deployments. This branch uses Node 24 and
+Next.js 14.2.35, the patched upgrade recommended for the prior Next.js 13 App
+Router release. React and the site's layouts/content stay unchanged. The reviewed
+`patches/@contentlayer__core@0.3.4.patch` changes generated JSON imports from
+`assert` to `with`, which current Node requires. pnpm applies it on installation.
+The RSS build no longer sets the obsolete experimental JSON-modules flag.
+
+Use Node 24 and pnpm 10.1.0 for local builds. There are existing peer-version
+warnings from Pliny/Contentlayer; build and browser behavior are checked rather
+than treating these warnings as runtime success. A broader framework migration
+is outside the Hal dashboard change.
+
+
+Dashboard browser checks run with `HAL_E2E_PASSWORD` supplied privately:
+`pnpm exec playwright test e2e/hal.spec.ts`. Set `PLAYWRIGHT_BASE_URL` to run
+against a deployed HTTPS build instead of starting the local development server.
+Production cookies require HTTPS; use the dev server for local WebKit checks.
